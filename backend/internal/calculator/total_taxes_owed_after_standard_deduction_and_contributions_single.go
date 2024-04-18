@@ -1,0 +1,28 @@
+package calculator
+
+type TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation Calculation
+
+type TotalTaxesOwedAfterStandardDeductionAndContributionsSingle struct {
+	TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation
+}
+
+func NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle() TotalTaxesOwedAfterStandardDeductionAndContributionsSingle {
+	return TotalTaxesOwedAfterStandardDeductionAndContributionsSingle{
+		TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation: NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle(),
+	}
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) Calculate(model Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.Calculate(model)
+
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := 0.0
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle {
+		totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle += value
+	}
+
+	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRetirement(model Model) float64 {
+	return c.Calculate(model)
+}

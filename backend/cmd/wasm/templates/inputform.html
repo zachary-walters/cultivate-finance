@@ -1,0 +1,70 @@
+{{define "inputform"}}
+
+<form hx-post="/calculate/">
+  <div class="container current-input">
+    <div class="form-input">
+      <label for="current-age">Current Age</label>
+      <input type="number" id="current-age" name="current-age" value={{.input.CurrentAge}} />
+    </div>
+    <div class="form-input">
+      <label for="current-filing-status">Current Filing Status</label>
+      <select id="current-filing-status" name="current-filing-status" value="{{.input.CurrentFilingStatus}}">
+        <option value="single">Single</option>
+        <option value="married">Married</option>
+      </select>
+    </div>
+    <div class="form-input">
+      <label for="current-annual-income">Current Annual Income</label>
+      <input type="number" id="current-annual-income" name="current-annual-income" value={{.input.CurrentAnnualIncome}} />
+    </div>
+    <div class="form-input">
+      <label for="annual-investment-growth">Annual Investment Growth</label>
+      <input type="number" id="annual-investment-growth" name="annual-investment-growth" value={{.input.AnnualInvestmentGrowth}} />
+    </div>
+  </div>
+
+  <br />
+
+  <div class="container retirement-input">
+    <div class="form-input">
+      <label for="retirement-age">Retirement Age</label>
+      <input type="number" id="retirement-age" name="retirement-age" value={{.input.RetirementAge}} />
+    </div>
+    <div class="form-input">
+      <label for="retirement-filing-status">Retirement Filing Status</label>
+      <select id="retirement-filing-status" name="retirement-filing-status" value={{.input.RetirementFilingStatus}}>
+        <option value="single">Single</option>
+        <option value="married">Married</option>
+      </select>
+    </div>
+    <div class="form-input">
+      <label for="yearly-withdrawals">Yearly Withdrawal (today's dollars)</label>
+      <input type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
+    </div>
+
+    <button type="submit">Calculate</button>
+  </div>
+</form>
+
+<style>
+  label {
+    display: inline-block;
+    width: 250px;
+    text-align: right;
+  }
+
+  .container {
+    display: flex;
+    flex-flow: row wrap;
+    flex-direction: row;
+  }
+
+  .current-input .retirement-input {
+    width: 50%;
+  }
+
+  .form-input {
+    flex: 1 100%;
+  }
+</style>
+{{end}}

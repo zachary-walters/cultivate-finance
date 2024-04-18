@@ -1,0 +1,21 @@
+package calculator
+
+type IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation SequenceCalculation
+
+type IncomePerBracketAfterStandardDeductionAndContributionsSingle struct {
+	IncomePerBracketAfterStandardDeductionAndContributionsCalculation
+}
+
+func NewIncomePerBracketAfterStandardDeductionAndContributionsSingle() IncomePerBracketAfterStandardDeductionAndContributionsSingle {
+	return IncomePerBracketAfterStandardDeductionAndContributionsSingle{
+		IncomePerBracketAfterStandardDeductionAndContributionsCalculation: NewIncomePerBracketAfterStandardDeductionAndContributions(),
+	}
+}
+
+func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) Calculate(model Model) []float64 {
+	return c.IncomePerBracketAfterStandardDeductionAndContributionsCalculation.Calculate(model, model.SingleTaxRates)
+}
+
+func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateRetirement(model Model) []float64 {
+	return c.IncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRetirement(model, model.SingleTaxRates)
+}
