@@ -1,5 +1,10 @@
 package calculator
 
+import (
+	"strconv"
+	"sync"
+)
+
 type Calculation interface {
 	Calculate(Model) float64
 	CalculateRetirement(Model) float64
@@ -15,7 +20,6 @@ type ChartCalculation interface {
 }
 
 type ChartData struct {
-	AgeSequence      map[int]float64 `json:"age_sequence,omitempty"`
 	BeginningBalance map[int]float64 `json:"beginning_balance,omitempty"`
 	Contribution     map[int]float64 `json:"contribution,omitempty"`
 	Withdrawal       map[int]float64 `json:"withdrawal,omitempty"`
@@ -50,4 +54,122 @@ type Model struct {
 	STANDARD_DEDUCTION_MARRIED_JOINT     float64   `json:"standard_deduction_married_joint"`
 	STANDARD_DEDUCTION_MARRIED_SEPERATE  float64   `json:"standard_deduction_married_seperate"`
 	STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD float64   `json:"standard_deduction_head_of_household"`
+}
+
+func CalculateSynchronous(model Model, calculation any) (value any, retirementValue any) {
+	calc, isCalculation := calculation.(Calculation)
+	seq, isSequenceCalculation := calculation.(SequenceCalculation)
+	chart, isChartCalculation := calculation.(ChartCalculation)
+
+	if isCalculation {
+		value = calc.Calculate(model)
+		retirementValue = calc.CalculateRetirement(model)
+	} else if isSequenceCalculation {
+		value = seq.Calculate(model)
+		retirementValue = seq.CalculateRetirement(model)
+	} else if isChartCalculation {
+		value = chart.Calculate(model)
+		retirementValue = nil
+	} else {
+
+	}
+
+	return value, retirementValue
+}
+
+func CalculateAsync(wg *sync.WaitGroup, ch chan<- map[string]any, rch chan<- map[string]any, datakey string, calculation any, model Model) {
+	value, retirementValue := CalculateSynchronous(model, calculation)
+
+	ch <- map[string]any{datakey: value}
+	rch <- map[string]any{datakey: retirementValue}
+
+	wg.Done()
+}
+
+func CalculateSynchronousWasm(model Model, calculation any) (value any, retirementValue any) {
+	calc, isCalculation := calculation.(Calculation)
+	seq, isSequenceCalculation := calculation.(SequenceCalculation)
+	chart, isChartCalculation := calculation.(ChartCalculation)
+
+	if isCalculation {
+		value = calc.Calculate(model)
+		retirementValue = calc.CalculateRetirement(model)
+	} else if isSequenceCalculation {
+		value = translateFloatSlice(seq.Calculate(model))
+		retirementValue = translateFloatSlice(seq.CalculateRetirement(model))
+	} else if isChartCalculation {
+		value = translateChartData(chart.Calculate(model))
+		retirementValue = nil
+	} else {
+		// return an error
+	}
+	return value, retirementValue
+}
+
+func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan<- map[string]any, rch chan<- map[string]any, datakey string, calculation any, model Model) {
+	value, retirementValue := CalculateSynchronousWasm(model, calculation)
+
+	ch <- map[string]any{datakey: value}
+	rch <- map[string]any{datakey: retirementValue}
+
+	wg.Done()
+}
+
+func translateFloatSlice(s []float64) []interface{} {
+	x := make([]interface{}, len(s))
+
+	for i := range s {
+		x[i] = s[i]
+	}
+
+	return x
+}
+
+func translateChartMap(m map[int]float64) map[string]interface{} {
+	n := map[string]interface{}{}
+
+	for k, v := range m {
+		n[strconv.Itoa(k)] = v
+	}
+
+	return n
+}
+
+func translateChartData(c ChartData) map[string]interface{} {
+	chartData := map[string]interface{}{}
+
+	chartData["beginning_balance"] = translateChartMap(c.BeginningBalance)
+	chartData["contribution"] = translateChartMap(c.Contribution)
+	chartData["withdrawal"] = translateChartMap(c.Withdrawal)
+	chartData["interest_earned"] = translateChartMap(c.InterestEarned)
+	chartData["ending_balance"] = translateChartMap(c.EndingBalance)
+	chartData["after_tax_income"] = translateChartMap(c.AfterTaxIncome)
+
+	return chartData
+}
+
+var Calculations = map[string]any{
+	"ANNUAL_GROWTH_LESS_INFLATION":                                             NewAnnualGrowthLessInflation(),
+	"ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION":                                     NewAnnualTaxSavingsWithContribution(),
+	"BALANCES_ROTH_MATCHING_GROSS_CONTRIBUTIONS":                               NewBalancesRothMatchingGrossContributions(),
+	"BALANCES_ROTH_MATCHING_NET_CONTRIBUTIONS":                                 NewBalancesRothMatchingNetContributions(),
+	"BALANCES_TRADITIONAL":                                                     NewBalancesTraditional(),
+	"EFFECTIVE_TAX_RATE_ON_GROSS":                                              NewEffectiveTaxRateOnGross(),
+	"EQUIVALENT_ROTH_CONTRIBUTIONS":                                            NewEquivalentRothContributions(),
+	"INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":                        NewIncomeAfterStandardDeductionAndContributions(),
+	"INCOME_AFTER_STANDARD_DEDUCTION":                                          NewIncomeAfterStandardDeduction(),
+	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_SINGLE":     NewIncomePerBracketAfterStandardDeductionAndContributionsSingle(),
+	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                       NewIncomePerBracketAfterStandardDeductionSingle(),
+	"NET_DISTRIBUTION_AFTER_TAXES":                                             NewNetDistributionAfterTaxes(),
+	"STANDARD_DEDUCTION":                                                       NewStandardDeduction(),
+	"TAX_RATE_OF_SAVINGS":                                                      NewTaxRateOfSavings(),
+	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_SINGLE": NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle(),
+	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                   NewTaxesOwedPerBracketAfterStandardDeductionSingle(),
+	"TOTAL_DISBURSEMENTS_AFTER_TAX":                                            NewTotalDisbursementsAfterTax(),
+	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_GROSS":                                  NewTotalDisbursementsRothMatchingGross(),
+	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_NET":                                    NewTotalDisbursementsRothMatchingNet(),
+	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_SINGLE":       NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle(),
+	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":              NewTotalTaxesOwedAfterStandardDeductionAndContributions(),
+	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_SINGLE":                         NewTotalTaxesOwedAfterStandardDeductionSingle(),
+	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION":                                NewTotalTaxesOwedAfterStandardDeduction(),
 }

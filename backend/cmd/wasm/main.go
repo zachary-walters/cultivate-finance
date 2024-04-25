@@ -1,91 +1,134 @@
 package main
 
 import (
-// "embed"
-// "encoding/json"
-// "html/template"
-// "net/http"
-// "strconv"
+	"embed"
+	"encoding/json"
+	"sync"
+	"syscall/js"
 
-// "github.com/zachary-walters/rothvtrad/backend/internal/calculator"
+	"github.com/zachary-walters/rothvtrad/backend/internal/calculator"
 )
 
-/*
-// go:embed templates/index.html
-// go:embed templates/inputform.html
-// go:embed constants.json
-// var res embed.FS
-*/
-func main() {
-	// calculator.AnnualGrowthLessInflation(calculator.Model{})
+//go:embed constants.json
+var res embed.FS
 
-	// tmpl := make(map[string]*template.Template)
-	// tmpl["index"] = template.Must(template.ParseFS(res, "templates/index.html", "templates/inputform.html"))
-	// tmpl["inputform"] = template.Must(template.ParseFS(res, "templates/inputform.html"))
+var constants calculator.Model
 
-	// homeFunc := func(w http.ResponseWriter, r *http.Request) {
-	// 	inputMap := map[string]*calculator.Input{
-	// 		"input": getInput(false, r),
-	// 	}
-
-	// 	tmpl["index"].Execute(w, inputMap)
-	// }
-
-	// calculateFunc := func(w http.ResponseWriter, r *http.Request) {
-	// 	inputMap := map[string]*calculator.Input{
-	// 		"input": getInput(true, r),
-	// 	}
-
-	// 	tmpl["index"].Execute(w, inputMap)
-	// }
-
-	// http.HandleFunc("/", homeFunc)
-	// http.HandleFunc("/calculate/", calculateFunc)
-
+type data struct {
+	Value           any `json:"value,omitempty"`
+	RetirementValue any `json:"retirement_value,omitempty"`
 }
 
-// func loadConstants() *calculator.Constants {
-// 	constants := calculator.Constants{}
+func main() {
+	j, err := res.ReadFile("constants.json")
+	if err != nil {
+		panic(err)
+	}
+	json.Unmarshal(j, &constants)
 
-// 	j, err := res.ReadFile("constants.json")
-// 	if err != nil {
-// 		panic(err)
-// 	}
+	wait := make(chan struct{}, 0)
+	js.Global().Set("calculate", js.FuncOf(calculate))
+	js.Global().Set("calculateAll", js.FuncOf(calculateAll))
+	<-wait
+}
 
-// 	json.Unmarshal(j, &constants)
+func calculateAll(this js.Value, args []js.Value) interface{} {
+	model := calculator.Model{
+		Input: calculator.Input{
+			CurrentAge:                args[0].Get("current_age").Int(),
+			CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
+			CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
+			AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
+			AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
+			RetirementAge:             args[0].Get("retirement_age").Int(),
+			RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
+			YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
+		},
+		SingleTaxRates:                       constants.SingleTaxRates,
+		MarriedJointTaxRates:                 constants.MarriedJointTaxRates,
+		MarriedSeperateTaxRates:              constants.MarriedSeperateTaxRates,
+		HeadOfHouseholdTaxRates:              constants.HeadOfHouseholdTaxRates,
+		STANDARD_DEDUCTION_SINGLE:            constants.STANDARD_DEDUCTION_SINGLE,
+		STANDARD_DEDUCTION_MARRIED_JOINT:     constants.STANDARD_DEDUCTION_MARRIED_JOINT,
+		STANDARD_DEDUCTION_MARRIED_SEPERATE:  constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
+		STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: constants.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD,
+	}
 
-// 	return &constants
-// }
+	defaultCh := make(chan map[string]any, len(calculator.Calculations))
+	retirementCh := make(chan map[string]any, len(calculator.Calculations))
+	wg := &sync.WaitGroup{}
+	for datakey, calculation := range calculator.Calculations {
+		wg.Add(1)
+		go calculator.CalculateAsyncWasm(wg, defaultCh, retirementCh, datakey, calculation, model)
+	}
+	wg.Wait()
 
-// func getInput(calculate bool, r *http.Request) *calculator.Input {
-// 	if calculate {
-// 		currentAge, _ := strconv.Atoi(r.PostFormValue("current-age"))
-// 		currentFilingStatus := r.PostFormValue("current-filing-status")
-// 		currentAnnualIncome, _ := strconv.ParseFloat(r.PostFormValue("current-annual-income"), 64)
-// 		annualInvestmentGrowth, _ := strconv.ParseFloat(r.PostFormValue("annual-investment-growth"), 64)
-// 		retirementAge, _ := strconv.Atoi(r.PostFormValue("retirement-age"))
-// 		retirementFilingStatus := r.PostFormValue("retirement-filing-status")
-// 		yearlyWithdrawal, _ := strconv.ParseFloat(r.PostFormValue("yearly-withdrawal"), 64)
+	close(defaultCh)
+	close(retirementCh)
 
-// 		return &calculator.Input{
-// 			CurrentAge:             currentAge,
-// 			CurrentFilingStatus:    currentFilingStatus,
-// 			CurrentAnnualIncome:    currentAnnualIncome,
-// 			AnnualInvestmentGrowth: annualInvestmentGrowth,
-// 			RetirementAge:          retirementAge,
-// 			RetirementFilingStatus: retirementFilingStatus,
-// 			YearlyWithdrawal:       yearlyWithdrawal,
-// 		}
-// 	}
+	m := map[string]any{}
+	rm := map[string]any{}
 
-// 	return &calculator.Input{
-// 		CurrentAge:                30,
-// 		CurrentFilingStatus:       "single",
-// 		CurrentAnnualIncome:       60000,
-// 		AnnualContributionsPreTax: 23000,
-// 		AnnualInvestmentGrowth:    8,
-// 		RetirementAge:             65,
-// 		RetirementFilingStatus:    "single",
-// 		YearlyWithdrawal:          60000,
-// 	}
-// }
+	for i := 0; i < len(calculator.Calculations); i++ {
+		select {
+		case data := <-defaultCh:
+			for datakey, value := range data {
+				m[datakey] = value
+			}
+		}
+	}
+
+	for i := 0; i < len(calculator.Calculations); i++ {
+		select {
+		case data := <-retirementCh:
+			for datakey, value := range data {
+				rm[datakey] = value
+			}
+		}
+	}
+
+	modelMapDefault := map[string]interface{}{}
+	modelMapRetired := map[string]interface{}{}
+	for datakey := range m {
+		modelMapDefault[datakey] = m[datakey]
+		modelMapRetired[datakey] = rm[datakey]
+	}
+
+	return js.ValueOf(map[string]interface{}{
+		"default": modelMapDefault,
+		"retired": modelMapRetired,
+	})
+}
+
+func calculate(this js.Value, args []js.Value) interface{} {
+	model := calculator.Model{
+		Input: calculator.Input{
+			CurrentAge:                args[0].Get("current_age").Int(),
+			CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
+			CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
+			AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
+			AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
+			RetirementAge:             args[0].Get("retirement_age").Int(),
+			RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
+			YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
+		},
+		SingleTaxRates:                       constants.SingleTaxRates,
+		MarriedJointTaxRates:                 constants.MarriedJointTaxRates,
+		MarriedSeperateTaxRates:              constants.MarriedSeperateTaxRates,
+		HeadOfHouseholdTaxRates:              constants.HeadOfHouseholdTaxRates,
+		STANDARD_DEDUCTION_SINGLE:            constants.STANDARD_DEDUCTION_SINGLE,
+		STANDARD_DEDUCTION_MARRIED_JOINT:     constants.STANDARD_DEDUCTION_MARRIED_JOINT,
+		STANDARD_DEDUCTION_MARRIED_SEPERATE:  constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
+		STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: constants.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD,
+	}
+
+	calculation, _ := calculator.Calculations[args[0].Get("datakey").String()]
+
+	value, retirementValue := calculator.CalculateSynchronousWasm(model, calculation)
+
+	return js.ValueOf(map[string]interface{}{
+		"datakey":          args[0].Get("datakey").String(),
+		"value":            value,
+		"retirement_value": retirementValue,
+	})
+}

@@ -1,6 +1,4 @@
 {{define "inputform"}}
-
-<form hx-post="/calculate/">
   <div class="container current-input">
     <div class="form-input">
       <label for="current-age">Current Age</label>
@@ -18,7 +16,11 @@
       <input type="number" id="current-annual-income" name="current-annual-income" value={{.input.CurrentAnnualIncome}} />
     </div>
     <div class="form-input">
-      <label for="annual-investment-growth">Annual Investment Growth</label>
+      <label for="annual-contributions-pre-tax">Current Annual Income</label>
+      <input type="number" id="annual-contributions-pre-tax" name="annual-contributions-pre-tax" value={{.input.AnnualContributionsPreTax}} />
+    </div>
+    <div class="form-input">
+      <label for="annual-investment-growth">Annual Investment Growth (percent)</label>
       <input type="number" id="annual-investment-growth" name="annual-investment-growth" value={{.input.AnnualInvestmentGrowth}} />
     </div>
   </div>
@@ -42,9 +44,9 @@
       <input type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
     </div>
 
-    <button type="submit">Calculate</button>
+    <button type="submit" id="401k-form-submit">Calculate</button>
   </div>
-</form>
+
 
 <style>
   label {

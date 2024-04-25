@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Analyze 401k</title>
+  <script type="text/javascript" src="/assets/wasm_exec.js"></script>
+</head>
+
+<body>
+  {{template "inputform" .}}
+</body>
+
+<script type="module"> 
+import { calculate, calculateAll } from "/assets/js/401k_calculations_module.js";
+import { get401kCalculatorInput } from "/assets/js/input_module.js";
+
+let ANNUAL_GROWTH_LESS_INFLATION = await calculate(get401kCalculatorInput("ANNUAL_GROWTH_LESS_INFLATION")); 
+let BALANCES_TRADITIONAL = await calculate(get401kCalculatorInput("BALANCES_TRADITIONAL")); 
+let INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE = await calculate(get401kCalculatorInput("INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE")); 
+
+console.log(ANNUAL_GROWTH_LESS_INFLATION);
+console.log(BALANCES_TRADITIONAL);
+console.log(INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE);
+
+document.getElementById('401k-form-submit').onclick=async() => {
+  let all = await calculateAll(get401kCalculatorInput())
+  console.log(all);
+  console.log("done")
+}
+
+</script>
+
+</html>
+
