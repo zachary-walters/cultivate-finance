@@ -56,6 +56,20 @@ type Model struct {
 	STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD float64   `json:"standard_deduction_head_of_household"`
 }
 
+func NewModel(input Input) Model {
+	return Model{
+		Input:                                input,
+		SingleTaxRates:                       Constants.SingleTaxRates,
+		MarriedJointTaxRates:                 Constants.MarriedJointTaxRates,
+		MarriedSeperateTaxRates:              Constants.MarriedSeperateTaxRates,
+		HeadOfHouseholdTaxRates:              Constants.HeadOfHouseholdTaxRates,
+		STANDARD_DEDUCTION_SINGLE:            Constants.STANDARD_DEDUCTION_SINGLE,
+		STANDARD_DEDUCTION_MARRIED_JOINT:     Constants.STANDARD_DEDUCTION_MARRIED_JOINT,
+		STANDARD_DEDUCTION_MARRIED_SEPERATE:  Constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
+		STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: Constants.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD,
+	}
+}
+
 func CalculateSynchronous(model Model, calculation any) (value any, retirementValue any) {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,23 +11,12 @@ import (
 	"github.com/zachary-walters/rothvtrad/backend/internal/calculator"
 )
 
-//go:embed constants.json
-var res embed.FS
-
-var model calculator.Model
-
 type data struct {
 	Value           any `json:"value,omitempty"`
 	RetirementValue any `json:"retirement_value,omitempty"`
 }
 
 func main() {
-	j, err := res.ReadFile("constants.json")
-	if err != nil {
-		panic(err)
-	}
-	json.Unmarshal(j, &model)
-
 	r := chi.NewRouter()
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +36,7 @@ func calculateAll(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	model.Input = input
+	model := calculator.NewModel(input)
 
 	defaultCh := make(chan map[string]any, len(calculator.Calculations))
 	retirementCh := make(chan map[string]any, len(calculator.Calculations))
@@ -111,7 +99,7 @@ func getCalculationByDatakey(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	model.Input = input
+	model := calculator.NewModel(input)
 
 	value, retirementValue := calculator.CalculateSynchronous(model, calculation)
 

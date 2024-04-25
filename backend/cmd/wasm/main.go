@@ -1,18 +1,11 @@
 package main
 
 import (
-	"embed"
-	"encoding/json"
 	"sync"
 	"syscall/js"
 
 	"github.com/zachary-walters/rothvtrad/backend/internal/calculator"
 )
-
-//go:embed constants.json
-var res embed.FS
-
-var constants calculator.Model
 
 type data struct {
 	Value           any `json:"value,omitempty"`
@@ -20,12 +13,6 @@ type data struct {
 }
 
 func main() {
-	j, err := res.ReadFile("constants.json")
-	if err != nil {
-		panic(err)
-	}
-	json.Unmarshal(j, &constants)
-
 	wait := make(chan struct{}, 0)
 	js.Global().Set("calculate", js.FuncOf(calculate))
 	js.Global().Set("calculateAll", js.FuncOf(calculateAll))
@@ -33,26 +20,18 @@ func main() {
 }
 
 func calculateAll(this js.Value, args []js.Value) interface{} {
-	model := calculator.Model{
-		Input: calculator.Input{
-			CurrentAge:                args[0].Get("current_age").Int(),
-			CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
-			CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
-			AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
-			AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
-			RetirementAge:             args[0].Get("retirement_age").Int(),
-			RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
-			YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
-		},
-		SingleTaxRates:                       constants.SingleTaxRates,
-		MarriedJointTaxRates:                 constants.MarriedJointTaxRates,
-		MarriedSeperateTaxRates:              constants.MarriedSeperateTaxRates,
-		HeadOfHouseholdTaxRates:              constants.HeadOfHouseholdTaxRates,
-		STANDARD_DEDUCTION_SINGLE:            constants.STANDARD_DEDUCTION_SINGLE,
-		STANDARD_DEDUCTION_MARRIED_JOINT:     constants.STANDARD_DEDUCTION_MARRIED_JOINT,
-		STANDARD_DEDUCTION_MARRIED_SEPERATE:  constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
-		STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: constants.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD,
+	input := calculator.Input{
+		CurrentAge:                args[0].Get("current_age").Int(),
+		CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
+		CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
+		AnnualContributionsPreTax: args[0].Get("annual_calculator.Constantstributions_pre_tax").Float(),
+		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
+		RetirementAge:             args[0].Get("retirement_age").Int(),
+		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
+		YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
 	}
+
+	model := calculator.NewModel(input)
 
 	defaultCh := make(chan map[string]any, len(calculator.Calculations))
 	retirementCh := make(chan map[string]any, len(calculator.Calculations))
@@ -101,26 +80,18 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 }
 
 func calculate(this js.Value, args []js.Value) interface{} {
-	model := calculator.Model{
-		Input: calculator.Input{
-			CurrentAge:                args[0].Get("current_age").Int(),
-			CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
-			CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
-			AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
-			AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
-			RetirementAge:             args[0].Get("retirement_age").Int(),
-			RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
-			YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
-		},
-		SingleTaxRates:                       constants.SingleTaxRates,
-		MarriedJointTaxRates:                 constants.MarriedJointTaxRates,
-		MarriedSeperateTaxRates:              constants.MarriedSeperateTaxRates,
-		HeadOfHouseholdTaxRates:              constants.HeadOfHouseholdTaxRates,
-		STANDARD_DEDUCTION_SINGLE:            constants.STANDARD_DEDUCTION_SINGLE,
-		STANDARD_DEDUCTION_MARRIED_JOINT:     constants.STANDARD_DEDUCTION_MARRIED_JOINT,
-		STANDARD_DEDUCTION_MARRIED_SEPERATE:  constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
-		STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: constants.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD,
+	input := calculator.Input{
+		CurrentAge:                args[0].Get("current_age").Int(),
+		CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
+		CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
+		AnnualContributionsPreTax: args[0].Get("annual_calculator.Constantstributions_pre_tax").Float(),
+		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
+		RetirementAge:             args[0].Get("retirement_age").Int(),
+		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
+		YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
 	}
+
+	model := calculator.NewModel(input)
 
 	calculation, _ := calculator.Calculations[args[0].Get("datakey").String()]
 
