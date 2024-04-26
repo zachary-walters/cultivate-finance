@@ -1,0 +1,37 @@
+package calculator
+
+type TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation SequenceCalculation
+
+type TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate struct {
+	IncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation
+}
+
+func NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate() TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate {
+	return TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate{
+		IncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation: NewIncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate(),
+	}
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate) Calculate(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.IncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.Calculate(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.MarriedSeperateTaxRates))
+
+	for idx, taxRate := range model.MarriedSeperateTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate) CalculateRetirement(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.IncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.Calculate(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.MarriedSeperateTaxRates))
+
+	for idx, taxRate := range model.MarriedSeperateTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}

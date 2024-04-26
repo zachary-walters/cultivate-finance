@@ -1,0 +1,28 @@
+package calculator
+
+type TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation Calculation
+
+type TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate struct {
+	TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation
+}
+
+func NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate() TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate {
+	return TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate{
+		TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation: NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate(),
+	}
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate) Calculate(model Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.Calculate(model)
+
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate := 0.0
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate {
+		totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate += value
+	}
+
+	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate) CalculateRetirement(model Model) float64 {
+	return c.Calculate(model)
+}
