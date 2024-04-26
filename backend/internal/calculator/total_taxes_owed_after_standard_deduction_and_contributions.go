@@ -6,6 +6,7 @@ type TotalTaxesOwedAfterStandardDeductionAndContributions struct {
 	TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation
 	TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation
 	TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation
+	TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation
 }
 
 func NewTotalTaxesOwedAfterStandardDeductionAndContributions() TotalTaxesOwedAfterStandardDeductionAndContributions {
@@ -13,6 +14,7 @@ func NewTotalTaxesOwedAfterStandardDeductionAndContributions() TotalTaxesOwedAft
 		TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation:          NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle(),
 		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation:    NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint(),
 		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation: NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate(),
+		TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: NewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold(),
 	}
 }
 
@@ -20,6 +22,7 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) Calculate(model Mo
 	totalTaxesOwedAfterStandardDeductionAndContributionsSingle := c.TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation.Calculate(model)
 	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation.Calculate(model)
 	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation.Calculate(model)
+	totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.Calculate(model)
 
 	switch model.Input.CurrentFilingStatus {
 	case "single":
@@ -28,6 +31,8 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) Calculate(model Mo
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint
 	case "married-seperate":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate
+	case "head-of-household":
+		return totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
 		return 0.0
 	}
@@ -37,6 +42,7 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRetiremen
 	totalTaxesOwedAfterStandardDeductionAndContributionsSingle := c.TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation.CalculateRetirement(model)
 	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateRetirement(model)
 	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateRetirement(model)
+	totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateRetirement(model)
 
 	switch model.Input.CurrentFilingStatus {
 	case "single":
@@ -45,6 +51,8 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRetiremen
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint
 	case "married-seperate":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate
+	case "head-of-household":
+		return totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
 		return 0.0
 	}

@@ -1,0 +1,28 @@
+package calculator
+
+type TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation Calculation
+
+type TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold struct {
+	TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation
+}
+
+func NewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold() TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold {
+	return TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold{
+		TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
+	}
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) Calculate(model Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.Calculate(model)
+
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := 0.0
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold {
+		totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold += value
+	}
+
+	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRetirement(model Model) float64 {
+	return c.Calculate(model)
+}

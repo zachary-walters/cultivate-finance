@@ -1,0 +1,37 @@
+package calculator
+
+type TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation SequenceCalculation
+
+type TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold struct {
+	IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation
+}
+
+func NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold() TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold {
+	return TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold{
+		IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: NewIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
+	}
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) Calculate(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.Calculate(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.HeadOfHouseholdTaxRates))
+
+	for idx, taxRate := range model.HeadOfHouseholdTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRetirement(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.Calculate(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.HeadOfHouseholdTaxRates))
+
+	for idx, taxRate := range model.HeadOfHouseholdTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}

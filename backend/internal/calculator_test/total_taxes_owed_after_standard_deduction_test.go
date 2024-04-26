@@ -26,6 +26,7 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 	totalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
 	totalTaxesOwedAfterStandardDeductionMarriedSeperate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeperate)
+	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
 
 	tests := []struct {
 		name  string
@@ -69,11 +70,13 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 		totalTaxesOwedAfterStandardDeductionSingle.On("Calculate", test.model).Return(1337.0)
 		totalTaxesOwedAfterStandardDeductionMarriedJoint.On("Calculate", test.model).Return(90245.7)
 		totalTaxesOwedAfterStandardDeductionMarriedSeperate.On("Calculate", test.model).Return(345.89)
+		totalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("Calculate", test.model).Return(1233214.908)
 
 		totalTaxesOwedAfterStandardDeduction := calculator.TotalTaxesOwedAfterStandardDeduction{
 			TotalTaxesOwedAfterStandardDeductionSingleCalculation:          totalTaxesOwedAfterStandardDeductionSingle,
 			TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    totalTaxesOwedAfterStandardDeductionMarriedJoint,
 			TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation: totalTaxesOwedAfterStandardDeductionMarriedSeperate,
+			TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: totalTaxesOwedAfterStandardDeductionHeadOfHousehold,
 		}
 		t.Run(test.name, func(t *testing.T) {
 			expected := 0.0
@@ -85,6 +88,7 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 			case "married-seperate":
 				expected = 345.89
 			case "head-of-household":
+				expected = 1233214.908
 			default:
 				expected = 0
 			}
