@@ -8,7 +8,9 @@
       <label for="current-filing-status">Current Filing Status</label>
       <select id="current-filing-status" name="current-filing-status" value="{{.input.CurrentFilingStatus}}">
         <option value="single">Single</option>
-        <option value="married">Married</option>
+        <option value="married-joint">Married Joint</option>
+        <option value="married-seperate">Married Seperate</option>
+        <option value="head-of-household">Head of Household</option>
       </select>
     </div>
     <div class="form-input">
@@ -36,7 +38,9 @@
       <label for="retirement-filing-status">Retirement Filing Status</label>
       <select id="retirement-filing-status" name="retirement-filing-status" value={{.input.RetirementFilingStatus}}>
         <option value="single">Single</option>
-        <option value="married">Married</option>
+        <option value="married-joint">Married Joint</option>
+        <option value="married-seperate">Married Seperate</option>
+        <option value="head-of-household">Head of Household</option>
       </select>
     </div>
     <div class="form-input">

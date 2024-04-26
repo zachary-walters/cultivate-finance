@@ -23,7 +23,8 @@ func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRetirement(model cal
 }
 
 func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
-	totalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsSingle)
+	totalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
+	totalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
 
 	tests := []struct {
 		name  string
@@ -65,18 +66,21 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 
 	for _, test := range tests {
 		totalTaxesOwedAfterStandardDeductionSingle.On("Calculate", test.model).Return(1337.0)
+		totalTaxesOwedAfterStandardDeductionMarriedJoint.On("Calculate", test.model).Return(90245.7)
 
 		totalTaxesOwedAfterStandardDeduction := calculator.TotalTaxesOwedAfterStandardDeduction{
-			TotalTaxesOwedAfterStandardDeductionSingleCalculation: totalTaxesOwedAfterStandardDeductionSingle,
+			TotalTaxesOwedAfterStandardDeductionSingleCalculation:       totalTaxesOwedAfterStandardDeductionSingle,
+			TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation: totalTaxesOwedAfterStandardDeductionMarriedJoint,
 		}
 		t.Run(test.name, func(t *testing.T) {
 			expected := 0.0
 			switch test.model.Input.CurrentFilingStatus {
 			case "single":
 				expected = 1337.0
-			case "married_joint":
-			case "married_seperate":
-			case "head_of_household":
+			case "married-joint":
+				expected = 90245.7
+			case "married-seperate":
+			case "head-of-household":
 			default:
 				expected = 0
 			}

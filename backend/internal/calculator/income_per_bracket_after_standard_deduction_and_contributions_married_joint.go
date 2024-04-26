@@ -1,0 +1,21 @@
+package calculator
+
+type IncomePerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation SequenceCalculation
+
+type IncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint struct {
+	IncomePerBracketAfterStandardDeductionAndContributionsCalculation
+}
+
+func NewIncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint() IncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint {
+	return IncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint{
+		IncomePerBracketAfterStandardDeductionAndContributionsCalculation: NewIncomePerBracketAfterStandardDeductionAndContributions(),
+	}
+}
+
+func (c IncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint) Calculate(model Model) []float64 {
+	return c.IncomePerBracketAfterStandardDeductionAndContributionsCalculation.Calculate(model, model.MarriedJointTaxRates)
+}
+
+func (c IncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint) CalculateRetirement(model Model) []float64 {
+	return c.IncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRetirement(model, model.MarriedJointTaxRates)
+}

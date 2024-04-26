@@ -1,0 +1,37 @@
+package calculator
+
+type TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation SequenceCalculation
+
+type TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint struct {
+	IncomePerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation
+}
+
+func NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint() TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint {
+	return TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint{
+		IncomePerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation: NewIncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint(),
+	}
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint) Calculate(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.IncomePerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.Calculate(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.MarriedJointTaxRates))
+
+	for idx, taxRate := range model.MarriedJointTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsMarriedJoint[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint) CalculateRetirement(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.IncomePerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.Calculate(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.MarriedJointTaxRates))
+
+	for idx, taxRate := range model.MarriedJointTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsMarriedJoint[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}

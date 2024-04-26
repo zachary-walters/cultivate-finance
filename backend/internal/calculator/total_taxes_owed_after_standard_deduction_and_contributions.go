@@ -4,25 +4,40 @@ type TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation Calculation
 
 type TotalTaxesOwedAfterStandardDeductionAndContributions struct {
 	TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation
+	TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation
 }
 
 func NewTotalTaxesOwedAfterStandardDeductionAndContributions() TotalTaxesOwedAfterStandardDeductionAndContributions {
 	return TotalTaxesOwedAfterStandardDeductionAndContributions{
-		TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation: NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle(),
+		TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation:       NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle(),
+		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation: NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint(),
 	}
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributions) Calculate(model Model) float64 {
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation.Calculate(model)
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation.Calculate(model)
 
 	switch model.Input.CurrentFilingStatus {
 	case "single":
 		return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
+	case "married-joint":
+		return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint
 	default:
 		return 0.0
 	}
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRetirement(model Model) float64 {
-	return c.Calculate(model)
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation.CalculateRetirement(model)
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateRetirement(model)
+
+	switch model.Input.CurrentFilingStatus {
+	case "single":
+		return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
+	case "married-joint":
+		return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint
+	default:
+		return 0.0
+	}
 }

@@ -23,6 +23,7 @@ func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateReti
 
 func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 	totalTaxesOwedAfterStandardDeductionAndContributionsSingle := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsSingle)
+	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint)
 
 	tests := []struct {
 		name  string
@@ -36,14 +37,14 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 				},
 			},
 		},
-		// {
-		// 	name: "Test Case Married Joint",
-		// 	model: calculator.Model{
-		// 		Input: calculator.Input{
-		// 			CurrentFilingStatus: "married_joint",
-		// 		},
-		// 	},
-		// },
+		{
+			name: "Test Case Married Joint",
+			model: calculator.Model{
+				Input: calculator.Input{
+					CurrentFilingStatus: "married_joint",
+				},
+			},
+		},
 		// {
 		// 	name: "Test Case Married Seperate",
 		// 	model: calculator.Model{
@@ -63,20 +64,23 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 	}
 
 	c := &calculator.TotalTaxesOwedAfterStandardDeductionAndContributions{
-		TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation: totalTaxesOwedAfterStandardDeductionAndContributionsSingle,
+		TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation:       totalTaxesOwedAfterStandardDeductionAndContributionsSingle,
+		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation: totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint,
 	}
 
 	for _, test := range tests {
 		totalTaxesOwedAfterStandardDeductionAndContributionsSingle.On("Calculate", test.model).Return(1337.0)
+		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint.On("Calculate", test.model).Return(349587.0)
 		expected := 0.0
 		actual := c.Calculate(test.model)
 		t.Run(test.name, func(t *testing.T) {
 			switch test.model.Input.CurrentFilingStatus {
 			case "single":
 				expected = 1337.0
-			case "married_joint":
-			case "married_seperate":
-			case "head_of_household":
+			case "married-joint":
+				expected = 349587.0
+			case "married-seperate":
+			case "head-of-household":
 			default:
 			}
 
