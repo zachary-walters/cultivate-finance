@@ -8,16 +8,16 @@ import (
 	"github.com/zachary-walters/rothvtrad/backend/internal/calculator"
 )
 
-type MockIncomePerBracketAfterStandardDeductionAndContributions struct {
+type MockAbstractIncomePerBracketAfterStandardDeductionAndContributions struct {
 	mock.Mock
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) Calculate(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockAbstractIncomePerBracketAfterStandardDeductionAndContributions) Calculate(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	args := m.Called(model, taxRates)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockAbstractIncomePerBracketAfterStandardDeductionAndContributions) CalculateRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	return m.Calculate(model, taxRates)
 }
 
@@ -55,12 +55,12 @@ func TestIncomePerBracketAfterStandarddeductionAndContributions(t *testing.T) {
 			mockIncomeAfterStandardDeductionAndContributions := new(MockIncomeAfterStandardDeductionAndContributions)
 			mockIncomeAfterStandardDeductionAndContributions.On("Calculate", test.model).Return(test.incomeAfterStandardDeduction)
 
-			mockIncomePerBracket := new(MockIncomePerBracket)
-			mockIncomePerBracket.On("Calculate", test.taxRates, mock.Anything, test.incomeAfterStandardDeduction).Return(test.incomePerBracket)
+			mockAbstractIncomePerBracket := new(MockAbstractIncomePerBracket)
+			mockAbstractIncomePerBracket.On("Calculate", test.taxRates, mock.Anything, test.incomeAfterStandardDeduction).Return(test.incomePerBracket)
 
-			c := calculator.IncomePerBracketAfterStandardDeductionAndContributions{
+			c := calculator.AbstractIncomePerBracketAfterStandardDeductionAndContributions{
 				IncomeAfterStandardDeductionAndContributionsCalculation: mockIncomeAfterStandardDeductionAndContributions,
-				IncomePerBracketCalculation:                             mockIncomePerBracket,
+				AbstractIncomePerBracketCalculation:                     mockAbstractIncomePerBracket,
 			}
 
 			actual := c.Calculate(test.model, test.taxRates)

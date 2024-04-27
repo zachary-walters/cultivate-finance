@@ -3,19 +3,19 @@ package calculator
 type IncomePerBracketAfterStandardDeductionMarriedJointCalculation SequenceCalculation
 
 type IncomePerBracketAfterStandardDeductionMarriedJoint struct {
-	IncomePerBracketAfterStandardDeductionCalculation
+	AbstractIncomePerBracketAfterStandardDeductionCalculation
 }
 
 func NewIncomePerBracketAfterStandardDeductionMarriedJoint() IncomePerBracketAfterStandardDeductionMarriedJoint {
 	return IncomePerBracketAfterStandardDeductionMarriedJoint{
-		IncomePerBracketAfterStandardDeductionCalculation: NewIncomePerBracketAfterStandardDeduction(),
+		AbstractIncomePerBracketAfterStandardDeductionCalculation: NewAbstractIncomePerBracketAfterStandardDeduction(),
 	}
 }
 
 func (c IncomePerBracketAfterStandardDeductionMarriedJoint) Calculate(model Model) []float64 {
-	return c.IncomePerBracketAfterStandardDeductionCalculation.Calculate(model, model.MarriedJointTaxRates)
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.Calculate(model, model.MarriedJointTaxRates)
 }
 
 func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRetirement(model Model) []float64 {
-	return c.IncomePerBracketAfterStandardDeductionCalculation.CalculateRetirement(model, model.MarriedJointTaxRates)
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRetirement(model, model.MarriedJointTaxRates)
 }

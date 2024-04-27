@@ -50,15 +50,15 @@ func TestMockIncomePerBracketAfterStandardDeductionHeadOfHousehold(t *testing.T)
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			mockIncomePerBracketAfterStandardDeduction := new(MockIncomePerBracketAfterStandardDeduction)
+			mockIncomePerBracketAfterStandardDeduction := new(MockAbstractIncomePerBracketAfterStandardDeduction)
 			mockIncomePerBracketAfterStandardDeduction.On("Calculate", test.model, test.model.HeadOfHouseholdTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
 
 			c := &calculator.IncomePerBracketAfterStandardDeductionHeadOfHousehold{
-				IncomePerBracketAfterStandardDeductionCalculation: mockIncomePerBracketAfterStandardDeduction,
+				AbstractIncomePerBracketAfterStandardDeductionCalculation: mockIncomePerBracketAfterStandardDeduction,
 			}
 
 			actual := c.Calculate(test.model)
-			expected := c.IncomePerBracketAfterStandardDeductionCalculation.Calculate(test.model, test.model.HeadOfHouseholdTaxRates)
+			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.Calculate(test.model, test.model.HeadOfHouseholdTaxRates)
 
 			assert.Equal(t, expected, actual)
 		})

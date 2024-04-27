@@ -9,17 +9,17 @@ import (
 	"github.com/zachary-walters/rothvtrad/backend/internal/calculator"
 )
 
-type MockIncomePerBracket struct {
+type MockAbstractIncomePerBracket struct {
 	mock.Mock
 }
 
-func (m *MockIncomePerBracket) Calculate(taxRates []calculator.TaxRate, bracketSequence int, income float64) float64 {
+func (m *MockAbstractIncomePerBracket) Calculate(taxRates []calculator.TaxRate, bracketSequence int, income float64) float64 {
 	args := m.Called(taxRates, bracketSequence, income)
 	return args.Get(0).(float64)
 }
 
 func TestIncomePerBracketCalculate(t *testing.T) {
-	calc := &calculator.IncomePerBracket{}
+	calc := &calculator.AbstractIncomePerBracket{}
 
 	taxRates := []calculator.TaxRate{
 		{Cap: 10000.0},
@@ -256,7 +256,7 @@ func TestIncomePerBracketCalculateQA(t *testing.T) {
 		},
 	}
 
-	calc := &calculator.IncomePerBracket{}
+	calc := &calculator.AbstractIncomePerBracket{}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

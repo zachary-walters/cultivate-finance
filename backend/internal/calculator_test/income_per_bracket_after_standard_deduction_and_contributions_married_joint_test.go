@@ -50,15 +50,15 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsMarriedJointCalcu
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			mockIncomePerBracketAfterStandardDeductionAndContributions := new(MockIncomePerBracketAfterStandardDeductionAndContributions)
+			mockIncomePerBracketAfterStandardDeductionAndContributions := new(MockAbstractIncomePerBracketAfterStandardDeductionAndContributions)
 			mockIncomePerBracketAfterStandardDeductionAndContributions.On("Calculate", test.model, test.model.MarriedJointTaxRates).Return(test.incomePerBracketAfterStandardDeductionAndContributions)
 
 			c := &calculator.IncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint{
-				IncomePerBracketAfterStandardDeductionAndContributionsCalculation: mockIncomePerBracketAfterStandardDeductionAndContributions,
+				AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation: mockIncomePerBracketAfterStandardDeductionAndContributions,
 			}
 
 			actual := c.Calculate(test.model)
-			expected := c.IncomePerBracketAfterStandardDeductionAndContributionsCalculation.Calculate(test.model, test.model.MarriedJointTaxRates)
+			expected := c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.Calculate(test.model, test.model.MarriedJointTaxRates)
 
 			assert.Equal(t, expected, actual)
 		})

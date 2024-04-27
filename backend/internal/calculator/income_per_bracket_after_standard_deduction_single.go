@@ -3,19 +3,19 @@ package calculator
 type IncomePerBracketAfterStandardDeductionSingleCalculation SequenceCalculation
 
 type IncomePerBracketAfterStandardDeductionSingle struct {
-	IncomePerBracketAfterStandardDeductionCalculation
+	AbstractIncomePerBracketAfterStandardDeductionCalculation
 }
 
 func NewIncomePerBracketAfterStandardDeductionSingle() IncomePerBracketAfterStandardDeductionSingle {
 	return IncomePerBracketAfterStandardDeductionSingle{
-		IncomePerBracketAfterStandardDeductionCalculation: NewIncomePerBracketAfterStandardDeduction(),
+		AbstractIncomePerBracketAfterStandardDeductionCalculation: NewAbstractIncomePerBracketAfterStandardDeduction(),
 	}
 }
 
 func (c IncomePerBracketAfterStandardDeductionSingle) Calculate(model Model) []float64 {
-	return c.IncomePerBracketAfterStandardDeductionCalculation.Calculate(model, model.SingleTaxRates)
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.Calculate(model, model.SingleTaxRates)
 }
 
 func (c IncomePerBracketAfterStandardDeductionSingle) CalculateRetirement(model Model) []float64 {
-	return c.IncomePerBracketAfterStandardDeductionCalculation.CalculateRetirement(model, model.SingleTaxRates)
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRetirement(model, model.SingleTaxRates)
 }

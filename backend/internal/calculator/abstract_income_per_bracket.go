@@ -1,16 +1,16 @@
 package calculator
 
-type IncomePerBracketCalculation interface {
+type AbstractIncomePerBracketCalculation interface {
 	Calculate([]TaxRate, int, float64) float64
 }
 
-type IncomePerBracket struct{}
+type AbstractIncomePerBracket struct{}
 
-func NewIncomePerBracket() IncomePerBracket {
-	return IncomePerBracket{}
+func NewAbstractIncomePerBracket() AbstractIncomePerBracket {
+	return AbstractIncomePerBracket{}
 }
 
-func (c IncomePerBracket) Calculate(taxRates []TaxRate, bracketSequence int, income float64) float64 {
+func (c AbstractIncomePerBracket) Calculate(taxRates []TaxRate, bracketSequence int, income float64) float64 {
 	incomePerBracket := 0.0
 	previousCap := 0.0
 	sum := 0.0
