@@ -44,7 +44,7 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRetiremen
 	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateRetirement(model)
 	totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateRetirement(model)
 
-	switch model.Input.CurrentFilingStatus {
+	switch model.Input.RetirementFilingStatus {
 	case "single":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 	case "married-joint":

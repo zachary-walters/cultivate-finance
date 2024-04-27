@@ -44,7 +44,7 @@ func (c IncomePerBracketAfterStandardDeductionAndContributions) CalculateRetirem
 	incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.IncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateRetirement(model)
 	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateRetirement(model)
 
-	switch model.Input.CurrentFilingStatus {
+	switch model.Input.RetirementFilingStatus {
 	case "single":
 		return incomePerBracketAfterStandardDeductionAndContributionsSingle
 	case "married-joint":
