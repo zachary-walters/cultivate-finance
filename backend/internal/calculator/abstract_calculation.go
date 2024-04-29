@@ -19,6 +19,11 @@ type ChartCalculation interface {
 	Calculate(Model) ChartData
 }
 
+type DecisionCalculation interface {
+	Calculate(Model) string
+	CalculateRetirement(Model) string
+}
+
 type ChartData struct {
 	BeginningBalance map[int]float64 `json:"beginning_balance,omitempty"`
 	Contribution     map[int]float64 `json:"contribution,omitempty"`
@@ -74,6 +79,7 @@ func CalculateSynchronous(model Model, calculation any) (value any, retirementVa
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	chart, isChartCalculation := calculation.(ChartCalculation)
+	decision, isDecisionCalculation := calculation.(DecisionCalculation)
 
 	if isCalculation {
 		value = calc.Calculate(model)
@@ -84,8 +90,9 @@ func CalculateSynchronous(model Model, calculation any) (value any, retirementVa
 	} else if isChartCalculation {
 		value = chart.Calculate(model)
 		retirementValue = nil
-	} else {
-
+	} else if isDecisionCalculation {
+		value = decision.Calculate(model)
+		retirementValue = decision.CalculateRetirement(model)
 	}
 
 	return value, retirementValue
@@ -104,6 +111,7 @@ func CalculateSynchronousWasm(model Model, calculation any) (value any, retireme
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	chart, isChartCalculation := calculation.(ChartCalculation)
+	decision, isDecisionCalculation := calculation.(DecisionCalculation)
 
 	if isCalculation {
 		value = calc.Calculate(model)
@@ -114,8 +122,9 @@ func CalculateSynchronousWasm(model Model, calculation any) (value any, retireme
 	} else if isChartCalculation {
 		value = translateChartData(chart.Calculate(model))
 		retirementValue = nil
-	} else {
-		// return an error
+	} else if isDecisionCalculation {
+		value = decision.Calculate(model)
+		retirementValue = decision.CalculateRetirement(model)
 	}
 	return value, retirementValue
 }
@@ -183,6 +192,7 @@ var Calculations = map[string]any{
 	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                                  NewIncomePerBracketAfterStandardDeductionSingle(),
 	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION":                                         NewIncomePerBracketAfterStandardDeduction(),
 	"NET_DISTRIBUTION_AFTER_TAXES":                                                        NewNetDistributionAfterTaxes(),
+	"ROTH_OR_TRADITIONAL_DECISION":                                                        NewRothOrTraditionalDecision(),
 	"STANDARD_DEDUCTION":                                                                  NewStandardDeduction(),
 	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_HEAD_OF_HOUSEHOLD": NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
 	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_JOINT":     NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint(),

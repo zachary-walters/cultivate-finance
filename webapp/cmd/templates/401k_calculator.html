@@ -7,10 +7,13 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container inputform-container">
     {{template "inputform" .}}
   </div>
-  <div class="container"></div>
+  <div class="container decision-container">
+    {{template "decision" .}}
+  </div>
+  <div class="container calculations-container"></div>
     {{template "calculations" .}}
   </div>
 </body>
@@ -43,6 +46,7 @@ document.getElementById("total-taxes-owed-after-standard-deduction").innerHTML =
 document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.STANDARD_DEDUCTION);
 document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.INCOME_AFTER_STANDARD_DEDUCTION);
 document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
+document.getElementById("decision").innerHTML = all.retirement.ROTH_OR_TRADITIONAL_DECISION;
 
 document.getElementById('401k-form-submit').onclick=async() => {
   let all = await calculateAll(get401kCalculatorInput())
@@ -58,6 +62,7 @@ document.getElementById('401k-form-submit').onclick=async() => {
   document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.STANDARD_DEDUCTION);
   document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.INCOME_AFTER_STANDARD_DEDUCTION);
   document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
+  document.getElementById("decision").innerHTML = all.retirement.ROTH_OR_TRADITIONAL_DECISION;
 }
 
 </script>
@@ -65,8 +70,17 @@ document.getElementById('401k-form-submit').onclick=async() => {
 <style>
   body {
     display:flex;
-    flex-direction: column;
-    row-gap: 1rem; 
+    flex-wrap: wrap;
+    /* flex-direction: column;
+    row-gap: 1rem;  */
+
+    flex-direction: row;
+    column-gap: 1rem; 
+  }
+
+  .inputform-container, decision-container {
+    flex: 50%;
+    width: 100%;
   }
 </style>
 

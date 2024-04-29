@@ -26,6 +26,7 @@ func main() {
 		ParseFS(res,
 			"templates/401k_calculator.html",
 			"templates/401k_calculator_input_form.html",
+			"templates/401k_calculator_decision.html",
 			"templates/401k_calculator_calculations.html")
 	if err != nil {
 		log.Fatal(err)

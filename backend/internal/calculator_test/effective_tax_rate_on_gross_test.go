@@ -13,13 +13,12 @@ type MockEffectiveTaxRateOnGross struct {
 }
 
 func (m *MockEffectiveTaxRateOnGross) Calculate(model calculator.Model) float64 {
-	return m.CalculateRetirement(model)
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
 func (m *MockEffectiveTaxRateOnGross) CalculateRetirement(model calculator.Model) float64 {
-	args := m.Called(model)
-	return args.Get(0).(float64)
-
+	return m.Calculate(model)
 }
 
 func TestEffectiveTaxRateOnGrossCalculate(t *testing.T) {

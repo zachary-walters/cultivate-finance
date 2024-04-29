@@ -74,11 +74,14 @@
   .form-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     row-gap: 1rem; 
   }
 
-  .current-input .retirement-input {
+  .current-input, .retirement-input {
+    display:flex;
+    flex-direction: column;
+    row-gap: 2px;
     width: 50%;
   }
 
