@@ -205,6 +205,8 @@ var Calculations = map[string]any{
 	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                              NewTaxesOwedPerBracketAfterStandardDeductionSingle(),
 	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION":                                     NewTaxesOwedPerBracketAfterStandardDeduction(),
 	"TAX_RATE_OF_SAVINGS":                                                                 NewTaxRateOfSavings(),
+	"TOTAL_CONTRIBUTIONS":                                                                 NewTotalContributions(),
+	"TOTAL_CONTRIBUTIONS_ROTH":                                                            NewTotalContributionsRoth(),
 	"TOTAL_DISBURSEMENTS_AFTER_TAX":                                                       NewTotalDisbursementsAfterTax(),
 	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_GROSS":                                             NewTotalDisbursementsRothMatchingGross(),
 	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_NET":                                               NewTotalDisbursementsRothMatchingNet(),
