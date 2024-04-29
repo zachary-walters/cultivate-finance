@@ -40,7 +40,7 @@ func TestStandardDeductionCalculate(t *testing.T) {
 			model: calculator.Model{
 				STANDARD_DEDUCTION_MARRIED_JOINT: 200,
 				Input: calculator.Input{
-					CurrentFilingStatus: "married_joint",
+					CurrentFilingStatus: "married-joint",
 				},
 			},
 		},
@@ -49,7 +49,7 @@ func TestStandardDeductionCalculate(t *testing.T) {
 			model: calculator.Model{
 				STANDARD_DEDUCTION_MARRIED_SEPERATE: 200,
 				Input: calculator.Input{
-					CurrentFilingStatus: "married_seperate",
+					CurrentFilingStatus: "married-seperate",
 				},
 			},
 		},
@@ -58,7 +58,7 @@ func TestStandardDeductionCalculate(t *testing.T) {
 			model: calculator.Model{
 				STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: 200,
 				Input: calculator.Input{
-					CurrentFilingStatus: "head_of_household",
+					CurrentFilingStatus: "head-of-household",
 				},
 			},
 		},
@@ -83,11 +83,11 @@ func TestStandardDeductionCalculate(t *testing.T) {
 			switch test.model.Input.CurrentFilingStatus {
 			case "single":
 				expected = test.model.STANDARD_DEDUCTION_SINGLE
-			case "married_joint":
+			case "married-joint":
 				expected = test.model.STANDARD_DEDUCTION_MARRIED_JOINT
-			case "married_seperate":
+			case "married-seperate":
 				expected = test.model.STANDARD_DEDUCTION_MARRIED_SEPERATE
-			case "head_of_household":
+			case "head-of-household":
 				expected = test.model.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD
 			default:
 				expected = test.model.STANDARD_DEDUCTION_SINGLE

@@ -27,8 +27,11 @@ down:
 	docker-compose down
 	@echo "Docker compose stopped!"
 
-serve:
+serve_api:
 	cd ../backend/cmd/api && fresh -c runner.conf
+
+serve_webapp:
+	cd ../webapp/cmd && fresh -c runner.conf
 
 webapp: fmt build_tinygo build_webapp 
 	@echo "rebuilding and starting webapp"
@@ -61,6 +64,9 @@ build_tinygo:
 
 build_webapp: build_tinygo
 	@echo "Building the HTMX webapp..."
+	cp ${TINYGOROOT}/targets/wasm_exec.js ../webapp/cmd/assets
+	cp ../backend/bin/${TINYGO_BINARY} ../webapp/cmd/assets
+	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' ../webapp/cmd/assets/wasm_exec.js
 	cd ../webapp && env GOOS=linux CGO_ENABLED=0 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
 	du -sh ../webapp/bin/${WEBAPP_BINARY}
 	@echo "Done building webapp binary"

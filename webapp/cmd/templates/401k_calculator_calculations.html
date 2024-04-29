@@ -1,0 +1,85 @@
+{{define "calculations"}}
+  <div class="calculations-content">
+    <div class="current-calculations">
+      <span><h4>Current</h4></1></span>
+      <div class="calculation">
+        <label for="standard-deduction" class="calculation-label">Standard Deduction</label>
+        <div class="standard-deduction" id="standard-deduction" name="standard-deduction"></div>
+      </div>
+      <div class="calculation">
+        <label for="income-after-standard-deduction" class="calculation-label">Income After Standard Deduction</label>
+        <div class="income-after-standard-deduction" id="income-after-standard-deduction" name="income-after-standard-deduction"></div>
+      </div>
+      <div class="calculation">
+        <label for="equivalent-roth-contributions" class="calculation-label">Equivalent Roth Contributions</label>
+        <div class="equivalent-roth-contributions" id="equivalent-roth-contributions" name="equivalent-roth-contributions"></div>
+      </div>
+      <div class="calculation">
+        <label for="income-after-standard-deduction-and-contributions" class="calculation-label">Income After Standard Deduction and Contributions</label>
+        <div class="income-after-standard-deduction-and-contributions" id="income-after-standard-deduction-and-contributions" name="income-after-standard-deduction-and-contributions"></div>
+      </div>
+      <div class="calculation">
+        <label for="annual-growth-less-inflation" class="calculation-label">Annual Growth Less Inflation</label>
+        <div class="annual-growth-less-inflation" id="annual-growth-less-inflation" name="annual-growth-less-inflation"></div>
+      </div>
+      <div class="calculation">
+        <label for="annual-tax-savings-with-contributions" class="calculation-label">Annual Tax Savings w/ Contributions</label>
+        <div class="annual-tax-savings-with-contributions" id="annual-tax-savings-with-contributions" name="annual-tax-savings-with-contributions"></div>
+      </div>
+      <div class="calculation">
+        <label for="tax-rate-of-savings" class="calculation-label">Tax Rate of Savings</label>
+        <div class="tax-rate-of-savings" id="tax-rate-of-savings" name="tax-rate-of-savings"></div>
+      </div>
+    </div>
+
+    <div class="retirement-calculations">
+      <span><h4>Retirement</h4></1></span>
+      <div class="calculation">
+        <label for="standard-deduction-retirement" class="calculation-label">Standard Deduction</label>
+        <div class="standard-deduction-retirement" id="standard-deduction-retirement" name="standard-deduction-retirement"></div>
+      </div>
+      <div class="calculation">
+        <label for="income-after-standard-deduction-retirement" class="calculation-label">Income After Standard Deduction</label>
+        <div class="income-after-standard-deduction-retirement" id="income-after-standard-deduction-retirement" name="income-after-standard-deduction-retirement"></div>
+      </div>
+      <div class="calculation">
+        <label for="total-taxes-owed-after-standard-deduction" class="calculation-label">Total Taxes Owed After Standard Deduction</label>
+        <div class="total-taxes-owed-after-standard-deduction" id="total-taxes-owed-after-standard-deduction" name="total-taxes-owed-after-standard-deduction"></div>
+      </div> 
+      <div class="calculation">
+        <label for="net-distribution-after-taxes" class="calculation-label">Net Distribution After Taxes</label>
+        <div class="net-distribution-after-taxes" id="net-distribution-after-taxes" name="net-distribution-after-taxes"></div>
+      </div> 
+      <div class="calculation">
+        <label for="effective-tax-rate-on-gross" class="calculation-label">Effective Tax Rate On Gross</label>
+        <div class="effective-tax-rate-on-gross" id="effective-tax-rate-on-gross" name="effective-tax-rate-on-gross"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .calculations-content {
+      display: flex;
+      column-gap: 2rem;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+    }
+
+    .current-calculations, .retirement-calculations{
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.5rem;
+      width: 26rem;
+    }
+
+    .calculation {
+      display: flex;
+    }
+
+    .calculation-label {
+      display: inline-block;
+      width: 100%;
+      text-align: left;
+    }
+  </style>
+{{end}}

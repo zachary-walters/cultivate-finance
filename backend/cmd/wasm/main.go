@@ -27,7 +27,7 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 		CurrentAge:                args[0].Get("current_age").Int(),
 		CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
 		CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
-		AnnualContributionsPreTax: args[0].Get("annual_calculator.Constantstributions_pre_tax").Float(),
+		AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
 		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
 		RetirementAge:             args[0].Get("retirement_age").Int(),
 		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
@@ -77,8 +77,8 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 	}
 
 	return js.ValueOf(map[string]interface{}{
-		"default": modelMapDefault,
-		"retired": modelMapRetired,
+		"default":    modelMapDefault,
+		"retirement": modelMapRetired,
 	})
 }
 
@@ -87,7 +87,7 @@ func calculate(this js.Value, args []js.Value) interface{} {
 		CurrentAge:                args[0].Get("current_age").Int(),
 		CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
 		CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
-		AnnualContributionsPreTax: args[0].Get("annual_calculator.Constantstributions_pre_tax").Float(),
+		AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
 		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
 		RetirementAge:             args[0].Get("retirement_age").Int(),
 		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),

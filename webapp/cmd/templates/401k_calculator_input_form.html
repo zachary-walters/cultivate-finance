@@ -1,68 +1,81 @@
 {{define "inputform"}}
-  <div class="container current-input">
-    <div class="form-input">
-      <label for="current-age">Current Age</label>
-      <input type="number" id="current-age" name="current-age" value={{.input.CurrentAge}} />
-    </div>
-    <div class="form-input">
-      <label for="current-filing-status">Current Filing Status</label>
-      <select id="current-filing-status" name="current-filing-status" value="{{.input.CurrentFilingStatus}}">
-        <option value="single">Single</option>
-        <option value="married-joint">Married Joint</option>
-        <option value="married-seperate">Married Seperate</option>
-        <option value="head-of-household">Head of Household</option>
-      </select>
-    </div>
-    <div class="form-input">
-      <label for="current-annual-income">Current Annual Income</label>
-      <input type="number" id="current-annual-income" name="current-annual-income" value={{.input.CurrentAnnualIncome}} />
-    </div>
-    <div class="form-input">
-      <label for="annual-contributions-pre-tax">Current Annual Income</label>
-      <input type="number" id="annual-contributions-pre-tax" name="annual-contributions-pre-tax" value={{.input.AnnualContributionsPreTax}} />
-    </div>
-    <div class="form-input">
-      <label for="annual-investment-growth">Annual Investment Growth (percent)</label>
-      <input type="number" id="annual-investment-growth" name="annual-investment-growth" value={{.input.AnnualInvestmentGrowth}} />
-    </div>
-  </div>
-
-  <br />
-
-  <div class="container retirement-input">
-    <div class="form-input">
-      <label for="retirement-age">Retirement Age</label>
-      <input type="number" id="retirement-age" name="retirement-age" value={{.input.RetirementAge}} />
-    </div>
-    <div class="form-input">
-      <label for="retirement-filing-status">Retirement Filing Status</label>
-      <select id="retirement-filing-status" name="retirement-filing-status" value={{.input.RetirementFilingStatus}}>
-        <option value="single">Single</option>
-        <option value="married-joint">Married Joint</option>
-        <option value="married-seperate">Married Seperate</option>
-        <option value="head-of-household">Head of Household</option>
-      </select>
-    </div>
-    <div class="form-input">
-      <label for="yearly-withdrawals">Yearly Withdrawal (today's dollars)</label>
-      <input type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
+  <div class="form-content">
+    <div class="current-input">
+      <div class="form-input">
+        <label for="current-age" class="input-label">Current Age</label>
+        <input type="number" id="current-age" name="current-age" value={{.input.CurrentAge}} />
+      </div>
+      <div class="form-input">
+        <label for="current-filing-status" class="input-label">Current Filing Status</label>
+        <select id="current-filing-status" name="current-filing-status" value="{{.input.CurrentFilingStatus}}">
+          <option value="single">Single</option>
+          <option value="married-joint">Married Joint</option>
+          <option value="married-seperate">Married Seperate</option>
+          <option value="head-of-household">Head of Household</option>
+        </select>
+      </div>
+      <div class="form-input">
+        <label for="current-annual-income" class="input-label">Current Annual Income</label>
+        <input type="number" id="current-annual-income" name="current-annual-income" value={{.input.CurrentAnnualIncome}} />
+      </div>
+      <div class="form-input">
+        <label for="annual-contributions-pre-tax" class="input-label">Annual Contributions Pretax</label>
+        <input type="number" id="annual-contributions-pre-tax" name="annual-contributions-pre-tax" value={{.input.AnnualContributionsPreTax}} />
+      </div>
+      <div class="form-input">
+        <label for="annual-investment-growth" class="input-label">Annual Investment Growth (percent)</label>
+        <input type="number" id="annual-investment-growth" name="annual-investment-growth" value={{.input.AnnualInvestmentGrowth}} />
+      </div>
     </div>
 
-    <button type="submit" id="401k-form-submit">Calculate</button>
+    <div class="retirement-input">
+      <div class="form-input">
+        <label for="retirement-age" class="input-label">Retirement Age</label>
+        <input type="number" id="retirement-age" name="retirement-age" value={{.input.RetirementAge}} />
+      </div>
+      <div class="form-input">
+        <label for="retirement-filing-status" class="input-label">Retirement Filing Status</label>
+        <select id="retirement-filing-status" name="retirement-filing-status" value={{.input.RetirementFilingStatus}}>
+          <option value="single">Single</option>
+          <option value="married-joint">Married Joint</option>
+          <option value="married-seperate">Married Seperate</option>
+          <option value="head-of-household">Head of Household</option>
+        </select>
+      </div>
+      <div class="form-input">
+        <label for="yearly-withdrawals" class="input-label">Yearly Withdrawal (today's dollars)</label>
+        <input type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
+      </div>
+
+      <button type="submit" id="401k-form-submit">Calculate</button>
+    </div>
   </div>
 
 
 <style>
-  label {
-    display: inline-block;
-    width: 250px;
-    text-align: right;
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
-  .container {
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  .input-label {
+    display: inline-block;
+    width: 250px;
+    text-align: left;
+  }
+
+  .form-content {
     display: flex;
-    flex-flow: row wrap;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-around;
+    row-gap: 1rem; 
   }
 
   .current-input .retirement-input {

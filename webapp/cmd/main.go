@@ -25,7 +25,8 @@ func main() {
 	templates, err := template.New("").
 		ParseFS(res,
 			"templates/401k_calculator.html",
-			"templates/401k_calculator_input_form.html")
+			"templates/401k_calculator_input_form.html",
+			"templates/401k_calculator_calculations.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,7 +38,7 @@ func main() {
 				CurrentFilingStatus:       "single",
 				CurrentAnnualIncome:       60000,
 				AnnualContributionsPreTax: 10000,
-				AnnualInvestmentGrowth:    8,
+				AnnualInvestmentGrowth:    0.08,
 				RetirementAge:             70,
 				RetirementFilingStatus:    "single",
 				YearlyWithdrawal:          60000,

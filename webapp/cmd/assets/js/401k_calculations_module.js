@@ -27,7 +27,7 @@ export const calculateAll = async (input) => {
 
   return window.calculateAll({
     current_age: input.current_age,
-    current_filing_status: input.CurrentFilingStatus,
+    current_filing_status: input.current_filing_status,
     current_annual_income: input.current_annual_income,
     annual_contributions_pre_tax: input.annual_contributions_pre_tax,
     annual_investment_growth: input.annual_investment_growth,
