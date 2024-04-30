@@ -6,8 +6,8 @@ services:
   api:
     container_name: rest-api-server
     build:
-      context: ./../backend
-      dockerfile: ./../backend/backend.dockerfile
+      context: ./../401k_calculator
+      dockerfile: ./../401k_calculator/401k_calculator.dockerfile
     restart: always
     ports:
       - "8660:8660"

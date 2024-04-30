@@ -1,4 +1,4 @@
-BACKEND_BINARY=backendApp
+401K_CALCULATOR_BINARY=401kCalculatorApp
 WASM_BINARY=wasmBin
 TINYGO_BINARY=tinygoBin.wasm
 WEBAPP_BINARY=webapp
@@ -7,7 +7,7 @@ GOROOT = $(shell go env GOROOT)
 TINYGOROOT = $(shell tinygo env TINYGOROOT)
 
 test: fmt
-	(cd ../backend; go test ./... -v)
+	(cd ../401k_calculator; go test ./... -v)
 
 ## up: starts all containers in the background without forcing build
 up: 
@@ -28,7 +28,7 @@ down:
 	@echo "Docker compose stopped!"
 
 serve_api:
-	cd ../backend/cmd/api && fresh -c runner.conf
+	cd ../401k_calculator/cmd/api && fresh -c runner.conf
 
 serve_webapp:
 	cd ../webapp/cmd && fresh -c runner.conf
@@ -36,7 +36,7 @@ serve_webapp:
 webapp: fmt build_tinygo build_webapp 
 	@echo "rebuilding and starting webapp"
 	cp ${TINYGOROOT}/targets/wasm_exec.js ../webapp/cmd/assets
-	cp ../backend/bin/${TINYGO_BINARY} ../webapp/cmd/assets
+	cp ../401k_calculator/bin/${TINYGO_BINARY} ../webapp/cmd/assets
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' ../webapp/cmd/assets/wasm_exec.js
 	docker-compose up -d --build webapp
 
@@ -45,27 +45,28 @@ api: fmt build_api
 	docker-compose up -d --build  api 
 
 build_api: 
-	@echo "Building api backend binary..."
-	cd ../backend && env GOOS=linux CGO_ENABLED=0 go build -o bin/${BACKEND_BINARY} ./cmd/api
-	du -sh ../backend/bin/${BACKEND_BINARY}
-	@echo "Done building backend binary!"
+	@echo "Building api 401k_calculator binary..."
+	cd ../401k_calculator && env GOOS=linux CGO_ENABLED=0 go build -o bin/${401K_CALCULATOR_BINARY} ./cmd/api
+	du -sh ../401k_calculator/bin/${401K_CALCULATOR_BINARY}
+	@echo "Done building 401k_calculator binary!"
 
 build_wasm:
 	@echo "Building the wasm binary..."
-	cd ../backend && env GOOS=js GOARCH=wasm CGO_ENABLED=0 go build -o bin/${WASM_BINARY} ./cmd/wasm
-	du -sh ../backend/bin/${WASM_BINARY}
+	cd ../401k_calculator && env GOOS=js GOARCH=wasm CGO_ENABLED=0 go build -o bin/${WASM_BINARY} ./cmd/wasm
+	du -sh ../401k_calculator/bin/${WASM_BINARY}
 	@echo "Done building wasm binary"
 
 build_tinygo:
 	@echo "Building tinygo wasm binary..."
-	cd ../backend && tinygo build -o bin/${TINYGO_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify ./cmd/wasm
-	du -sh ../backend/bin/${TINYGO_BINARY}
+	cd ../401k_calculator && tinygo build -o bin/${TINYGO_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify -panic=trap ./cmd/wasm 
+	wasm-opt -s -Oz ../401k_calculator/bin/${TINYGO_BINARY} -o ../401k_calculator/bin/${TINYGO_BINARY} && chmod +x ../401k_calculator/bin/${TINYGO_BINARY}
+	du -sh ../401k_calculator/bin/${TINYGO_BINARY}
 	@echo "Done building tinygo binary"
 
 build_webapp: build_tinygo
 	@echo "Building the HTMX webapp..."
 	cp ${TINYGOROOT}/targets/wasm_exec.js ../webapp/cmd/assets
-	cp ../backend/bin/${TINYGO_BINARY} ../webapp/cmd/assets
+	cp ../401k_calculator/bin/${TINYGO_BINARY} ../webapp/cmd/assets
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' ../webapp/cmd/assets/wasm_exec.js
 	cd ../webapp && env GOOS=linux CGO_ENABLED=0 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
 	du -sh ../webapp/bin/${WEBAPP_BINARY}
