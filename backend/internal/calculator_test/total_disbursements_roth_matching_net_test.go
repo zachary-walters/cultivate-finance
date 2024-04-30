@@ -17,6 +17,10 @@ func (m *MockTotalDisbursementsRothMatchingNet) Calculate(model calculator.Model
 	return args.Get(0).(float64)
 }
 
+func (m *MockTotalDisbursementsRothMatchingNet) CalculateRetirement(model calculator.Model) float64 {
+	return m.Calculate(model)
+}
+
 func TestTotalDisbursementsRothMatchingNet(t *testing.T) {
 	tests := []struct {
 		name                    string

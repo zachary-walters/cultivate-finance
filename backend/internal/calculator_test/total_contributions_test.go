@@ -17,6 +17,10 @@ func (m *MockTotalContributions) Calculate(model calculator.Model) float64 {
 	return args.Get(0).(float64)
 }
 
+func (m *MockTotalContributions) CalculateRetirement(model calculator.Model) float64 {
+	return m.Calculate(model)
+}
+
 func TestTotalContributionsCalculate(t *testing.T) {
 	tests := []struct {
 		name                string

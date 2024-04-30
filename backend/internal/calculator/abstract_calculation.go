@@ -210,6 +210,8 @@ var Calculations = map[string]any{
 	"TOTAL_DISBURSEMENTS_AFTER_TAX":                                                       NewTotalDisbursementsAfterTax(),
 	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_GROSS":                                             NewTotalDisbursementsRothMatchingGross(),
 	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_NET":                                               NewTotalDisbursementsRothMatchingNet(),
+	"TOTAL_INTEREST_AFTER_TAX":                                                            NewTotalInterestAfterTax(),
+	"TOTAL_INTEREST_ROTH":                                                                 NewTotalInterestRoth(),
 	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION":                                           NewTotalTaxesOwedAfterStandardDeduction(),
 	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":                         NewTotalTaxesOwedAfterStandardDeductionAndContributions(),
 	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_HEAD_OF_HOUSEHOLD":       NewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold(),
