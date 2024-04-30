@@ -3,11 +3,11 @@
     <div class="current-input">
       <div class="form-input">
         <label for="current-age" class="input-label">Current Age</label>
-        <input type="number" id="current-age" name="current-age" value={{.input.CurrentAge}} />
+        <input class="401k-calculator-input" type="number" id="current-age" name="current-age" value={{.input.CurrentAge}} />
       </div>
       <div class="form-input">
         <label for="current-filing-status" class="input-label">Current Filing Status</label>
-        <select id="current-filing-status" name="current-filing-status" value="{{.input.CurrentFilingStatus}}">
+        <select class="401k-calculator-input" id="current-filing-status" name="current-filing-status" value="{{.input.CurrentFilingStatus}}">
           <option value="single">Single</option>
           <option value="married-joint">Married Joint</option>
           <option value="married-seperate">Married Seperate</option>
@@ -16,26 +16,26 @@
       </div>
       <div class="form-input">
         <label for="current-annual-income" class="input-label">Current Annual Income</label>
-        <input type="number" id="current-annual-income" name="current-annual-income" value={{.input.CurrentAnnualIncome}} />
+        <input class="401k-calculator-input" type="number" id="current-annual-income" name="current-annual-income" value={{.input.CurrentAnnualIncome}} />
       </div>
       <div class="form-input">
         <label for="annual-contributions-pre-tax" class="input-label">Annual Contributions Pretax</label>
-        <input type="number" id="annual-contributions-pre-tax" name="annual-contributions-pre-tax" value={{.input.AnnualContributionsPreTax}} />
+        <input class="401k-calculator-input" type="number" id="annual-contributions-pre-tax" name="annual-contributions-pre-tax" value={{.input.AnnualContributionsPreTax}} />
       </div>
       <div class="form-input">
         <label for="annual-investment-growth" class="input-label">Annual Investment Growth (percent)</label>
-        <input type="number" id="annual-investment-growth" name="annual-investment-growth" value={{.input.AnnualInvestmentGrowth}} />
+        <input class="401k-calculator-input" type="number" id="annual-investment-growth" name="annual-investment-growth" value={{.input.AnnualInvestmentGrowth}} />
       </div>
     </div>
 
     <div class="retirement-input">
       <div class="form-input">
         <label for="retirement-age" class="input-label">Retirement Age</label>
-        <input type="number" id="retirement-age" name="retirement-age" value={{.input.RetirementAge}} />
+        <input class="401k-calculator-input" type="number" id="retirement-age" name="retirement-age" value={{.input.RetirementAge}} />
       </div>
       <div class="form-input">
         <label for="retirement-filing-status" class="input-label">Retirement Filing Status</label>
-        <select id="retirement-filing-status" name="retirement-filing-status" value={{.input.RetirementFilingStatus}}>
+        <select class="401k-calculator-input" id="retirement-filing-status" name="retirement-filing-status" value={{.input.RetirementFilingStatus}}>
           <option value="single">Single</option>
           <option value="married-joint">Married Joint</option>
           <option value="married-seperate">Married Seperate</option>
@@ -44,14 +44,43 @@
       </div>
       <div class="form-input">
         <label for="yearly-withdrawals" class="input-label">Yearly Withdrawal (today's dollars)</label>
-        <input type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
+        <input class="401k-calculator-input" type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
       </div>
-
-      <button type="submit" id="401k-form-submit">Calculate</button>
     </div>
   </div>
 
+<script type="module">
+import { calculate, calculateAll, isDollarValue, isPercentValue } from "/assets/js/401k_calculations_module.js";
+import { get401kCalculatorInput } from "/assets/js/input_module.js";
+import { generateCharts } from "/assets/js/chart_module.js";
 
+async function recalculate() {
+  let all = await calculateAll(get401kCalculatorInput());
+  document.getElementById("standard-deduction").innerHTML = isDollarValue(all.default.STANDARD_DEDUCTION);
+  document.getElementById("income-after-standard-deduction").innerHTML = isDollarValue(all.default.INCOME_AFTER_STANDARD_DEDUCTION);
+  document.getElementById("equivalent-roth-contributions").innerHTML = isDollarValue(all.default.EQUIVALENT_ROTH_CONTRIBUTIONS);
+  document.getElementById("income-after-standard-deduction-and-contributions").innerHTML = isDollarValue(all.default.INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS);
+  document.getElementById("annual-growth-less-inflation").innerHTML = isPercentValue(all.default.ANNUAL_GROWTH_LESS_INFLATION);
+  document.getElementById("annual-tax-savings-with-contributions").innerHTML = isDollarValue(all.default.ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION);
+  document.getElementById("tax-rate-of-savings").innerHTML = isPercentValue(all.default.TAX_RATE_OF_SAVINGS, true);
+  document.getElementById("net-distribution-after-taxes").innerHTML = isDollarValue(all.retirement.NET_DISTRIBUTION_AFTER_TAXES);
+  document.getElementById("total-taxes-owed-after-standard-deduction").innerHTML = isDollarValue(all.retirement.TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION);
+  document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.STANDARD_DEDUCTION);
+  document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.INCOME_AFTER_STANDARD_DEDUCTION);
+  document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
+
+  generateCharts(all);
+}
+
+let inputs = document.getElementsByClassName("401k-calculator-input");
+for (var i = 0; i < inputs.length; i++) {
+  inputs[i].oninput = () => {
+    setTimeout(() => {
+      recalculate()
+    }, 10);
+  }
+}
+</script>
 <style>
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
@@ -76,17 +105,17 @@
     flex-direction: column;
     justify-content: space-between;
     row-gap: 1rem; 
+    margin-top: 4rem;
   }
 
   .current-input, .retirement-input {
     display:flex;
     flex-direction: column;
     row-gap: 2px;
-    width: 50%;
   }
 
   .form-input {
-    flex: 1 100%;
+    display: flex;
   }
 </style>
 {{end}}

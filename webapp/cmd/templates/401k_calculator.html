@@ -4,6 +4,7 @@
 <head>
   <title>Analyze 401k</title>
   <script type="text/javascript" src="/assets/wasm_exec.js"></script>
+  <script type="module" src="/assets/js/external/chart.umd.min.js"></script>
 </head>
 
 <body>
@@ -13,27 +14,22 @@
   <div class="container decision-container">
     {{template "decision" .}}
   </div>
+  <div class="break"></div>
   <div class="container calculations-container"></div>
     {{template "calculations" .}}
   </div>
+  <div class="break"></div>
+  <div class="container area-chart-container"></div>
+    {{template "area-chart" .}}
+  </div> 
 </body>
 
 <script type="module"> 
-import { calculate, calculateAll } from "/assets/js/401k_calculations_module.js";
+import { calculate, calculateAll, isDollarValue, isPercentValue } from "/assets/js/401k_calculations_module.js";
 import { get401kCalculatorInput } from "/assets/js/input_module.js";
-
-function isDollarValue(str) {
-  return "$" + str;
-}
-
-function isPercentValue(str, convert) {
-  str = convert ? parseFloat(str).toFixed(4) * 100 : str;
-
-  return str + "%";
-}
+import { generateCharts } from "/assets/js/chart_module.js";
 
 let all = await calculateAll(get401kCalculatorInput());
-console.log(all);
 document.getElementById("standard-deduction").innerHTML = isDollarValue(all.default.STANDARD_DEDUCTION);
 document.getElementById("income-after-standard-deduction").innerHTML = isDollarValue(all.default.INCOME_AFTER_STANDARD_DEDUCTION);
 document.getElementById("equivalent-roth-contributions").innerHTML = isDollarValue(all.default.EQUIVALENT_ROTH_CONTRIBUTIONS);
@@ -46,41 +42,22 @@ document.getElementById("total-taxes-owed-after-standard-deduction").innerHTML =
 document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.STANDARD_DEDUCTION);
 document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.INCOME_AFTER_STANDARD_DEDUCTION);
 document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
-document.getElementById("decision").innerHTML = all.retirement.ROTH_OR_TRADITIONAL_DECISION;
+// document.getElementById("decision").innerHTML = all.retirement.ROTH_OR_TRADITIONAL_DECISION;
 
-document.getElementById('401k-form-submit').onclick=async() => {
-  let all = await calculateAll(get401kCalculatorInput())
-  document.getElementById("standard-deduction").innerHTML = isDollarValue(all.default.STANDARD_DEDUCTION);
-  document.getElementById("income-after-standard-deduction").innerHTML = isDollarValue(all.default.INCOME_AFTER_STANDARD_DEDUCTION);
-  document.getElementById("equivalent-roth-contributions").innerHTML = isDollarValue(all.default.EQUIVALENT_ROTH_CONTRIBUTIONS);
-  document.getElementById("income-after-standard-deduction-and-contributions").innerHTML = isDollarValue(all.default.INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS);
-  document.getElementById("annual-growth-less-inflation").innerHTML = isPercentValue(all.default.ANNUAL_GROWTH_LESS_INFLATION);
-  document.getElementById("annual-tax-savings-with-contributions").innerHTML = isDollarValue(all.default.ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION);
-  document.getElementById("tax-rate-of-savings").innerHTML = isPercentValue(all.default.TAX_RATE_OF_SAVINGS, true);
-  document.getElementById("net-distribution-after-taxes").innerHTML = isDollarValue(all.retirement.NET_DISTRIBUTION_AFTER_TAXES);
-  document.getElementById("total-taxes-owed-after-standard-deduction").innerHTML = isDollarValue(all.retirement.TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION);
-  document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.STANDARD_DEDUCTION);
-  document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.retirement.INCOME_AFTER_STANDARD_DEDUCTION);
-  document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
-  document.getElementById("decision").innerHTML = all.retirement.ROTH_OR_TRADITIONAL_DECISION;
-}
-
+generateCharts(all);
 </script>
 
 <style>
   body {
     display:flex;
     flex-wrap: wrap;
-    /* flex-direction: column;
-    row-gap: 1rem;  */
-
     flex-direction: row;
-    column-gap: 1rem; 
+    justify-content: space-around;
   }
 
-  .inputform-container, decision-container {
-    flex: 50%;
-    width: 100%;
+  .break {
+    flex-basis: 100%;
+    height: 0;
   }
 </style>
 

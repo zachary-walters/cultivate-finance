@@ -36,3 +36,13 @@ export const calculateAll = async (input) => {
     yearly_withdrawal: input.yearly_withdrawal,
   });
 }
+
+export const isDollarValue = (str) => {
+  return "$" + str.toLocaleString();
+}
+
+export const isPercentValue = (str, convert) => {
+  str = convert ? parseFloat(str).toFixed(4) * 100 : str;
+
+  return str + "%";
+}
