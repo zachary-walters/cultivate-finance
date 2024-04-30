@@ -8,25 +8,25 @@ import (
 	"github.com/zachary-walters/rothvtrad/backend/internal/calculator"
 )
 
-type MockTotalInterestAfterTax struct {
+type MockTotalInterest struct {
 	mock.Mock
 }
 
-func (m *MockTotalInterestAfterTax) Calculate(model calculator.Model) float64 {
+func (m *MockTotalInterest) Calculate(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func TestMockTotalInterestAfterTaxCalculate(t *testing.T) {
+func TestMockTotalInterestCalculate(t *testing.T) {
 	tests := []struct {
-		name                       string
-		totalDisbursementsAfterTax float64
-		totalContributions         float64
+		name               string
+		totalDisbursements float64
+		totalContributions float64
 	}{
 		{
-			name:                       "Test Case 0",
-			totalDisbursementsAfterTax: 100000,
-			totalContributions:         1,
+			name:               "Test Case 0",
+			totalDisbursements: 100000,
+			totalContributions: 1,
 		},
 	}
 
@@ -34,19 +34,19 @@ func TestMockTotalInterestAfterTaxCalculate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			mockTotalDisbursementsAfterTax := new(MockTotalDisbursementsAfterTax)
+			mockTotalDisbursements := new(MockTotalDisbursementsAfterTax)
 			mockTotalContributions := new(MockTotalContributions)
 
-			mockTotalDisbursementsAfterTax.On("Calculate", model).Return(test.totalDisbursementsAfterTax)
+			mockTotalDisbursements.On("Calculate", model).Return(test.totalDisbursements)
 			mockTotalContributions.On("Calculate", model).Return(test.totalContributions)
 
-			c := &calculator.TotalInterestAfterTax{
-				TotalDisbursementsAfterTaxCalculation: mockTotalDisbursementsAfterTax,
+			c := &calculator.TotalInterest{
+				TotalDisbursementsAfterTaxCalculation: mockTotalDisbursements,
 				TotalContributionsCalculation:         mockTotalContributions,
 			}
 
 			actual := c.Calculate(model)
-			expected := test.totalDisbursementsAfterTax - test.totalContributions
+			expected := test.totalDisbursements - test.totalContributions
 
 			assert.Equal(t, expected, actual)
 		})
