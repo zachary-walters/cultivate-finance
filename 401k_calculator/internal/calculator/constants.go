@@ -6,6 +6,8 @@ type constants struct {
 	MarriedJointTaxRates                 []TaxRate
 	MarriedSeperateTaxRates              []TaxRate
 	HeadOfHouseholdTaxRates              []TaxRate
+	SocialSecurityTaxRatesIndividual     []TaxRate
+	SocialSecurityTaxRatesJoint          []TaxRate
 	STANDARD_DEDUCTION_SINGLE            float64
 	STANDARD_DEDUCTION_MARRIED_JOINT     float64
 	STANDARD_DEDUCTION_MARRIED_SEPERATE  float64
@@ -132,6 +134,34 @@ var Constants = constants{
 		{
 			Cap:  -1,
 			Rate: 0.37,
+		},
+	},
+	SocialSecurityTaxRatesIndividual: []TaxRate{
+		{
+			Cap:  25000,
+			Rate: 0.0,
+		},
+		{
+			Cap:  34000,
+			Rate: 0.5,
+		},
+		{
+			Cap:  -1,
+			Rate: 0.85,
+		},
+	},
+	SocialSecurityTaxRatesJoint: []TaxRate{
+		{
+			Cap:  32000,
+			Rate: 0.0,
+		},
+		{
+			Cap:  44000,
+			Rate: 0.5,
+		},
+		{
+			Cap:  -1,
+			Rate: 0.85,
 		},
 	},
 	STANDARD_DEDUCTION_SINGLE:            13850,

@@ -42,6 +42,17 @@ type Input struct {
 	RetirementAge             int     `json:"retirement_age"`
 	RetirementFilingStatus    string  `json:"retirement_filing_status"`
 	YearlyWithdrawal          float64 `json:"yearly_withdrawal"`
+	// Extended
+	WorkIncome                              float64 `json:"work_income"`
+	QualifiedDividends                      float64 `json:"qualified_dividends"`
+	OtherLongTermCapitalGains               float64 `json:"other_long_term_capital_gains"`
+	PensionIncome                           float64 `json:"pension_income"`
+	RentalNetIncome                         float64 `json:"rental_net_income"`
+	AnnuityIncome                           float64 `json:"annuity_income"`
+	SocialSecurity                          float64 `json:"social_security"`
+	OtherTaxableIncome                      float64 `json:"other_taxable_income"`
+	EstimatedTaxPercentIncreaseAtRetirement float64 `json:"estimated_tax_percent_increase_at_retirement"`
+	StandardDeductionIncreaseDecrease       float64 `json:"standard_deduction_increase_decrease"`
 }
 
 type TaxRate struct {
@@ -55,6 +66,8 @@ type Model struct {
 	MarriedJointTaxRates                 []TaxRate `json:"married_joint_tax_rates"`
 	MarriedSeperateTaxRates              []TaxRate `json:"married_seperate_tax_rates"`
 	HeadOfHouseholdTaxRates              []TaxRate `json:"head_of_household_tax_rates"`
+	SocialSecurityTaxRatesIndividual     []TaxRate `json:"social_security_tax_rates_individual"`
+	SocialSecurityTaxRatesJoint          []TaxRate `json:"social_security_tax_rates_joint"`
 	STANDARD_DEDUCTION_SINGLE            float64   `json:"standard_deduction_single"`
 	STANDARD_DEDUCTION_MARRIED_JOINT     float64   `json:"standard_deduction_married_joint"`
 	STANDARD_DEDUCTION_MARRIED_SEPERATE  float64   `json:"standard_deduction_married_seperate"`
@@ -68,6 +81,8 @@ func NewModel(input Input) Model {
 		MarriedJointTaxRates:                 Constants.MarriedJointTaxRates,
 		MarriedSeperateTaxRates:              Constants.MarriedSeperateTaxRates,
 		HeadOfHouseholdTaxRates:              Constants.HeadOfHouseholdTaxRates,
+		SocialSecurityTaxRatesIndividual:     Constants.SocialSecurityTaxRatesIndividual,
+		SocialSecurityTaxRatesJoint:          Constants.SocialSecurityTaxRatesJoint,
 		STANDARD_DEDUCTION_SINGLE:            Constants.STANDARD_DEDUCTION_SINGLE,
 		STANDARD_DEDUCTION_MARRIED_JOINT:     Constants.STANDARD_DEDUCTION_MARRIED_JOINT,
 		STANDARD_DEDUCTION_MARRIED_SEPERATE:  Constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
@@ -172,6 +187,10 @@ func translateChartData(c ChartData) map[string]interface{} {
 }
 
 var Calculations = map[string]any{
+	"ADJUSTED_GROSS_INCOME_ROTH":                                                          NewAdjustedGrossIncomeRoth(),
+	"ADJUSTED_GROSS_INCOME_TRADITIONAL":                                                   NewAdjustedGrossIncomeTraditional(),
+	"ADJUSTED_GROSS_INCOME_ROTH_AND_HALF_OF_SOCIAL_SECURITY":                              NewAdjustedGrossIncomeRothAndHalfOfSocialSecurity(),
+	"ADJUSTED_GROSS_INCOME_TRADITIONAL_AND_HALF_OF_SOCIAL_SECURITY":                       NewAdjustedGrossIncomeTraditionalAndHalfOfSocialSecurity(),
 	"ANNUAL_GROWTH_LESS_INFLATION":                                                        NewAnnualGrowthLessInflation(),
 	"ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION":                                                NewAnnualTaxSavingsWithContribution(),
 	"BALANCES_ROTH_MATCHING_GROSS_CONTRIBUTIONS":                                          NewBalancesRothMatchingGrossContributions(),
@@ -191,8 +210,13 @@ var Calculations = map[string]any{
 	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_MARRIED_SEPERATE":                        NewIncomePerBracketAfterStandardDeductionMarriedSeperate(),
 	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                                  NewIncomePerBracketAfterStandardDeductionSingle(),
 	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION":                                         NewIncomePerBracketAfterStandardDeduction(),
+	"HALF_OF_SOCIAL_SECURITY":                                                             NewHalfOfSocialSecurity(),
 	"NET_DISTRIBUTION_AFTER_TAXES":                                                        NewNetDistributionAfterTaxes(),
 	"ROTH_OR_TRADITIONAL_DECISION":                                                        NewRothOrTraditionalDecision(),
+	"SOCIAL_SECURITY_TAXABLE_INCOME_INDIVIDUAL_ROTH":                                      NewSocialSecurityTaxableIncomeIndividualRoth(),
+	"SOCIAL_SECURITY_TAXABLE_INCOME_INDIVIDUAL_TRADITIONAL":                               NewSocialSecurityTaxableIncomeIndividualTraditional(),
+	"SOCIAL_SECURITY_TAXABLE_INCOME_JOINT_ROTH":                                           NewSocialSecurityTaxableIncomeJointRoth(),
+	"SOCIAL_SECURITY_TAXABLE_INCOME_JOINT_TRADITIONAL":                                    NewSocialSecurityTaxableIncomeJointTraditional(),
 	"STANDARD_DEDUCTION":                                                                  NewStandardDeduction(),
 	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_HEAD_OF_HOUSEHOLD": NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
 	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_JOINT":     NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint(),
