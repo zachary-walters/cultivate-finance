@@ -4,11 +4,13 @@ type IncomeAfterStandardDeductionCalculation Calculation
 
 type IncomeAfterStandardDeduction struct {
 	StandardDeductionCalculation
+	TotalTaxableIncomeTraditionalCalculation
 }
 
 func NewIncomeAfterStandardDeduction() IncomeAfterStandardDeduction {
 	return IncomeAfterStandardDeduction{
-		StandardDeductionCalculation: NewStandardDeduction(),
+		StandardDeductionCalculation:                   NewStandardDeduction(),
+		TotalTaxableIncomeTraditionalCalculation:       NewTotalTaxableIncomeTraditional(),
 	}
 }
 
@@ -21,7 +23,8 @@ func (c IncomeAfterStandardDeduction) Calculate(model Model) float64 {
 
 func (c IncomeAfterStandardDeduction) CalculateRetirement(model Model) float64 {
 	standardDeduction := c.StandardDeductionCalculation.CalculateRetirement(model)
-	yearlyWithdrawal := model.Input.YearlyWithdrawal
 
-	return yearlyWithdrawal - standardDeduction
+	combinedRetirementIncomeTraditional := c.TotalTaxableIncomeTraditionalCalculation.Calculate(model)
+
+	return combinedRetirementIncomeTraditional - standardDeduction
 }

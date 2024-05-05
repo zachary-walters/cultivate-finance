@@ -3,20 +3,20 @@ package calculator
 type SocialSecurityTaxableIncomeIndividualRothCalculation Calculation
 
 type SocialSecurityTaxableIncomeIndividualRoth struct {
-	AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation
+	AdjustedGrossIncomeRothCalculation
 }
 
 func NewSocialSecurityTaxableIncomeIndividualRoth() SocialSecurityTaxableIncomeIndividualRoth {
 	return SocialSecurityTaxableIncomeIndividualRoth{
-		AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation: NewAdjustedGrossIncomeRothAndHalfOfSocialSecurity(),
+		AdjustedGrossIncomeRothCalculation: NewAdjustedGrossIncomeRoth(),
 	}
 }
 
 func (c SocialSecurityTaxableIncomeIndividualRoth) Calculate(model Model) float64 {
-	adjustedGrossIncomeRothAndHalfOfSocialSecurity := c.AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation.Calculate(model)
+	adjustedGrossIncomeRoth := c.AdjustedGrossIncomeRothCalculation.Calculate(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
-		if taxRate.Cap > adjustedGrossIncomeRothAndHalfOfSocialSecurity {
+		if taxRate.Cap > adjustedGrossIncomeRoth {
 			return model.Input.SocialSecurity * taxRate.Rate
 		}
 	}

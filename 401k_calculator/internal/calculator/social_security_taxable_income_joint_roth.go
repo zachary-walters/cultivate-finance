@@ -3,20 +3,20 @@ package calculator
 type SocialSecurityTaxableIncomeJointRothCalculation Calculation
 
 type SocialSecurityTaxableIncomeJointRoth struct {
-	AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation
+	AdjustedGrossIncomeRothCalculation
 }
 
 func NewSocialSecurityTaxableIncomeJointRoth() SocialSecurityTaxableIncomeJointRoth {
 	return SocialSecurityTaxableIncomeJointRoth{
-		AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation: NewAdjustedGrossIncomeRothAndHalfOfSocialSecurity(),
+		AdjustedGrossIncomeRothCalculation: NewAdjustedGrossIncomeRoth(),
 	}
 }
 
 func (c SocialSecurityTaxableIncomeJointRoth) Calculate(model Model) float64 {
-	adjustedGrossIncomeRothAndHalfOfSocialSecurity := c.AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation.Calculate(model)
+	totalTaxableIncomeRoth := c.AdjustedGrossIncomeRothCalculation.Calculate(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesJoint {
-		if taxRate.Cap > adjustedGrossIncomeRothAndHalfOfSocialSecurity {
+		if taxRate.Cap > totalTaxableIncomeRoth {
 			return model.Input.SocialSecurity * taxRate.Rate
 		}
 	}

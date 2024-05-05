@@ -23,9 +23,9 @@ func (m *MockSocialSecurityTaxableIncomeIndividualRoth) CalculateRetirement(mode
 
 func TestSocialSecurityTaxableIncomeIndividualRothCalculate(t *testing.T) {
 	tests := []struct {
-		name                                           string
-		model                                          calculator.Model
-		adjustedGrossIncomeRothAndHalfOfSocialSecurity float64
+		name                    string
+		model                   calculator.Model
+		adjustedGrossIncomeRoth float64
 	}{
 		{
 			name: "Test Case 0",
@@ -48,23 +48,23 @@ func TestSocialSecurityTaxableIncomeIndividualRothCalculate(t *testing.T) {
 					},
 				},
 			},
-			adjustedGrossIncomeRothAndHalfOfSocialSecurity: 0,
+			adjustedGrossIncomeRoth: 0,
 		},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			mockAdjustedGrossIncomeRothAndHalfOfSocialSecurity := new(MockAdjustedGrossIncomeRothAndHalfOfSocialSecurity)
-			mockAdjustedGrossIncomeRothAndHalfOfSocialSecurity.On("Calculate", test.model).Return(test.adjustedGrossIncomeRothAndHalfOfSocialSecurity)
+			mockAdjustedGrossIncomeRoth := new(MockAdjustedGrossIncomeRoth)
+			mockAdjustedGrossIncomeRoth.On("Calculate", test.model).Return(test.adjustedGrossIncomeRoth)
 
 			c := &calculator.SocialSecurityTaxableIncomeIndividualRoth{
-				AdjustedGrossIncomeRothAndHalfOfSocialSecurityCalculation: mockAdjustedGrossIncomeRothAndHalfOfSocialSecurity,
+				AdjustedGrossIncomeRothCalculation: mockAdjustedGrossIncomeRoth,
 			}
 
 			actual := c.Calculate(test.model)
 			expected := func() float64 {
 				for _, taxRate := range test.model.SocialSecurityTaxRatesIndividual {
-					if taxRate.Cap > test.adjustedGrossIncomeRothAndHalfOfSocialSecurity {
+					if taxRate.Cap > test.adjustedGrossIncomeRoth {
 						return test.model.Input.SocialSecurity * taxRate.Rate
 					}
 				}

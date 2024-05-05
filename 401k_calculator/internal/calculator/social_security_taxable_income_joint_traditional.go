@@ -3,20 +3,20 @@ package calculator
 type SocialSecurityTaxableIncomeJointTraditionalCalculation Calculation
 
 type SocialSecurityTaxableIncomeJointTraditional struct {
-	AdjustedGrossIncomeTraditionalAndHalfOfSocialSecurityCalculation
+	AdjustedGrossIncomeTraditionalCalculation
 }
 
 func NewSocialSecurityTaxableIncomeJointTraditional() SocialSecurityTaxableIncomeJointTraditional {
 	return SocialSecurityTaxableIncomeJointTraditional{
-		AdjustedGrossIncomeTraditionalAndHalfOfSocialSecurityCalculation: NewAdjustedGrossIncomeTraditionalAndHalfOfSocialSecurity(),
+		AdjustedGrossIncomeTraditionalCalculation: NewAdjustedGrossIncomeTraditional(),
 	}
 }
 
 func (c SocialSecurityTaxableIncomeJointTraditional) Calculate(model Model) float64 {
-	adjustedGrossIncomeTraditionalAndHalfOfSocialSecurity := c.AdjustedGrossIncomeTraditionalAndHalfOfSocialSecurityCalculation.Calculate(model)
+	adjustedGrossIncomeTraditional := c.AdjustedGrossIncomeTraditionalCalculation.Calculate(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesJoint {
-		if taxRate.Cap > adjustedGrossIncomeTraditionalAndHalfOfSocialSecurity {
+		if taxRate.Cap > adjustedGrossIncomeTraditional {
 			return model.Input.SocialSecurity * taxRate.Rate
 		}
 	}
