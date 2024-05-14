@@ -6,13 +6,17 @@ import (
 )
 
 type Calculation interface {
-	Calculate(Model) float64
-	CalculateRetirement(Model) float64
+	CalculateTraditional(Model) float64
+	CalculateTraditionalRetirement(Model) float64
+	CalculateRoth(Model) float64
+	CalculateRothRetirement(Model) float64
 }
 
 type SequenceCalculation interface {
-	Calculate(Model) []float64
-	CalculateRetirement(Model) []float64
+	CalculateTraditional(Model) []float64
+	CalculateTraditionalRetirement(Model) []float64
+	CalculateRoth(Model) []float64
+	CalculateRothRetirement(Model) []float64
 }
 
 type ChartCalculation interface {
@@ -22,6 +26,14 @@ type ChartCalculation interface {
 type DecisionCalculation interface {
 	Calculate(Model) string
 	CalculateRetirement(Model) string
+}
+
+type CalculationData struct {
+	Datakey                    string
+	TraditionalValue           any
+	TraditionalRetirementValue any
+	RothValue                  any
+	RothRetirementValue        any
 }
 
 type ChartData struct {
@@ -90,67 +102,95 @@ func NewModel(input Input) Model {
 	}
 }
 
-func CalculateSynchronous(model Model, calculation any) (value any, retirementValue any) {
+func coalesce[T int | float64](number T) T {
+	if number < 0 {
+		return 0
+	}
+	return number
+}
+
+func CalculateSynchronous(model Model, calculation any, datakey string) CalculationData {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	chart, isChartCalculation := calculation.(ChartCalculation)
 	decision, isDecisionCalculation := calculation.(DecisionCalculation)
 
-	if isCalculation {
-		value = calc.Calculate(model)
-		retirementValue = calc.CalculateRetirement(model)
-	} else if isSequenceCalculation {
-		value = seq.Calculate(model)
-		retirementValue = seq.CalculateRetirement(model)
-	} else if isChartCalculation {
-		value = chart.Calculate(model)
-		retirementValue = nil
-	} else if isDecisionCalculation {
-		value = decision.Calculate(model)
-		retirementValue = decision.CalculateRetirement(model)
+	calculationData := CalculationData{
+		Datakey: datakey,
 	}
 
-	return value, retirementValue
+	if isCalculation {
+		calculationData.TraditionalValue = calc.CalculateTraditional(model)
+		calculationData.TraditionalRetirementValue = calc.CalculateTraditionalRetirement(model)
+		calculationData.RothValue = calc.CalculateRoth(model)
+		calculationData.RothRetirementValue = calc.CalculateRothRetirement(model)
+	} else if isSequenceCalculation {
+		calculationData.TraditionalValue = seq.CalculateTraditional(model)
+		calculationData.TraditionalRetirementValue = seq.CalculateTraditionalRetirement(model)
+		calculationData.RothValue = seq.CalculateRoth(model)
+		calculationData.RothRetirementValue = seq.CalculateRothRetirement(model)
+	} else if isChartCalculation {
+		calculationData.TraditionalValue = chart.Calculate(model)
+		calculationData.TraditionalRetirementValue = nil
+		calculationData.RothValue = nil
+		calculationData.RothRetirementValue = nil
+	} else if isDecisionCalculation {
+		calculationData.TraditionalValue = decision.Calculate(model)
+		calculationData.TraditionalRetirementValue = nil
+		calculationData.RothValue = nil
+		calculationData.RothRetirementValue = nil
+	}
+
+	return calculationData
 }
 
-func CalculateAsync(wg *sync.WaitGroup, ch chan<- map[string]any, rch chan<- map[string]any, datakey string, calculation any, model Model) {
-	value, retirementValue := CalculateSynchronous(model, calculation)
+func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model Model) {
+	defer wg.Done()
+	calculationData := CalculateSynchronous(model, calculation, datakey)
 
-	ch <- map[string]any{datakey: value}
-	rch <- map[string]any{datakey: retirementValue}
-
-	wg.Done()
+	ch <- calculationData
 }
 
-func CalculateSynchronousWasm(model Model, calculation any) (value any, retirementValue any) {
+func CalculateSynchronousWasm(model Model, calculation any, datakey string) CalculationData {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	chart, isChartCalculation := calculation.(ChartCalculation)
 	decision, isDecisionCalculation := calculation.(DecisionCalculation)
 
-	if isCalculation {
-		value = calc.Calculate(model)
-		retirementValue = calc.CalculateRetirement(model)
-	} else if isSequenceCalculation {
-		value = translateFloatSlice(seq.Calculate(model))
-		retirementValue = translateFloatSlice(seq.CalculateRetirement(model))
-	} else if isChartCalculation {
-		value = translateChartData(chart.Calculate(model))
-		retirementValue = nil
-	} else if isDecisionCalculation {
-		value = decision.Calculate(model)
-		retirementValue = decision.CalculateRetirement(model)
+	calculationData := CalculationData{
+		Datakey: datakey,
 	}
-	return value, retirementValue
+
+	if isCalculation {
+		calculationData.TraditionalValue = calc.CalculateTraditional(model)
+		calculationData.TraditionalRetirementValue = calc.CalculateTraditionalRetirement(model)
+		calculationData.RothValue = calc.CalculateRoth(model)
+		calculationData.RothRetirementValue = calc.CalculateRothRetirement(model)
+	} else if isSequenceCalculation {
+		calculationData.TraditionalValue = translateFloatSlice(seq.CalculateTraditional(model))
+		calculationData.TraditionalRetirementValue = translateFloatSlice(seq.CalculateTraditionalRetirement(model))
+		calculationData.RothValue = translateFloatSlice(seq.CalculateRoth(model))
+		calculationData.RothRetirementValue = translateFloatSlice(seq.CalculateRothRetirement(model))
+	} else if isChartCalculation {
+		calculationData.TraditionalValue = translateChartData(chart.Calculate(model))
+		calculationData.TraditionalRetirementValue = nil
+		calculationData.RothValue = nil
+		calculationData.RothRetirementValue = nil
+	} else if isDecisionCalculation {
+		calculationData.TraditionalValue = decision.Calculate(model)
+		calculationData.TraditionalRetirementValue = decision.CalculateRetirement(model)
+		calculationData.RothValue = nil
+		calculationData.RothRetirementValue = nil
+	}
+
+	return calculationData
 }
 
-func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan<- map[string]any, rch chan<- map[string]any, datakey string, calculation any, model Model) {
-	value, retirementValue := CalculateSynchronousWasm(model, calculation)
+func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model Model) {
+	defer wg.Done()
+	calculationData := CalculateSynchronousWasm(model, calculation, datakey)
 
-	ch <- map[string]any{datakey: value}
-	rch <- map[string]any{datakey: retirementValue}
-
-	wg.Done()
+	ch <- calculationData
 }
 
 func translateFloatSlice(s []float64) []interface{} {
@@ -184,71 +224,4 @@ func translateChartData(c ChartData) map[string]interface{} {
 	chartData["after_tax_income"] = translateChartMap(c.AfterTaxIncome)
 
 	return chartData
-}
-
-var Calculations = map[string]any{
-	"ADJUSTED_GROSS_INCOME_ROTH":                                                          NewAdjustedGrossIncomeRoth(),
-	"ADJUSTED_GROSS_INCOME_TRADITIONAL":                                                   NewAdjustedGrossIncomeTraditional(),
-	"TOTAL_TAXABLE_INCOME_ROTH":                                                           NewTotalTaxableIncomeRoth(),
-	"TOTAL_TAXABLE_INCOME_TRADITIONAL":                                                    NewTotalTaxableIncomeTraditional(),
-	"ANNUAL_GROWTH_LESS_INFLATION":                                                        NewAnnualGrowthLessInflation(),
-	"ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION":                                                NewAnnualTaxSavingsWithContribution(),
-	"BALANCES_ROTH_MATCHING_GROSS_CONTRIBUTIONS":                                          NewBalancesRothMatchingGrossContributions(),
-	"BALANCES_ROTH_MATCHING_NET_CONTRIBUTIONS":                                            NewBalancesRothMatchingNetContributions(),
-	"BALANCES_TRADITIONAL":                                                                NewBalancesTraditional(),
-	"COMBINED_RETIREMENT_INCOME_ROTH":                                                     NewCombinedRetirementIncomeRoth(),
-	"COMBINED_RETIREMENT_INCOME_TRADITIONAL":                                              NewCombinedRetirementIncomeTraditional(),
-	"EFFECTIVE_TAX_RATE_ON_GROSS":                                                         NewEffectiveTaxRateOnGross(),
-	"EQUIVALENT_ROTH_CONTRIBUTIONS":                                                       NewEquivalentRothContributions(),
-	"INCOME_AFTER_STANDARD_DEDUCTION":                                                     NewIncomeAfterStandardDeduction(),
-	"INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":                                   NewIncomeAfterStandardDeductionAndContributions(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_HEAD_OF_HOUSEHOLD":     NewIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_JOINT":         NewIncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_SEPERATE":      NewIncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_SINGLE":                NewIncomePerBracketAfterStandardDeductionAndContributionsSingle(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":                       NewIncomePerBracketAfterStandardDeductionAndContributions(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD":                       NewIncomePerBracketAfterStandardDeductionHeadOfHousehold(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_MARRIED_JOINT":                           NewIncomePerBracketAfterStandardDeductionMarriedJoint(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_MARRIED_SEPERATE":                        NewIncomePerBracketAfterStandardDeductionMarriedSeperate(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                                  NewIncomePerBracketAfterStandardDeductionSingle(),
-	"INCOME_PER_BRACKET_AFTER_STANDARD_DEDUCTION":                                         NewIncomePerBracketAfterStandardDeduction(),
-	"HALF_OF_SOCIAL_SECURITY":                                                             NewHalfOfSocialSecurity(),
-	"NET_DISTRIBUTION_AFTER_TAXES":                                                        NewNetDistributionAfterTaxes(),
-	"ROTH_OR_TRADITIONAL_DECISION":                                                        NewRothOrTraditionalDecision(),
-	"SOCIAL_SECURITY_TAXABLE_INCOME_INDIVIDUAL_ROTH":                                      NewSocialSecurityTaxableIncomeIndividualRoth(),
-	"SOCIAL_SECURITY_TAXABLE_INCOME_INDIVIDUAL_TRADITIONAL":                               NewSocialSecurityTaxableIncomeIndividualTraditional(),
-	"SOCIAL_SECURITY_TAXABLE_INCOME_JOINT_ROTH":                                           NewSocialSecurityTaxableIncomeJointRoth(),
-	"SOCIAL_SECURITY_TAXABLE_INCOME_JOINT_TRADITIONAL":                                    NewSocialSecurityTaxableIncomeJointTraditional(),
-	"SOCIAL_SECURITY_TAXABLE_INCOME_ROTH":                                                 NewSocialSecurityTaxableIncomeRoth(),
-	"SOCIAL_SECURITY_TAXABLE_INCOME_TRADITIONAL":                                          NewSocialSecurityTaxableIncomeTraditional(),
-	"STANDARD_DEDUCTION":                                                                  NewStandardDeduction(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_HEAD_OF_HOUSEHOLD": NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_JOINT":     NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_SEPERATE":  NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_SINGLE":            NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":                   NewTaxesOwedPerBracketAfterStandardDeductionAndContributions(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD":                   NewTaxesOwedPerBracketAfterStandardDeductionHeadOfHousehold(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_MARRIED_JOINT":                       NewTaxesOwedPerBracketAfterStandardDeductionMarriedJoint(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_MARRIED_SEPERATE":                    NewTaxesOwedPerBracketAfterStandardDeductionMarriedSeperate(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION_SINGLE":                              NewTaxesOwedPerBracketAfterStandardDeductionSingle(),
-	"TAXES_OWED_PER_BRACKET_AFTER_STANDARD_DEDUCTION":                                     NewTaxesOwedPerBracketAfterStandardDeduction(),
-	"TAX_RATE_OF_SAVINGS":                                                                 NewTaxRateOfSavings(),
-	"TOTAL_ANNUAL_RETIREMENT_INCOME_BEFORE_TAX":                                           NewTotalAnnualRetirementIncomeBeforeTax(),
-	"TOTAL_CONTRIBUTIONS":                                                                 NewTotalContributions(),
-	"TOTAL_CONTRIBUTIONS_ROTH":                                                            NewTotalContributionsRoth(),
-	"TOTAL_DISBURSEMENTS_AFTER_TAX":                                                       NewTotalDisbursementsAfterTax(),
-	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_GROSS":                                             NewTotalDisbursementsRothMatchingGross(),
-	"TOTAL_DISBURSEMENTS_ROTH_MATCHING_NET":                                               NewTotalDisbursementsRothMatchingNet(),
-	"TOTAL_INTEREST":                                                                      NewTotalInterest(),
-	"TOTAL_INTEREST_ROTH":                                                                 NewTotalInterestRoth(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION":                                           NewTotalTaxesOwedAfterStandardDeduction(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS":                         NewTotalTaxesOwedAfterStandardDeductionAndContributions(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_HEAD_OF_HOUSEHOLD":       NewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_JOINT":           NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_MARRIED_SEPERATE":        NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS_SINGLE":                  NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD":                         NewTotalTaxesOwedAfterStandardDeductionHeadOfHousehold(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_MARRIED_JOINT":                             NewTotalTaxesOwedAfterStandardDeductionMarriedJoint(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_MARRIED_SEPERATE":                          NewTotalTaxesOwedAfterStandardDeductionMarriedSeperate(),
-	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION_SINGLE":                                    NewTotalTaxesOwedAfterStandardDeductionSingle(),
 }

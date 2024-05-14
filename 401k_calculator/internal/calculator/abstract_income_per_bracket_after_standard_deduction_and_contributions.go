@@ -1,8 +1,10 @@
 package calculator
 
 type AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation interface {
-	Calculate(Model, []TaxRate) []float64
-	CalculateRetirement(Model, []TaxRate) []float64
+	CalculateTraditional(Model, []TaxRate) []float64
+	CalculateTraditionalRetirement(Model, []TaxRate) []float64
+	CalculateRoth(Model, []TaxRate) []float64
+	CalculateRothRetirement(Model, []TaxRate) []float64
 }
 
 type AbstractIncomePerBracketAfterStandardDeductionAndContributions struct {
@@ -17,8 +19,8 @@ func NewAbstractIncomePerBracketAfterStandardDeductionAndContributions() Abstrac
 	}
 }
 
-func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) Calculate(model Model, taxRates []TaxRate) []float64 {
-	incomeAfterStandardDeductionAndContributions := c.IncomeAfterStandardDeductionAndContributionsCalculation.Calculate(model)
+func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditional(model Model, taxRates []TaxRate) []float64 {
+	incomeAfterStandardDeductionAndContributions := c.IncomeAfterStandardDeductionAndContributionsCalculation.CalculateTraditional(model)
 
 	values := []float64{}
 
@@ -29,8 +31,32 @@ func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) Calculat
 	return values
 }
 
-func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) CalculateRetirement(model Model, taxRates []TaxRate) []float64 {
-	incomeAfterStandardDeductionAndContributions := c.IncomeAfterStandardDeductionAndContributionsCalculation.CalculateRetirement(model)
+func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditionalRetirement(model Model, taxRates []TaxRate) []float64 {
+	incomeAfterStandardDeductionAndContributions := c.IncomeAfterStandardDeductionAndContributionsCalculation.CalculateTraditionalRetirement(model)
+
+	values := []float64{}
+
+	for idx := range taxRates {
+		values = append(values, c.AbstractIncomePerBracketCalculation.Calculate(taxRates, idx, incomeAfterStandardDeductionAndContributions))
+	}
+
+	return values
+}
+
+func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) CalculateRoth(model Model, taxRates []TaxRate) []float64 {
+	incomeAfterStandardDeductionAndContributions := c.IncomeAfterStandardDeductionAndContributionsCalculation.CalculateRoth(model)
+
+	values := []float64{}
+
+	for idx := range taxRates {
+		values = append(values, c.AbstractIncomePerBracketCalculation.Calculate(taxRates, idx, incomeAfterStandardDeductionAndContributions))
+	}
+
+	return values
+}
+
+func (c AbstractIncomePerBracketAfterStandardDeductionAndContributions) CalculateRothRetirement(model Model, taxRates []TaxRate) []float64 {
+	incomeAfterStandardDeductionAndContributions := c.IncomeAfterStandardDeductionAndContributionsCalculation.CalculateRothRetirement(model)
 
 	values := []float64{}
 

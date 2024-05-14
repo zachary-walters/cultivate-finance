@@ -3,24 +3,35 @@ package calculator
 type TotalInterestCalculation Calculation
 
 type TotalInterest struct {
-	TotalDisbursementsAfterTaxCalculation
+	TotalDisbursementsCalculation
 	TotalContributionsCalculation
 }
 
 func NewTotalInterest() TotalInterest {
 	return TotalInterest{
-		TotalDisbursementsAfterTaxCalculation: NewTotalDisbursementsAfterTax(),
-		TotalContributionsCalculation:         NewTotalContributions(),
+		TotalDisbursementsCalculation: NewTotalDisbursements(),
+		TotalContributionsCalculation: NewTotalContributions(),
 	}
 }
 
-func (c TotalInterest) Calculate(model Model) float64 {
-	totalDisbursements := c.TotalDisbursementsAfterTaxCalculation.Calculate(model)
-	totalContributions := c.TotalContributionsCalculation.Calculate(model)
+func (c TotalInterest) CalculateTraditional(model Model) float64 {
+	return c.CalculateTraditionalRetirement(model)
+}
+
+func (c TotalInterest) CalculateTraditionalRetirement(model Model) float64 {
+	totalDisbursements := c.TotalDisbursementsCalculation.CalculateTraditionalRetirement(model)
+	totalContributions := c.TotalContributionsCalculation.CalculateTraditionalRetirement(model)
 
 	return totalDisbursements - totalContributions
 }
 
-func (c TotalInterest) CalculateRetirement(model Model) float64 {
-	return c.Calculate(model)
+func (c TotalInterest) CalculateRoth(model Model) float64 {
+	return c.CalculateRothRetirement(model)
+}
+
+func (c TotalInterest) CalculateRothRetirement(model Model) float64 {
+	totalDisbursements := c.TotalDisbursementsCalculation.CalculateRothRetirement(model)
+	totalContributions := c.TotalContributionsCalculation.CalculateRothRetirement(model)
+
+	return totalDisbursements - totalContributions
 }

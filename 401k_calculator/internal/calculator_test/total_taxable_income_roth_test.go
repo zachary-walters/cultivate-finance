@@ -8,30 +8,30 @@ import (
 	"github.com/zachary-walters/rothvtrad/401k_calculator/internal/calculator"
 )
 
-type MockTotalTaxableIncomeRoth struct {
+type MockTotalTaxableIncome struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxableIncomeRoth) Calculate(model calculator.Model) float64 {
+func (m *MockTotalTaxableIncome) Calculate(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxableIncomeRoth) CalculateRetirement(model calculator.Model) float64 {
+func (m *MockTotalTaxableIncome) CalculateRetirement(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func TestTotalTaxableIncomeRothCalculate(t *testing.T) {
+func TestTotalTaxableIncomeCalculate(t *testing.T) {
 	tests := []struct {
-		name                            string
-		adjustedGrossIncomeRoth         float64
-		socialSecurityTaxbaleIncomeRoth float64
+		name                        string
+		adjustedGrossIncome         float64
+		socialSecurityTaxbaleIncome float64
 	}{
 		{
-			name:                            "Test Case 0",
-			adjustedGrossIncomeRoth:         10000,
-			socialSecurityTaxbaleIncomeRoth: 500,
+			name:                        "Test Case 0",
+			adjustedGrossIncome:         10000,
+			socialSecurityTaxbaleIncome: 500,
 		},
 	}
 
@@ -39,19 +39,19 @@ func TestTotalTaxableIncomeRothCalculate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			mockAdjustedGrossIncomeRoth := new(MockAdjustedGrossIncomeRoth)
-			mockSocialSecurityTaxableIncomeRoth := new(MockSocialSecurityTaxableIncomeRoth)
+			mockAdjustedGrossIncome := new(MockAdjustedGrossIncome)
+			mockSocialSecurityTaxableIncome := new(MockSocialSecurityTaxableIncome)
 
-			mockAdjustedGrossIncomeRoth.On("Calculate", model).Return(test.adjustedGrossIncomeRoth)
-			mockSocialSecurityTaxableIncomeRoth.On("Calculate", model).Return(test.socialSecurityTaxbaleIncomeRoth)
+			mockAdjustedGrossIncome.On("CalculateTraditional", model).Return(test.adjustedGrossIncome)
+			mockSocialSecurityTaxableIncome.On("CalculateTraditional", model).Return(test.socialSecurityTaxbaleIncome)
 
-			c := &calculator.TotalTaxableIncomeRoth{
-				AdjustedGrossIncomeRothCalculation:                   mockAdjustedGrossIncomeRoth,
-				SocialSecurityTaxableIncomeIndividualRothCalculation: mockSocialSecurityTaxableIncomeRoth,
+			c := &calculator.TotalTaxableIncome{
+				AdjustedGrossIncomeCalculation:                   mockAdjustedGrossIncome,
+				SocialSecurityTaxableIncomeIndividualCalculation: mockSocialSecurityTaxableIncome,
 			}
 
-			actual := c.Calculate(model)
-			expected := test.adjustedGrossIncomeRoth + test.socialSecurityTaxbaleIncomeRoth
+			actual := c.CalculateTraditional(model)
+			expected := test.adjustedGrossIncome + test.socialSecurityTaxbaleIncome
 
 			assert.Equal(t, expected, actual)
 		})

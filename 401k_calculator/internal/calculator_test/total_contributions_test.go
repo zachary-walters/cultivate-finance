@@ -12,16 +12,27 @@ type MockTotalContributions struct {
 	mock.Mock
 }
 
-func (m *MockTotalContributions) Calculate(model calculator.Model) float64 {
+func (m *MockTotalContributions) CalculateTraditional(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalContributions) CalculateRetirement(model calculator.Model) float64 {
-	return m.Calculate(model)
+func (m *MockTotalContributions) CalculateTraditionalRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
-func TestTotalContributionsCalculate(t *testing.T) {
+func (m *MockTotalContributions) CalculateRoth(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockTotalContributions) CalculateRothRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func TestTotalContributionsCalculateTraditional(t *testing.T) {
 	tests := []struct {
 		name                string
 		balancesTraditional calculator.ChartData
@@ -48,7 +59,7 @@ func TestTotalContributionsCalculate(t *testing.T) {
 				BalancesTraditionalCalculation: mockBalancesTraditional,
 			}
 
-			actual := c.Calculate(model)
+			actual := c.CalculateTraditional(model)
 			expected := func() float64 {
 				total := 0.0
 				for _, contribution := range test.balancesTraditional.Contribution {

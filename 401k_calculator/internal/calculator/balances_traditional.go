@@ -6,23 +6,23 @@ type BalancesTraditional struct {
 	Limit int
 
 	AnnualGrowthLessInflationCalculation
-	EffectiveTaxRateOnGrossCalculation
-	NetDistributionAfterTaxesCalculation
+	AnnualRetirementAccountDisbursementCalculation
+	TopTierTaxRateCalculation
 }
 
 func NewBalancesTraditional() BalancesTraditional {
 	return BalancesTraditional{
 		Limit:                                133,
 		AnnualGrowthLessInflationCalculation: NewAnnualGrowthLessInflation(),
-		EffectiveTaxRateOnGrossCalculation:   NewEffectiveTaxRateOnGross(),
-		NetDistributionAfterTaxesCalculation: NewNetDistributionAfterTaxes(),
+		AnnualRetirementAccountDisbursementCalculation: NewAnnualRetirementAccountDisbursement(),
+		TopTierTaxRateCalculation:                      NewTopTierTaxRate(),
 	}
 }
 
 func (c BalancesTraditional) Calculate(model Model) ChartData {
-	annualGrowthLessInflation := c.AnnualGrowthLessInflationCalculation.CalculateRetirement(model)
-	effectiveTaxRateOnGross := c.EffectiveTaxRateOnGrossCalculation.CalculateRetirement(model)
-	netDistributionAfterTaxes := c.NetDistributionAfterTaxesCalculation.CalculateRetirement(model)
+	annualGrowthLessInflation := c.AnnualGrowthLessInflationCalculation.CalculateTraditionalRetirement(model)
+	annualRetirementAccountDisbursement := c.AnnualRetirementAccountDisbursementCalculation.CalculateTraditionalRetirement(model)
+	topTierTaxRate := c.TopTierTaxRateCalculation.CalculateTraditionalRetirement(model)
 
 	chartData := ChartData{
 		BeginningBalance: make(map[int]float64, c.Limit),
@@ -47,7 +47,7 @@ func (c BalancesTraditional) Calculate(model Model) ChartData {
 		} else {
 			chartData.Contribution[i] = float64(0)
 			chartData.Withdrawal[i] = float64(model.Input.YearlyWithdrawal)
-			chartData.AfterTaxIncome[i] = netDistributionAfterTaxes
+			chartData.AfterTaxIncome[i] = annualRetirementAccountDisbursement
 		}
 
 		chartData.InterestEarned[i] = (chartData.BeginningBalance[i] +
@@ -64,7 +64,7 @@ func (c BalancesTraditional) Calculate(model Model) ChartData {
 			chartData.EndingBalance[i] = 0.0
 			chartData.InterestEarned[i] = 0.0
 			chartData.Withdrawal[i] = chartData.EndingBalance[i-1]
-			chartData.AfterTaxIncome[i] = chartData.Withdrawal[i] * (1 - effectiveTaxRateOnGross)
+			chartData.AfterTaxIncome[i] = chartData.Withdrawal[i] * (1 - topTierTaxRate)
 		}
 	}
 

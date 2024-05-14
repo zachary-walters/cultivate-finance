@@ -1,0 +1,43 @@
+package calculator
+
+type TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawalCalculation Calculation
+
+type TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal struct {
+	TotalAnnualRetirementIncomeBeforeTaxCalculation
+	TaxOnTraditionalIRAWithdrawalCalculation
+}
+
+func NewTotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal() TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal {
+	return TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal{
+		TotalAnnualRetirementIncomeBeforeTaxCalculation: NewTotalAnnualRetirementIncomeBeforeTax(),
+		TaxOnTraditionalIRAWithdrawalCalculation:        NewTaxOnTraditionalIRAWithdrawal(),
+	}
+}
+
+func (c TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal) CalculateTraditional(model Model) float64 {
+	totalAnnualRetirementIncomeBeforeTax := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditional(model)
+	taxOnTraditionalIRAWithdrawal := c.TaxOnTraditionalIRAWithdrawalCalculation.CalculateTraditional(model)
+
+	return totalAnnualRetirementIncomeBeforeTax - taxOnTraditionalIRAWithdrawal
+}
+
+func (c TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal) CalculateTraditionalRetirement(model Model) float64 {
+	totalAnnualRetirementIncomeBeforeTax := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditionalRetirement(model)
+	taxOnTraditionalIRAWithdrawal := c.TaxOnTraditionalIRAWithdrawalCalculation.CalculateTraditionalRetirement(model)
+
+	return totalAnnualRetirementIncomeBeforeTax - taxOnTraditionalIRAWithdrawal
+}
+
+func (c TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal) CalculateRoth(model Model) float64 {
+	totalAnnualRetirementIncomeBeforeTax := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateRoth(model)
+	taxOnTraditionalIRAWithdrawal := c.TaxOnTraditionalIRAWithdrawalCalculation.CalculateRoth(model)
+
+	return totalAnnualRetirementIncomeBeforeTax - taxOnTraditionalIRAWithdrawal
+}
+
+func (c TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal) CalculateRothRetirement(model Model) float64 {
+	totalAnnualRetirementIncomeBeforeTax := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateRothRetirement(model)
+	taxOnTraditionalIRAWithdrawal := c.TaxOnTraditionalIRAWithdrawalCalculation.CalculateRothRetirement(model)
+
+	return totalAnnualRetirementIncomeBeforeTax - taxOnTraditionalIRAWithdrawal
+}

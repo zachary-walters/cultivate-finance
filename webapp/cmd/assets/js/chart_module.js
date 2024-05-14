@@ -15,7 +15,7 @@ export const generateCharts = (calculations) => {
           "rgba(0, 40, 255, 0.5)",
           "rgba(85, 167, 131, 0.5)",
         ],
-        data: [calculations.retirement.TOTAL_CONTRIBUTIONS, calculations.retirement.TOTAL_INTEREST]
+        data: [calculations.traditional_retirement.TOTAL_CONTRIBUTIONS, calculations.traditional_retirement.TOTAL_INTEREST]
       }]
     },
     options: {
@@ -23,7 +23,7 @@ export const generateCharts = (calculations) => {
       plugins: {
         title: {
           display: true,
-          text: "Traditional" + " ( " + isDollarValue(calculations.retirement.TOTAL_DISBURSEMENTS_AFTER_TAX) + " )",
+          text: "Traditional" + " ( " + isDollarValue(calculations.traditional_retirement.TOTAL_DISBURSEMENTS) + " )",
         }
       }
     }
@@ -42,7 +42,7 @@ export const generateCharts = (calculations) => {
           "rgba(0, 40, 255, 0.5)",
           "rgba(85, 167, 131, 0.5)",
         ],
-        data: [calculations.retirement.TOTAL_CONTRIBUTIONS_ROTH, calculations.retirement.TOTAL_INTEREST_ROTH]
+        data: [calculations.roth_retirement.TOTAL_CONTRIBUTIONS, calculations.roth_retirement.TOTAL_INTEREST]
       }]
     },
     options: {
@@ -50,7 +50,7 @@ export const generateCharts = (calculations) => {
       plugins: {
         title: {
           display: true,
-          text: "Roth" + " ( " + isDollarValue(calculations.retirement.TOTAL_DISBURSEMENTS_ROTH_MATCHING_NET) + " )",
+          text: "Roth" + " ( " + isDollarValue(calculations.roth_retirement.TOTAL_DISBURSEMENTS) + " )",
         }
       }
     }
@@ -63,11 +63,11 @@ export const generateCharts = (calculations) => {
   new Chart('area-chart', { 
     type: 'line', 
     data: { 
-      labels: Object.keys(calculations.default.BALANCES_TRADITIONAL.ending_balance), 
+      labels: Object.keys(calculations.traditional.BALANCES_TRADITIONAL.ending_balance), 
       datasets: [ 
         { 
           label: 'Traditional', 
-          data: Object.values(calculations.default.BALANCES_TRADITIONAL.ending_balance), 
+          data: Object.values(calculations.traditional.BALANCES_TRADITIONAL.ending_balance), 
           backgroundColor: 'rgba(85, 167, 131, 0.5)', 
           borderColor: 'rgba(0, 255, 0, 0)', 
           borderWidth: 1, 
@@ -76,7 +76,7 @@ export const generateCharts = (calculations) => {
         }, 
         { 
           label: 'Roth', 
-          data: Object.values(calculations.default.BALANCES_ROTH_MATCHING_NET_CONTRIBUTIONS.ending_balance), 
+          data: Object.values(calculations.traditional.BALANCES_ROTH_MATCHING_NET_CONTRIBUTIONS.ending_balance), 
           backgroundColor: 'rgba(0, 40, 255, 0.5)', 
           borderColor: 'rgba(0, 0, 255, 0)', 
           borderWidth: 1, 

@@ -12,8 +12,8 @@ func NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle() TaxesO
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) Calculate(model Model) []float64 {
-	incomePerBracketAfterStandardDeductionAndContributionsSingle := c.IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation.Calculate(model)
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) CalculateTraditional(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsSingle := c.IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateTraditional(model)
 
 	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.SingleTaxRates))
 
@@ -24,8 +24,32 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) Calcula
 	return taxesOwedPerBracketAfterStandardDudectionAndContributions
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) CalculateRetirement(model Model) []float64 {
-	incomePerBracketAfterStandardDeductionAndContributionsSingle := c.IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation.Calculate(model)
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) CalculateTraditionalRetirement(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsSingle := c.IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateTraditionalRetirement(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.SingleTaxRates))
+
+	for idx, taxRate := range model.SingleTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsSingle[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) CalculateRoth(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsSingle := c.IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateRoth(model)
+
+	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.SingleTaxRates))
+
+	for idx, taxRate := range model.SingleTaxRates {
+		taxesOwedPerBracketAfterStandardDudectionAndContributions[idx] = incomePerBracketAfterStandardDeductionAndContributionsSingle[idx] * taxRate.Rate
+	}
+
+	return taxesOwedPerBracketAfterStandardDudectionAndContributions
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle) CalculateRothRetirement(model Model) []float64 {
+	incomePerBracketAfterStandardDeductionAndContributionsSingle := c.IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateRothRetirement(model)
 
 	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.SingleTaxRates))
 

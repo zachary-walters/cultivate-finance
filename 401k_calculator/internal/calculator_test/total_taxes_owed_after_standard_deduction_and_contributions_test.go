@@ -12,13 +12,24 @@ type MockTotalTaxesOwedAfterStandardDeductionAndContributions struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) Calculate(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateTraditional(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRetirement(model calculator.Model) float64 {
-	return m.Calculate(model)
+func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateTraditionalRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRoth(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRothRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
 func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
@@ -73,13 +84,13 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		totalTaxesOwedAfterStandardDeductionAndContributionsSingle.On("Calculate", test.model).Return(1337.0)
-		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint.On("Calculate", test.model).Return(349587.0)
-		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate.On("Calculate", test.model).Return(10003.0)
-		totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold.On("Calculate", test.model).Return(4387.8)
+		totalTaxesOwedAfterStandardDeductionAndContributionsSingle.On("CalculateTraditional", test.model).Return(1337.0)
+		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint.On("CalculateTraditional", test.model).Return(349587.0)
+		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate.On("CalculateTraditional", test.model).Return(10003.0)
+		totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold.On("CalculateTraditional", test.model).Return(4387.8)
 
 		expected := 0.0
-		actual := c.Calculate(test.model)
+		actual := c.CalculateTraditional(test.model)
 		t.Run(test.name, func(t *testing.T) {
 			switch test.model.Input.CurrentFilingStatus {
 			case "single":

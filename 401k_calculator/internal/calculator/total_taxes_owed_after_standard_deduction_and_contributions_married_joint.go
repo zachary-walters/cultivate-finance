@@ -12,8 +12,8 @@ func NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint() Total
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) Calculate(model Model) float64 {
-	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.Calculate(model)
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateTraditional(model Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateTraditional(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := 0.0
 	for _, value := range taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint {
@@ -23,6 +23,21 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) Calcul
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRetirement(model Model) float64 {
-	return c.Calculate(model)
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateTraditionalRetirement(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRoth(model Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateRoth(model)
+
+	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := 0.0
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint {
+		totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint += value
+	}
+
+	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint
+}
+
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRothRetirement(model Model) float64 {
+	return c.CalculateRoth(model)
 }

@@ -4,27 +4,42 @@ type IncomeAfterStandardDeductionCalculation Calculation
 
 type IncomeAfterStandardDeduction struct {
 	StandardDeductionCalculation
-	TotalTaxableIncomeTraditionalCalculation
+	TotalTaxableIncomeCalculation
 }
 
 func NewIncomeAfterStandardDeduction() IncomeAfterStandardDeduction {
 	return IncomeAfterStandardDeduction{
-		StandardDeductionCalculation:                   NewStandardDeduction(),
-		TotalTaxableIncomeTraditionalCalculation:       NewTotalTaxableIncomeTraditional(),
+		StandardDeductionCalculation:  NewStandardDeduction(),
+		TotalTaxableIncomeCalculation: NewTotalTaxableIncome(),
 	}
 }
 
-func (c IncomeAfterStandardDeduction) Calculate(model Model) float64 {
-	standardDeduction := c.StandardDeductionCalculation.Calculate(model)
+func (c IncomeAfterStandardDeduction) CalculateTraditional(model Model) float64 {
+	standardDeduction := c.StandardDeductionCalculation.CalculateTraditional(model)
 	currentAnnualIncome := model.Input.CurrentAnnualIncome
 
 	return currentAnnualIncome - standardDeduction
 }
 
-func (c IncomeAfterStandardDeduction) CalculateRetirement(model Model) float64 {
-	standardDeduction := c.StandardDeductionCalculation.CalculateRetirement(model)
+func (c IncomeAfterStandardDeduction) CalculateTraditionalRetirement(model Model) float64 {
+	standardDeduction := c.StandardDeductionCalculation.CalculateTraditionalRetirement(model)
 
-	combinedRetirementIncomeTraditional := c.TotalTaxableIncomeTraditionalCalculation.Calculate(model)
+	combinedRetirementIncome := c.TotalTaxableIncomeCalculation.CalculateTraditionalRetirement(model)
 
-	return combinedRetirementIncomeTraditional - standardDeduction
+	return combinedRetirementIncome - standardDeduction
+}
+
+func (c IncomeAfterStandardDeduction) CalculateRoth(model Model) float64 {
+	standardDeduction := c.StandardDeductionCalculation.CalculateRoth(model)
+	currentAnnualIncome := model.Input.CurrentAnnualIncome
+
+	return currentAnnualIncome - standardDeduction
+}
+
+func (c IncomeAfterStandardDeduction) CalculateRothRetirement(model Model) float64 {
+	standardDeduction := c.StandardDeductionCalculation.CalculateRothRetirement(model)
+
+	combinedRetirementIncome := c.TotalTaxableIncomeCalculation.CalculateRothRetirement(model)
+
+	return coalesce(combinedRetirementIncome - standardDeduction)
 }

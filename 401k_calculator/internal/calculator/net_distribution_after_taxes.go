@@ -4,21 +4,40 @@ type NetDistributionAfterTaxesCalculation Calculation
 
 type NetDistributionAfterTaxes struct {
 	TotalTaxesOwedAfterStandardDeductionCalculation
+	TotalAnnualRetirementIncomeBeforeTaxCalculation
 }
 
 func NewNetDistributionAfterTaxes() NetDistributionAfterTaxes {
 	return NetDistributionAfterTaxes{
 		TotalTaxesOwedAfterStandardDeductionCalculation: NewTotalTaxesOwedAfterStandardDeduction(),
+		TotalAnnualRetirementIncomeBeforeTaxCalculation: NewTotalAnnualRetirementIncomeBeforeTax(),
 	}
 }
 
-func (c NetDistributionAfterTaxes) Calculate(model Model) float64 {
-	return c.CalculateRetirement(model)
+func (c NetDistributionAfterTaxes) CalculateTraditional(model Model) float64 {
+	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditional(model)
+	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditional(model)
+
+	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
 }
 
-func (c NetDistributionAfterTaxes) CalculateRetirement(model Model) float64 {
-	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRetirement(model)
-	yearlyWithdrawal := model.Input.YearlyWithdrawal
+func (c NetDistributionAfterTaxes) CalculateTraditionalRetirement(model Model) float64 {
+	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
+	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditionalRetirement(model)
 
-	return yearlyWithdrawal - totalTaxesOwedAfterStandardDeduction
+	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
+}
+
+func (c NetDistributionAfterTaxes) CalculateRoth(model Model) float64 {
+	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRoth(model)
+	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateRoth(model)
+
+	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
+}
+
+func (c NetDistributionAfterTaxes) CalculateRothRetirement(model Model) float64 {
+	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRothRetirement(model)
+	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateRothRetirement(model)
+
+	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
 }

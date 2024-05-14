@@ -15,8 +15,8 @@ func NewRothOrTraditionalDecision() RothOrTraditionalDecision {
 }
 
 func (c RothOrTraditionalDecision) Calculate(model Model) string {
-	taxRateOfSavings := c.TaxRateOfSavingsCalculation.Calculate(model)
-	effectiveTaxRateOnGross := c.EffectiveTaxRateOnGrossCalculation.Calculate(model)
+	taxRateOfSavings := c.TaxRateOfSavingsCalculation.CalculateTraditional(model)
+	effectiveTaxRateOnGross := c.EffectiveTaxRateOnGrossCalculation.CalculateTraditional(model)
 
 	if taxRateOfSavings >= effectiveTaxRateOnGross {
 		return "Traditional"

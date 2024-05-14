@@ -8,20 +8,31 @@ import (
 	"github.com/zachary-walters/rothvtrad/401k_calculator/internal/calculator"
 )
 
-type MockAdjustedGrossIncomeTraditional struct {
+type MockAdjustedGrossIncome struct {
 	mock.Mock
 }
 
-func (m *MockAdjustedGrossIncomeTraditional) Calculate(model calculator.Model) float64 {
+func (m *MockAdjustedGrossIncome) CalculateTraditional(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAdjustedGrossIncomeTraditional) CalculateRetirement(model calculator.Model) float64 {
-	return m.Calculate(model)
+func (m *MockAdjustedGrossIncome) CalculateTraditionalRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
-func TestAdjustedGrossIncomeTraditionalCalculate(t *testing.T) {
+func (m *MockAdjustedGrossIncome) CalculateRoth(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockAdjustedGrossIncome) CalculateRothRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func TestAdjustedGrossIncomeTraditionalCalculateTraditional(t *testing.T) {
 	tests := []struct {
 		name  string
 		model calculator.Model
@@ -42,9 +53,9 @@ func TestAdjustedGrossIncomeTraditionalCalculate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			c := calculator.AdjustedGrossIncomeTraditional{}
+			c := calculator.AdjustedGrossIncome{}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateTraditional(test.model)
 			expected := test.model.Input.WorkIncome +
 				test.model.Input.PensionIncome +
 				test.model.Input.RentalNetIncome +

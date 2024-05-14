@@ -12,16 +12,27 @@ type MockAbstractIncomePerBracketAfterStandardDeduction struct {
 	mock.Mock
 }
 
-func (m *MockAbstractIncomePerBracketAfterStandardDeduction) Calculate(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockAbstractIncomePerBracketAfterStandardDeduction) CalculateTraditional(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	args := m.Called(model, taxRates)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockAbstractIncomePerBracketAfterStandardDeduction) CalculateRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
-	return m.Calculate(model, taxRates)
+func (m *MockAbstractIncomePerBracketAfterStandardDeduction) CalculateTraditionalRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+	args := m.Called(model, taxRates)
+	return args.Get(0).([]float64)
 }
 
-func TestAbstractIncomePerBracketAfterStandardDeductionCalculate(t *testing.T) {
+func (m *MockAbstractIncomePerBracketAfterStandardDeduction) CalculateRoth(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+	args := m.Called(model, taxRates)
+	return args.Get(0).([]float64)
+}
+
+func (m *MockAbstractIncomePerBracketAfterStandardDeduction) CalculateRothRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+	args := m.Called(model, taxRates)
+	return args.Get(0).([]float64)
+}
+
+func TestAbstractIncomePerBracketAfterStandardDeductionCalculateTraditional(t *testing.T) {
 	tests := []struct {
 		name                         string
 		model                        calculator.Model
@@ -53,7 +64,7 @@ func TestAbstractIncomePerBracketAfterStandardDeductionCalculate(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockIncomeAfterStandardDeduction := new(MockIncomeAfterStandardDeduction)
-			mockIncomeAfterStandardDeduction.On("Calculate", test.model).Return(test.incomeAfterStandardDeduction)
+			mockIncomeAfterStandardDeduction.On("CalculateTraditional", test.model).Return(test.incomeAfterStandardDeduction)
 
 			mockAbstractIncomePerBracket := new(MockAbstractIncomePerBracket)
 			mockAbstractIncomePerBracket.On("Calculate", test.taxRates, mock.Anything, test.incomeAfterStandardDeduction).Return(test.incomePerBracket)
@@ -63,7 +74,7 @@ func TestAbstractIncomePerBracketAfterStandardDeductionCalculate(t *testing.T) {
 				AbstractIncomePerBracketCalculation:     mockAbstractIncomePerBracket,
 			}
 
-			actual := c.Calculate(test.model, test.taxRates)
+			actual := c.CalculateTraditional(test.model, test.taxRates)
 			expected := []float64{}
 
 			for range test.taxRates {

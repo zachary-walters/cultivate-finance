@@ -12,13 +12,21 @@ func NewEquivalentRothContributions() EquivalentRothContributions {
 	}
 }
 
-func (c EquivalentRothContributions) Calculate(model Model) float64 {
-	annualTaxSavingsWithContribution := c.AnnualTaxSavingsWithContributionCalculation.Calculate(model)
+func (c EquivalentRothContributions) CalculateTraditional(model Model) float64 {
+	annualTaxSavingsWithContribution := c.AnnualTaxSavingsWithContributionCalculation.CalculateTraditional(model)
 	annualContributionsPreTax := model.Input.AnnualContributionsPreTax
 
 	return annualContributionsPreTax - annualTaxSavingsWithContribution
 }
 
-func (c EquivalentRothContributions) CalculateRetirement(model Model) float64 {
-	return c.Calculate(model)
+func (c EquivalentRothContributions) CalculateTraditionalRetirement(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c EquivalentRothContributions) CalculateRoth(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c EquivalentRothContributions) CalculateRothRetirement(model Model) float64 {
+	return c.CalculateRoth(model)
 }

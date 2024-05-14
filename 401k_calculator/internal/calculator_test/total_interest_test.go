@@ -17,7 +17,7 @@ func (m *MockTotalInterest) Calculate(model calculator.Model) float64 {
 	return args.Get(0).(float64)
 }
 
-func TestMockTotalInterestCalculate(t *testing.T) {
+func TestMockTotalInterestCalculateTraditional(t *testing.T) {
 	tests := []struct {
 		name               string
 		totalDisbursements float64
@@ -34,18 +34,18 @@ func TestMockTotalInterestCalculate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			mockTotalDisbursements := new(MockTotalDisbursementsAfterTax)
+			mockTotalDisbursements := new(MockTotalDisbursements)
 			mockTotalContributions := new(MockTotalContributions)
 
-			mockTotalDisbursements.On("Calculate", model).Return(test.totalDisbursements)
-			mockTotalContributions.On("Calculate", model).Return(test.totalContributions)
+			mockTotalDisbursements.On("CalculateTraditional", model).Return(test.totalDisbursements)
+			mockTotalContributions.On("CalculateTraditional", model).Return(test.totalContributions)
 
 			c := &calculator.TotalInterest{
-				TotalDisbursementsAfterTaxCalculation: mockTotalDisbursements,
-				TotalContributionsCalculation:         mockTotalContributions,
+				TotalDisbursementsCalculation: mockTotalDisbursements,
+				TotalContributionsCalculation: mockTotalContributions,
 			}
 
-			actual := c.Calculate(model)
+			actual := c.CalculateTraditional(model)
 			expected := test.totalDisbursements - test.totalContributions
 
 			assert.Equal(t, expected, actual)

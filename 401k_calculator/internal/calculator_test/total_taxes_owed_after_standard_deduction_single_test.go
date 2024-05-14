@@ -12,13 +12,24 @@ type MockTotalTaxesOwedAfterStandardDeductionSingle struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) Calculate(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditional(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRetirement(model calculator.Model) float64 {
-	return m.Calculate(model)
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditionalRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRoth(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRothRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
 func TestTotalTaxesOwedPerBracketAfterStandardDeductionSingleCalculate(t *testing.T) {
@@ -48,12 +59,12 @@ func TestTotalTaxesOwedPerBracketAfterStandardDeductionSingleCalculate(t *testin
 			TaxesOwedPerBracketAfterStandardDeductionSingleCalculation: mockTaxesOwedPerBracketAfterStandardDeductionsSingle,
 		}
 
-		mockTaxesOwedPerBracketAfterStandardDeductionsSingle.On("Calculate", test.model).Return(test.taxesOwedPerBracketAfterStandardDeductions)
+		mockTaxesOwedPerBracketAfterStandardDeductionsSingle.On("CalculateTraditional", test.model).Return(test.taxesOwedPerBracketAfterStandardDeductions)
 
-		actual := c.Calculate(test.model)
+		actual := c.CalculateTraditional(test.model)
 		expected := func() float64 {
 			expected := 0.0
-			taxesOwedPerBracketAfterStandardDudections := mockTaxesOwedPerBracketAfterStandardDeductionsSingle.Calculate(test.model)
+			taxesOwedPerBracketAfterStandardDudections := mockTaxesOwedPerBracketAfterStandardDeductionsSingle.CalculateTraditional(test.model)
 			for _, value := range taxesOwedPerBracketAfterStandardDudections {
 				expected += value
 			}

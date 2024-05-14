@@ -8,12 +8,20 @@ func NewAnnualGrowthLessInflation() AnnualGrowthLessInflation {
 	return AnnualGrowthLessInflation{}
 }
 
-func (c AnnualGrowthLessInflation) Calculate(model Model) float64 {
+func (c AnnualGrowthLessInflation) CalculateTraditional(model Model) float64 {
 	annualInvestmentGrowth := model.Input.AnnualInvestmentGrowth
 
 	return annualInvestmentGrowth - 0.03
 }
 
-func (c AnnualGrowthLessInflation) CalculateRetirement(model Model) float64 {
-	return c.Calculate(model)
+func (c AnnualGrowthLessInflation) CalculateTraditionalRetirement(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c AnnualGrowthLessInflation) CalculateRoth(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c AnnualGrowthLessInflation) CalculateRothRetirement(model Model) float64 {
+	return c.CalculateTraditional(model)
 }

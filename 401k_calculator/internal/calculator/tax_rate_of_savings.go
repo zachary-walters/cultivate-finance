@@ -12,13 +12,21 @@ func NewTaxRateOfSavings() TaxRateOfSavings {
 	}
 }
 
-func (c TaxRateOfSavings) Calculate(model Model) float64 {
-	annualTaxSavingsWithContribution := c.AnnualTaxSavingsWithContributionCalculation.Calculate(model)
+func (c TaxRateOfSavings) CalculateTraditional(model Model) float64 {
+	annualTaxSavingsWithContribution := c.AnnualTaxSavingsWithContributionCalculation.CalculateTraditional(model)
 	annualContributions := model.Input.AnnualContributionsPreTax
 
 	return annualTaxSavingsWithContribution / annualContributions
 }
 
-func (c TaxRateOfSavings) CalculateRetirement(model Model) float64 {
-	return c.Calculate(model)
+func (c TaxRateOfSavings) CalculateTraditionalRetirement(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c TaxRateOfSavings) CalculateRoth(model Model) float64 {
+	return c.CalculateTraditional(model)
+}
+
+func (c TaxRateOfSavings) CalculateRothRetirement(model Model) float64 {
+	return c.CalculateTraditional(model)
 }

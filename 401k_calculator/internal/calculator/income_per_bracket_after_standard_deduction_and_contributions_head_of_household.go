@@ -12,10 +12,18 @@ func NewIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold() 
 	}
 }
 
-func (c IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) Calculate(model Model) []float64 {
-	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.Calculate(model, model.HeadOfHouseholdTaxRates)
+func (c IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditional(model Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateTraditional(model, model.HeadOfHouseholdTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRetirement(model Model) []float64 {
-	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRetirement(model, model.HeadOfHouseholdTaxRates)
+func (c IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditionalRetirement(model Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateTraditionalRetirement(model, model.HeadOfHouseholdTaxRates)
+}
+
+func (c IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRoth(model Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRoth(model, model.HeadOfHouseholdTaxRates)
+}
+
+func (c IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRothRetirement(model Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRothRetirement(model, model.HeadOfHouseholdTaxRates)
 }

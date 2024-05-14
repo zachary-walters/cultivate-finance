@@ -37,12 +37,12 @@ export const calculateAll = async (input) => {
   });
 }
 
-export const isDollarValue = (str) => {
-  return "$" + str.toLocaleString();
+export const isDollarValue = (s) => {
+  return "$" + s.toLocaleString();
 }
 
-export const isPercentValue = (str, convert) => {
-  str = convert ? parseFloat(str).toFixed(4) * 100 : str;
+export const isPercentValue = (s, convert) => {
+  s = convert ? parseFloat(s).toFixed(4) * 100 : s;
 
-  return str + "%";
+  return s + "%";
 }

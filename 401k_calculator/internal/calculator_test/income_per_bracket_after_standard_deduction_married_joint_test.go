@@ -12,16 +12,27 @@ type MockIncomePerBracketAfterStandardDeductionMarriedJoint struct {
 	mock.Mock
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionMarriedJoint) Calculate(model calculator.Model) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionMarriedJoint) CalculateTraditional(model calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRetirement(model calculator.Model) []float64 {
-	return m.Calculate(model)
+func (m *MockIncomePerBracketAfterStandardDeductionMarriedJoint) CalculateTraditionalRetirement(model calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
 }
 
-func TestMockIncomePerBracketAfterStandardDeductionMarriedJoint(t *testing.T) {
+func (m *MockIncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRoth(model calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
+}
+
+func (m *MockIncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRothRetirement(model calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
+}
+
+func TestMockIncomePerBracketAfterStandardDeductionMarriedJointCalculate(t *testing.T) {
 	tests := []struct {
 		name                                   string
 		model                                  calculator.Model
@@ -51,14 +62,14 @@ func TestMockIncomePerBracketAfterStandardDeductionMarriedJoint(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockIncomePerBracketAfterStandardDeduction := new(MockAbstractIncomePerBracketAfterStandardDeduction)
-			mockIncomePerBracketAfterStandardDeduction.On("Calculate", test.model, test.model.MarriedJointTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
+			mockIncomePerBracketAfterStandardDeduction.On("CalculateTraditional", test.model, test.model.MarriedJointTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
 
 			c := &calculator.IncomePerBracketAfterStandardDeductionMarriedJoint{
 				AbstractIncomePerBracketAfterStandardDeductionCalculation: mockIncomePerBracketAfterStandardDeduction,
 			}
 
-			actual := c.Calculate(test.model)
-			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.Calculate(test.model, test.model.MarriedJointTaxRates)
+			actual := c.CalculateTraditional(test.model)
+			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(test.model, test.model.MarriedJointTaxRates)
 
 			assert.Equal(t, expected, actual)
 		})

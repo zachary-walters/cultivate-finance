@@ -13,18 +13,29 @@ type MockIncomeAfterStandardDeduction struct {
 	mock.Mock
 }
 
-func (m *MockIncomeAfterStandardDeduction) Calculate(model calculator.Model) float64 {
+func (m *MockIncomeAfterStandardDeduction) CalculateTraditional(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockIncomeAfterStandardDeduction) CalculateRetirement(model calculator.Model) float64 {
-	return m.Calculate(model)
+func (m *MockIncomeAfterStandardDeduction) CalculateTraditionalRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockIncomeAfterStandardDeduction) CalculateRoth(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockIncomeAfterStandardDeduction) CalculateRothRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
 func TestIncomeAfterStandardDeductionCalculate(t *testing.T) {
 	mockStandardDeduction := new(MockStandardDeduction)
-	mockStandardDeduction.On("Calculate", mock.Anything).Return(10000.0)
+	mockStandardDeduction.On("CalculateTraditional", mock.Anything).Return(10000.0)
 
 	calc := &calculator.IncomeAfterStandardDeduction{
 		StandardDeductionCalculation: mockStandardDeduction,
@@ -54,8 +65,8 @@ func TestIncomeAfterStandardDeductionCalculate(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result := calc.Calculate(test.model)
-			expected := test.model.Input.CurrentAnnualIncome - float64(mockStandardDeduction.Calculate(test.model))
+			result := calc.CalculateTraditional(test.model)
+			expected := test.model.Input.CurrentAnnualIncome - float64(mockStandardDeduction.CalculateTraditional(test.model))
 			assert.Equal(t, expected, result)
 		})
 	}

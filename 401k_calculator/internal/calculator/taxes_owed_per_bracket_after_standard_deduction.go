@@ -18,11 +18,11 @@ func NewTaxesOwedPerBracketAfterStandardDeduction() TaxesOwedPerBracketAfterStan
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeduction) Calculate(model Model) []float64 {
-	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.Calculate(model)
-	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation.Calculate(model)
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.Calculate(model)
-	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.Calculate(model)
+func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateTraditional(model Model) []float64 {
+	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateTraditional(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation.CalculateTraditional(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditional(model)
+	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditional(model)
 
 	switch model.Input.CurrentFilingStatus {
 	case "single":
@@ -38,11 +38,51 @@ func (c TaxesOwedPerBracketAfterStandardDeduction) Calculate(model Model) []floa
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateRetirement(model Model) []float64 {
-	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateRetirement(model)
-	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRetirement(model)
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRetirement(model)
-	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRetirement(model)
+func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateTraditionalRetirement(model Model) []float64 {
+	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateTraditionalRetirement(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation.CalculateTraditionalRetirement(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
+	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditionalRetirement(model)
+
+	switch model.Input.RetirementFilingStatus {
+	case "single":
+		return taxesOwedPerBracketAfterStandardDeductionSingle
+	case "married-joint":
+		return taxesOwedPerBracketAfterStandardDeductionMarriedJoint
+	case "married-seperate":
+		return taxesOwedPerBracketAfterStandardDeductionMarriedSeperate
+	case "head-of-household":
+		return taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
+	default:
+		return nil
+	}
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateRoth(model Model) []float64 {
+	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateRoth(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRoth(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRoth(model)
+	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRoth(model)
+
+	switch model.Input.CurrentFilingStatus {
+	case "single":
+		return taxesOwedPerBracketAfterStandardDeductionSingle
+	case "married-joint":
+		return taxesOwedPerBracketAfterStandardDeductionMarriedJoint
+	case "married-seperate":
+		return taxesOwedPerBracketAfterStandardDeductionMarriedSeperate
+	case "head-of-household":
+		return taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
+	default:
+		return nil
+	}
+}
+
+func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateRothRetirement(model Model) []float64 {
+	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateRothRetirement(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRothRetirement(model)
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRothRetirement(model)
+	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRothRetirement(model)
 
 	switch model.Input.RetirementFilingStatus {
 	case "single":

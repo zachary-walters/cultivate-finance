@@ -12,15 +12,25 @@ type MockIncomePerBracketAfterStandardDeductionSingle struct {
 	mock.Mock
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionSingle) Calculate(model calculator.Model) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionSingle) CalculateTraditional(model calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionSingle) CalculateRetirement(model calculator.Model) []float64 {
-	return m.Calculate(model)
+func (m *MockIncomePerBracketAfterStandardDeductionSingle) CalculateTraditionalRetirement(model calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
 }
 
+func (m *MockIncomePerBracketAfterStandardDeductionSingle) CalculateRoth(model calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
+}
+
+func (m *MockIncomePerBracketAfterStandardDeductionSingle) CalculateRothRetirement(model calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
+}
 func TestMockIncomePerBracketAfterStandardDeductionSingle(t *testing.T) {
 	tests := []struct {
 		name                                   string
@@ -51,14 +61,14 @@ func TestMockIncomePerBracketAfterStandardDeductionSingle(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockIncomePerBracketAfterStandardDeduction := new(MockAbstractIncomePerBracketAfterStandardDeduction)
-			mockIncomePerBracketAfterStandardDeduction.On("Calculate", test.model, test.model.SingleTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
+			mockIncomePerBracketAfterStandardDeduction.On("CalculateTraditional", test.model, test.model.SingleTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
 
 			c := &calculator.IncomePerBracketAfterStandardDeductionSingle{
 				AbstractIncomePerBracketAfterStandardDeductionCalculation: mockIncomePerBracketAfterStandardDeduction,
 			}
 
-			actual := c.Calculate(test.model)
-			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.Calculate(test.model, test.model.SingleTaxRates)
+			actual := c.CalculateTraditional(test.model)
+			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(test.model, test.model.SingleTaxRates)
 
 			assert.Equal(t, expected, actual)
 		})

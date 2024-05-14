@@ -17,7 +17,6 @@ type data struct {
 
 func main() {
 	wait := make(chan struct{}, 0)
-	js.Global().Set("calculate", js.FuncOf(calculate))
 	js.Global().Set("calculateAll", js.FuncOf(calculateAll))
 	<-wait
 }
@@ -36,73 +35,49 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 
 	model := calculator.NewModel(input)
 
-	defaultCh := make(chan map[string]any, len(calculator.Calculations))
-	retirementCh := make(chan map[string]any, len(calculator.Calculations))
 	wg := &sync.WaitGroup{}
-	for datakey, calculation := range calculator.Calculations {
+	ch := make(chan calculator.CalculationData, len(calculations))
+	for datakey, calculation := range calculations {
 		wg.Add(1)
-		go calculator.CalculateAsyncWasm(wg, defaultCh, retirementCh, datakey, calculation, model)
+		go calculator.CalculateAsyncWasm(wg, ch, datakey, calculation, model)
 	}
 	wg.Wait()
 
-	close(defaultCh)
-	close(retirementCh)
+	modelMapTraditional := map[string]interface{}{}
+	modelMapTraditionalRetired := map[string]interface{}{}
+	modelMapRoth := map[string]interface{}{}
+	modelMapRothRetired := map[string]interface{}{}
 
-	m := map[string]any{}
-	rm := map[string]any{}
-
-	for i := 0; i < len(calculator.Calculations); i++ {
-		select {
-		case data := <-defaultCh:
-			for datakey, value := range data {
-				m[datakey] = value
-			}
-		}
-	}
-
-	for i := 0; i < len(calculator.Calculations); i++ {
-		select {
-		case data := <-retirementCh:
-			for datakey, value := range data {
-				rm[datakey] = value
-			}
-		}
-	}
-
-	modelMapDefault := map[string]interface{}{}
-	modelMapRetired := map[string]interface{}{}
-	for datakey := range m {
-		modelMapDefault[datakey] = m[datakey]
-		modelMapRetired[datakey] = rm[datakey]
+	for len(ch) > 0 {
+		calculationData := <-ch
+		modelMapTraditional[calculationData.Datakey] = calculationData.TraditionalValue
+		modelMapTraditionalRetired[calculationData.Datakey] = calculationData.TraditionalRetirementValue
+		modelMapRoth[calculationData.Datakey] = calculationData.RothValue
+		modelMapRothRetired[calculationData.Datakey] = calculationData.RothRetirementValue
 	}
 
 	return js.ValueOf(map[string]interface{}{
-		"default":    modelMapDefault,
-		"retirement": modelMapRetired,
+		"traditional":            modelMapTraditional,
+		"traditional_retirement": modelMapTraditionalRetired,
+		"roth":                   modelMapRoth,
+		"roth_retirement":        modelMapRothRetired,
 	})
 }
 
-func calculate(this js.Value, args []js.Value) interface{} {
-	input := calculator.Input{
-		CurrentAge:                args[0].Get("current_age").Int(),
-		CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
-		CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
-		AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
-		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
-		RetirementAge:             args[0].Get("retirement_age").Int(),
-		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
-		YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
-	}
-
-	model := calculator.NewModel(input)
-
-	calculation, _ := calculator.Calculations[args[0].Get("datakey").String()]
-
-	value, retirementValue := calculator.CalculateSynchronousWasm(model, calculation)
-
-	return js.ValueOf(map[string]interface{}{
-		"datakey":          args[0].Get("datakey").String(),
-		"value":            value,
-		"retirement_value": retirementValue,
-	})
+var calculations = map[string]any{
+	"ANNUAL_GROWTH_LESS_INFLATION":                      calculator.NewAnnualGrowthLessInflation(),
+	"ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION":              calculator.NewAnnualTaxSavingsWithContribution(),
+	"BALANCES_ROTH_MATCHING_NET_CONTRIBUTIONS":          calculator.NewBalancesRothMatchingNetContributions(),
+	"BALANCES_TRADITIONAL":                              calculator.NewBalancesTraditional(),
+	"EFFECTIVE_TAX_RATE_ON_GROSS":                       calculator.NewEffectiveTaxRateOnGross(),
+	"EQUIVALENT_ROTH_CONTRIBUTIONS":                     calculator.NewEquivalentRothContributions(),
+	"INCOME_AFTER_STANDARD_DEDUCTION":                   calculator.NewIncomeAfterStandardDeduction(),
+	"INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS": calculator.NewIncomeAfterStandardDeductionAndContributions(),
+	"NET_DISTRIBUTION_AFTER_TAXES":                      calculator.NewNetDistributionAfterTaxes(),
+	"STANDARD_DEDUCTION":                                calculator.NewStandardDeduction(),
+	"TAX_RATE_OF_SAVINGS":                               calculator.NewTaxRateOfSavings(),
+	"TOTAL_CONTRIBUTIONS":                               calculator.NewTotalContributions(),
+	"TOTAL_DISBURSEMENTS":                               calculator.NewTotalDisbursements(),
+	"TOTAL_INTEREST":                                    calculator.NewTotalInterest(),
+	"TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION":         calculator.NewTotalTaxesOwedAfterStandardDeduction(),
 }

@@ -12,15 +12,25 @@ type MockTotalTaxesOwedAfterStandardDeductionMarriedJoint struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionMarriedJoint) Calculate(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionMarriedJoint) CalculateTraditional(model calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionMarriedJoint) CalculateRetirement(model calculator.Model) float64 {
-	return m.Calculate(model)
+func (m *MockTotalTaxesOwedAfterStandardDeductionMarriedJoint) CalculateTraditionalRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
 }
 
+func (m *MockTotalTaxesOwedAfterStandardDeductionMarriedJoint) CalculateRoth(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockTotalTaxesOwedAfterStandardDeductionMarriedJoint) CalculateRothRetirement(model calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
 func TestTotalTaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculate(t *testing.T) {
 	tests := []struct {
 		name                                       string
@@ -48,12 +58,12 @@ func TestTotalTaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculate(t *
 			TaxesOwedPerBracketAfterStandardDeductionMarriedJointCalculation: mockTaxesOwedPerBracketAfterStandardDeductionsMarriedJoint,
 		}
 
-		mockTaxesOwedPerBracketAfterStandardDeductionsMarriedJoint.On("Calculate", test.model).Return(test.taxesOwedPerBracketAfterStandardDeductions)
+		mockTaxesOwedPerBracketAfterStandardDeductionsMarriedJoint.On("CalculateTraditional", test.model).Return(test.taxesOwedPerBracketAfterStandardDeductions)
 
-		actual := c.Calculate(test.model)
+		actual := c.CalculateTraditional(test.model)
 		expected := func() float64 {
 			expected := 0.0
-			taxesOwedPerBracketAfterStandardDudections := mockTaxesOwedPerBracketAfterStandardDeductionsMarriedJoint.Calculate(test.model)
+			taxesOwedPerBracketAfterStandardDudections := mockTaxesOwedPerBracketAfterStandardDeductionsMarriedJoint.CalculateTraditional(test.model)
 			for _, value := range taxesOwedPerBracketAfterStandardDudections {
 				expected += value
 			}

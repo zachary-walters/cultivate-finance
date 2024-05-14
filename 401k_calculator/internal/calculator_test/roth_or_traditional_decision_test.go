@@ -21,7 +21,7 @@ func (m *MockRothOrTraditionalDecision) CalculateRetirement(model calculator.Mod
 	return m.Calculate(model)
 }
 
-func TestRothOrTraditionalDecisionCalculate(t *testing.T) {
+func TestRothOrTraditionalDecisionCalculateTraditional(t *testing.T) {
 	tests := []struct {
 		name                    string
 		taxRateOfSavings        float64
@@ -51,8 +51,8 @@ func TestRothOrTraditionalDecisionCalculate(t *testing.T) {
 			mockTaxRateOfSavings := new(MockTaxRateOfSavings)
 			mockEffectiveTaxRateOnGross := new(MockEffectiveTaxRateOnGross)
 
-			mockTaxRateOfSavings.On("Calculate", testModel).Return(test.taxRateOfSavings)
-			mockEffectiveTaxRateOnGross.On("Calculate", testModel).Return(test.effectiveTaxRateOnGross)
+			mockTaxRateOfSavings.On("CalculateTraditional", testModel).Return(test.taxRateOfSavings)
+			mockEffectiveTaxRateOnGross.On("CalculateTraditional", testModel).Return(test.effectiveTaxRateOnGross)
 
 			c := calculator.RothOrTraditionalDecision{
 				TaxRateOfSavingsCalculation:        mockTaxRateOfSavings,
