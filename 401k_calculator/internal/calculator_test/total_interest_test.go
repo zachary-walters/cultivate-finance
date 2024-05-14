@@ -37,8 +37,8 @@ func TestMockTotalInterestCalculateTraditional(t *testing.T) {
 			mockTotalDisbursements := new(MockTotalDisbursements)
 			mockTotalContributions := new(MockTotalContributions)
 
-			mockTotalDisbursements.On("CalculateTraditional", model).Return(test.totalDisbursements)
-			mockTotalContributions.On("CalculateTraditional", model).Return(test.totalContributions)
+			mockTotalDisbursements.On("CalculateTraditionalRetirement", model).Return(test.totalDisbursements)
+			mockTotalContributions.On("CalculateTraditionalRetirement", model).Return(test.totalContributions)
 
 			c := &calculator.TotalInterest{
 				TotalDisbursementsCalculation: mockTotalDisbursements,
@@ -46,7 +46,7 @@ func TestMockTotalInterestCalculateTraditional(t *testing.T) {
 			}
 
 			actual := c.CalculateTraditional(model)
-			expected := test.totalDisbursements - test.totalContributions
+			expected := c.CalculateTraditionalRetirement(model)
 
 			assert.Equal(t, expected, actual)
 		})
