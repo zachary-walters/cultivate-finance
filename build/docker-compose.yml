@@ -1,9 +1,9 @@
 version: '3'
 
-name: rothvtrad 
+name: cultivate-finance 
 
 services:
-  api:
+  401k-calculator-api:
     container_name: rest-api-server
     build:
       context: ./../401k_calculator
