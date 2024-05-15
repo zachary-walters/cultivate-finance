@@ -30,6 +30,14 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
 		RetirementAge:             args[0].Get("retirement_age").Int(),
 		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
+		WorkIncome:                args[0].Get("work_income").Float(),
+		QualifiedDividends:        args[0].Get("qualified_dividends").Float(),
+		OtherLongTermCapitalGains: args[0].Get("other_long_term_capital_gains").Float(),
+		PensionIncome:             args[0].Get("pension_income").Float(),
+		RentalNetIncome:           args[0].Get("rental_net_income").Float(),
+		AnnuityIncome:             args[0].Get("annuity_income").Float(),
+		SocialSecurity:            args[0].Get("social_security").Float(),
+		OtherTaxableIncome:        args[0].Get("other_taxable_income").Float(),
 		YearlyWithdrawal:          args[0].Get("yearly_withdrawal").Float(),
 	}
 

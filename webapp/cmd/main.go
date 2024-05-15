@@ -18,6 +18,14 @@ type Input struct {
 	AnnualInvestmentGrowth    float64 `json:"annual_investment_growth"`
 	RetirementAge             int     `json:"retirement_age"`
 	RetirementFilingStatus    string  `json:"retirement_filing_status"`
+	WorkIncome                float64 `json:"work_income"`
+	QualifiedDividends        float64 `json:"qualified_dividends"`
+	OtherLongTermCapitalGains float64 `json:"other_long_term_capital_gains"`
+	PensionIncome             float64 `json:"pension_income"`
+	RentalNetIncome           float64 `json:"rental_net_income"`
+	AnnuityIncome             float64 `json:"annuity_income"`
+	SocialSecurity            float64 `json:"social_security"`
+	OtherTaxableIncome        float64 `json:"other_taxable_income"`
 	YearlyWithdrawal          float64 `json:"yearly_withdrawal"`
 }
 

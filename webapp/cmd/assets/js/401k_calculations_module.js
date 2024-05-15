@@ -33,6 +33,14 @@ export const calculateAll = async (input) => {
     annual_investment_growth: input.annual_investment_growth,
     retirement_age: input.retirement_age,
     retirement_filing_status: input.retirement_filing_status,
+    work_income: input.work_income,
+    qualified_dividends: input.qualified_dividends,
+    other_long_term_capital_gains: input.other_long_term_capital_gains,
+    pension_income: input.pension_income,
+    rental_net_income: input.rental_net_income,
+    annuity_income: input.annuity_income,
+    social_security: input.social_security,
+    other_taxable_income: input.other_taxable_income,
     yearly_withdrawal: input.yearly_withdrawal,
   });
 }

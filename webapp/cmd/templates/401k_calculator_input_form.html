@@ -43,7 +43,39 @@
         </select>
       </div>
       <div class="form-input">
-        <label for="yearly-withdrawals" class="input-label">Yearly Withdrawal (today's dollars)</label>
+        <label for="work-income" class="input-label">Work Income</label>
+        <input class="401k-calculator-input" type="number" id="work-income" name="work-income" value={{.input.WorkIncome}} />
+      </div>
+      <div class="form-input">
+        <label for="qualified-dividends" class="input-label">Qualified Dividends</label>
+        <input class="401k-calculator-input" type="number" id="qualified-dividends" name="qualified-dividends" value={{.input.QualifiedDividends}} />
+      </div>
+      <div class="form-input">
+        <label for="other-long-term-capital-gains" class="input-label">Other Long Term Capital Gains</label>
+        <input class="401k-calculator-input" type="number" id="other-long-term-capital-gains" name="other-long-term-capital-gains" value={{.input.OtherLongTermCapitalGains}} />
+      </div>
+      <div class="form-input">
+        <label for="pension-income" class="input-label">Pension Income</label>
+        <input class="401k-calculator-input" type="number" id="pension-income" name="pension-income" value={{.input.PensionIncome}} />
+      </div>
+      <div class="form-input">
+        <label for="rental-net-income" class="input-label">Rental Net Income</label>
+        <input class="401k-calculator-input" type="number" id="rental-net-income" name="rental-net-income" value={{.input.RentalNetIncome}} />
+      </div>
+      <div class="form-input">
+        <label for="annuity-income" class="input-label">Annuity Income</label>
+        <input class="401k-calculator-input" type="number" id="annuity-income" name="annuity-income" value={{.input.AnnuityIncome}} />
+      </div>
+      <div class="form-input">
+        <label for="social-security" class="input-label">Social Security</label>
+        <input class="401k-calculator-input" type="number" id="social-security" name="social-security" value={{.input.SocialSecurity}} />
+      </div>
+      <div class="form-input">
+        <label for="other-taxable-income" class="input-label">Other Taxable Income</label>
+        <input class="401k-calculator-input" type="number" id="other-taxable-income" name="other-taxable-income" value={{.input.OtherTaxableIncome}} />
+      </div>
+      <div class="form-input">
+        <label for="yearly-withdrawals" class="input-label">Annual Withdrawal (today's dollars)</label>
         <input class="401k-calculator-input" type="number" id="yearly-withdrawal" name="yearly-withdrawal" value={{.input.YearlyWithdrawal}} />
       </div>
     </div>
