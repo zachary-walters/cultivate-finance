@@ -10,11 +10,6 @@ import (
 	"github.com/zachary-walters/rothvtrad/401k_calculator/internal/calculator"
 )
 
-type data struct {
-	Value           any `json:"value,omitempty"`
-	RetirementValue any `json:"retirement_value,omitempty"`
-}
-
 func main() {
 	wait := make(chan struct{}, 0)
 	js.Global().Set("calculateAll", js.FuncOf(calculateAll))
@@ -82,6 +77,7 @@ var calculations = map[string]any{
 	"INCOME_AFTER_STANDARD_DEDUCTION":                   calculator.NewIncomeAfterStandardDeduction(),
 	"INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS": calculator.NewIncomeAfterStandardDeductionAndContributions(),
 	"NET_DISTRIBUTION_AFTER_TAXES":                      calculator.NewNetDistributionAfterTaxes(),
+	"ROTH_OR_TRADITIONAL_DECISION":                      calculator.NewRothOrTraditionalDecision(),
 	"STANDARD_DEDUCTION":                                calculator.NewStandardDeduction(),
 	"TAX_RATE_OF_SAVINGS":                               calculator.NewTaxRateOfSavings(),
 	"TOTAL_CONTRIBUTIONS":                               calculator.NewTotalContributions(),

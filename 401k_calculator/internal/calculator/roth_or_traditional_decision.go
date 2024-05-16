@@ -3,28 +3,22 @@ package calculator
 type RothOrTraditionalDecisionCalculation DecisionCalculation
 
 type RothOrTraditionalDecision struct {
-	TaxRateOfSavingsCalculation
-	EffectiveTaxRateOnGrossCalculation
+	TotalDisbursementsCalculation
 }
 
 func NewRothOrTraditionalDecision() RothOrTraditionalDecision {
 	return RothOrTraditionalDecision{
-		TaxRateOfSavingsCalculation:        NewTaxRateOfSavings(),
-		EffectiveTaxRateOnGrossCalculation: NewEffectiveTaxRateOnGross(),
+		TotalDisbursementsCalculation: NewTotalDisbursements(),
 	}
 }
 
 func (c RothOrTraditionalDecision) Calculate(model Model) string {
-	taxRateOfSavings := c.TaxRateOfSavingsCalculation.CalculateTraditional(model)
-	effectiveTaxRateOnGross := c.EffectiveTaxRateOnGrossCalculation.CalculateTraditional(model)
+	totalDisbursementsTraditionalRetirement := c.TotalDisbursementsCalculation.CalculateTraditionalRetirement(model)
+	totalDisbursementsRothRetirement := c.TotalDisbursementsCalculation.CalculateRothRetirement(model)
 
-	if taxRateOfSavings >= effectiveTaxRateOnGross {
+	if totalDisbursementsTraditionalRetirement >= totalDisbursementsRothRetirement {
 		return "Traditional"
 	}
 
 	return "Roth"
-}
-
-func (c RothOrTraditionalDecision) CalculateRetirement(model Model) string {
-	return c.Calculate(model)
 }

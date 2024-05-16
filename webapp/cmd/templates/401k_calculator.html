@@ -5,17 +5,21 @@
   <title>Analyze 401k</title>
   <script type="text/javascript" src="/assets/wasm_exec.js"></script>
   <script type="module" src="/assets/js/external/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/assets/css/_main.css" />
 </head>
 
 <body>
     <div class="inputform-container">
       {{template "inputform" .}}
     </div>
+    <div class="decision-container">
+      {{template "decision" .}}
+    </div>
     <div class="calculations-container">
       {{template "calculations" .}}
     </div>
-    <div class="decision-container">
-      {{template "decision" .}}
+    <div class="contributions-interest-container">
+      {{template "contributions-interest-charts" .}}
     </div>
     <div class="area-chart-container">
       {{template "area-chart" .}}
@@ -24,24 +28,10 @@
 
 <script type="module"> 
 import { calculate, calculateAll, isDollarValue, isPercentValue } from "/assets/js/401k_calculations_module.js";
-import { get401kCalculatorInput } from "/assets/js/input_module.js";
+import { get401kCalculatorInput, recalculate } from "/assets/js/input_module.js";
 import { generateCharts } from "/assets/js/chart_module.js";
 
-let all = await calculateAll(get401kCalculatorInput());
-document.getElementById("annual-growth-less-inflation").innerHTML = isPercentValue(all.traditional.ANNUAL_GROWTH_LESS_INFLATION);
-document.getElementById("annual-tax-savings-with-contributions").innerHTML = isDollarValue(all.traditional.ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION);
-document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.traditional_retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
-document.getElementById("equivalent-roth-contributions").innerHTML = isDollarValue(all.traditional.EQUIVALENT_ROTH_CONTRIBUTIONS);
-document.getElementById("income-after-standard-deduction").innerHTML = isDollarValue(all.traditional.INCOME_AFTER_STANDARD_DEDUCTION);
-document.getElementById("income-after-standard-deduction-and-contributions").innerHTML = isDollarValue(all.traditional.INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS);
-document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.traditional_retirement.INCOME_AFTER_STANDARD_DEDUCTION);
-document.getElementById("net-distribution-after-taxes").innerHTML = isDollarValue(all.traditional_retirement.NET_DISTRIBUTION_AFTER_TAXES);
-document.getElementById("standard-deduction").innerHTML = isDollarValue(all.traditional.STANDARD_DEDUCTION);
-document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.traditional_retirement.STANDARD_DEDUCTION);
-document.getElementById("tax-rate-of-savings").innerHTML = isPercentValue(all.traditional.TAX_RATE_OF_SAVINGS, true);
-document.getElementById("total-taxes-owed-after-standard-deduction").innerHTML = isDollarValue(all.traditional_retirement.TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION);
-
-generateCharts(all);
+recalculate();
 </script>
 
 <style>

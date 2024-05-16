@@ -1,21 +1,28 @@
 {{define "decision"}}
-<div class="decision-content">
-  <div class="chart">
-    <canvas id="traditional-chart"></canvas>
-  </div>
-  
-  <div class="chart">
-    <canvas id="roth-chart"></canvas>
-  </div>
+<div class="decision">
+  <p>
+    Given your following inputs, you should invest in a 
+  </p>
+  <h1 id="decision" name="decision"></h1>
 </div>
 
-<script type="module">
-
-</script>
-
 <style>
-  .decision-content {
+  .decision {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #decision {
+    font-size: 4rem;
+  }
+
+  #decision.traditional {
+    color: var(--cf-green);
+  }
+
+  #decision.roth {
+    color: var(--cf-blue);
   }
 </style>
 {{end}}

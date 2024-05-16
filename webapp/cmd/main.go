@@ -35,6 +35,7 @@ func main() {
 			"templates/401k_calculator.html",
 			"templates/401k_calculator_input_form.html",
 			"templates/401k_calculator_decision.html",
+			"templates/401k_calculator_contributions_interest_charts.html",
 			"templates/401k_calculator_area_chart.html",
 			"templates/401k_calculator_calculations.html")
 	if err != nil {

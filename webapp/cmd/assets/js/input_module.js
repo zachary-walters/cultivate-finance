@@ -1,3 +1,6 @@
+import { calculateAll, isPercentValue, isDollarValue } from "/assets/js/401k_calculations_module.js";
+import { generateCharts } from "/assets/js/chart_module.js";
+
 export const get401kCalculatorInput = (datakey) => {
   return {
     datakey: datakey,
@@ -19,3 +22,25 @@ export const get401kCalculatorInput = (datakey) => {
     yearly_withdrawal: parseFloat(document.getElementById('yearly-withdrawal').value),
   }
 };
+
+export async function recalculate() {
+  let all = await calculateAll(get401kCalculatorInput());
+  document.getElementById("annual-growth-less-inflation").innerHTML = isPercentValue(all.traditional.ANNUAL_GROWTH_LESS_INFLATION);
+  document.getElementById("annual-tax-savings-with-contributions").innerHTML = isDollarValue(all.traditional.ANNUAL_TAX_SAVINGS_WITH_CONTRIBUTION);
+  document.getElementById("effective-tax-rate-on-gross").innerHTML = isPercentValue(all.traditional_retirement.EFFECTIVE_TAX_RATE_ON_GROSS, true);
+  document.getElementById("equivalent-roth-contributions").innerHTML = isDollarValue(all.traditional.EQUIVALENT_ROTH_CONTRIBUTIONS);
+  document.getElementById("income-after-standard-deduction").innerHTML = isDollarValue(all.traditional.INCOME_AFTER_STANDARD_DEDUCTION);
+  document.getElementById("income-after-standard-deduction-and-contributions").innerHTML = isDollarValue(all.traditional.INCOME_AFTER_STANDARD_DEDUCTION_AND_CONTRIBUTIONS);
+  document.getElementById("income-after-standard-deduction-retirement").innerHTML = isDollarValue(all.traditional_retirement.INCOME_AFTER_STANDARD_DEDUCTION);
+  document.getElementById("net-distribution-after-taxes").innerHTML = isDollarValue(all.traditional_retirement.NET_DISTRIBUTION_AFTER_TAXES);
+  document.getElementById("standard-deduction").innerHTML = isDollarValue(all.traditional.STANDARD_DEDUCTION);
+  document.getElementById("standard-deduction-retirement").innerHTML = isDollarValue(all.traditional_retirement.STANDARD_DEDUCTION);
+  document.getElementById("tax-rate-of-savings").innerHTML = isPercentValue(all.traditional.TAX_RATE_OF_SAVINGS, true);
+  document.getElementById("total-taxes-owed-after-standard-deduction").innerHTML = isDollarValue(all.traditional_retirement.TOTAL_TAXES_OWED_AFTER_STANDARD_DEDUCTION);
+  document.getElementById("decision").innerHTML = all.traditional.ROTH_OR_TRADITIONAL_DECISION;
+  
+  document.getElementById("decision").classList = all.traditional.ROTH_OR_TRADITIONAL_DECISION == "Traditional" ? ['traditional'] : ['roth']
+
+  generateCharts(all);
+}
+

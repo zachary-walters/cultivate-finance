@@ -25,7 +25,6 @@ type ChartCalculation interface {
 
 type DecisionCalculation interface {
 	Calculate(Model) string
-	CalculateRetirement(Model) string
 }
 
 type CalculationData struct {
@@ -119,11 +118,11 @@ func CalculateSynchronous(model Model, calculation any, datakey string) Calculat
 		Datakey: datakey,
 	}
 
-	if isCalculation {
-		calculationData.TraditionalValue = calc.CalculateTraditional(model)
-		calculationData.TraditionalRetirementValue = calc.CalculateTraditionalRetirement(model)
-		calculationData.RothValue = calc.CalculateRoth(model)
-		calculationData.RothRetirementValue = calc.CalculateRothRetirement(model)
+	if isDecisionCalculation {
+		calculationData.TraditionalValue = decision.Calculate(model)
+		calculationData.TraditionalRetirementValue = nil
+		calculationData.RothValue = nil
+		calculationData.RothRetirementValue = nil
 	} else if isSequenceCalculation {
 		calculationData.TraditionalValue = seq.CalculateTraditional(model)
 		calculationData.TraditionalRetirementValue = seq.CalculateTraditionalRetirement(model)
@@ -134,11 +133,11 @@ func CalculateSynchronous(model Model, calculation any, datakey string) Calculat
 		calculationData.TraditionalRetirementValue = nil
 		calculationData.RothValue = nil
 		calculationData.RothRetirementValue = nil
-	} else if isDecisionCalculation {
-		calculationData.TraditionalValue = decision.Calculate(model)
-		calculationData.TraditionalRetirementValue = nil
-		calculationData.RothValue = nil
-		calculationData.RothRetirementValue = nil
+	} else if isCalculation {
+		calculationData.TraditionalValue = calc.CalculateTraditional(model)
+		calculationData.TraditionalRetirementValue = calc.CalculateTraditionalRetirement(model)
+		calculationData.RothValue = calc.CalculateRoth(model)
+		calculationData.RothRetirementValue = calc.CalculateRothRetirement(model)
 	}
 
 	return calculationData
@@ -161,11 +160,11 @@ func CalculateSynchronousWasm(model Model, calculation any, datakey string) Calc
 		Datakey: datakey,
 	}
 
-	if isCalculation {
-		calculationData.TraditionalValue = calc.CalculateTraditional(model)
-		calculationData.TraditionalRetirementValue = calc.CalculateTraditionalRetirement(model)
-		calculationData.RothValue = calc.CalculateRoth(model)
-		calculationData.RothRetirementValue = calc.CalculateRothRetirement(model)
+	if isDecisionCalculation {
+		calculationData.TraditionalValue = decision.Calculate(model)
+		calculationData.TraditionalRetirementValue = nil
+		calculationData.RothValue = nil
+		calculationData.RothRetirementValue = nil
 	} else if isSequenceCalculation {
 		calculationData.TraditionalValue = translateFloatSlice(seq.CalculateTraditional(model))
 		calculationData.TraditionalRetirementValue = translateFloatSlice(seq.CalculateTraditionalRetirement(model))
@@ -176,11 +175,11 @@ func CalculateSynchronousWasm(model Model, calculation any, datakey string) Calc
 		calculationData.TraditionalRetirementValue = nil
 		calculationData.RothValue = nil
 		calculationData.RothRetirementValue = nil
-	} else if isDecisionCalculation {
-		calculationData.TraditionalValue = decision.Calculate(model)
-		calculationData.TraditionalRetirementValue = decision.CalculateRetirement(model)
-		calculationData.RothValue = nil
-		calculationData.RothRetirementValue = nil
+	} else if isCalculation {
+		calculationData.TraditionalValue = calc.CalculateTraditional(model)
+		calculationData.TraditionalRetirementValue = calc.CalculateTraditionalRetirement(model)
+		calculationData.RothValue = calc.CalculateRoth(model)
+		calculationData.RothRetirementValue = calc.CalculateRothRetirement(model)
 	}
 
 	return calculationData

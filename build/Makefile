@@ -42,7 +42,7 @@ webapp: fmt build_tinygo build_webapp
 
 api: fmt build_api
 	@echo "rebuilding and starting api"
-	docker-compose up -d --build  api 
+	docker-compose up -d --build  401k-calculator-api 
 
 build_api: 
 	@echo "Building api 401k_calculator binary..."
