@@ -7,7 +7,10 @@ GOROOT = $(shell go env GOROOT)
 TINYGOROOT = $(shell tinygo env TINYGOROOT)
 
 test: fmt
-	(cd ../401k_calculator; go test ./... -v)
+	(cd ../401k_calculator; go test ./... -v -coverpkg=./...)
+
+coverage:
+	(cd ../401k_calculator; go test -v -coverprofile bin/cover.out ./... -coverpkg=./...; go tool cover -html bin/cover.out -o bin/cover.html; open bin/cover.html)
 
 ## up: starts all containers in the background without forcing build
 up: 
