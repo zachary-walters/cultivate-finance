@@ -102,9 +102,11 @@ func NewModel(input Input) Model {
 }
 
 func coalesce[T int | float64](number T) T {
-	if number < 0 {
+	// if NaN or negative
+	if number != number || number < 0 {
 		return 0
 	}
+
 	return number
 }
 

@@ -28,5 +28,5 @@ func (c EquivalentRothContributions) CalculateRoth(model Model) float64 {
 }
 
 func (c EquivalentRothContributions) CalculateRothRetirement(model Model) float64 {
-	return c.CalculateRoth(model)
+	return c.CalculateTraditional(model)
 }
