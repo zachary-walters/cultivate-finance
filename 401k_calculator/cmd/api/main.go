@@ -1,13 +1,18 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
-	"strings"
+	"os"
 	"sync"
+	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/nats-io/nats.go"
+
 	"github.com/zachary-walters/rothvtrad/401k_calculator/internal/calculator"
 )
 
@@ -19,23 +24,78 @@ type data struct {
 }
 
 func main() {
+	var nc *nats.Conn
+	var err error
 	r := chi.NewRouter()
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome"))
+	uri := os.Getenv("NATS_URI")
+	for i := 0; i < 5; i++ {
+		nc, err = nats.Connect(uri)
+		if err == nil {
+			break
+		}
+
+		log.Println("Waiting before connecting to NATS at:", uri)
+		time.Sleep(1 * time.Second)
+	}
+	if err != nil {
+		log.Fatal("Error establishing connection to NATS:", err)
+	}
+	log.Println("Connected to NATS at:", nc.ConnectedUrl())
+
+	nc.Subscribe("calculate_all_401k", func(msg *nats.Msg) {
+		log.Println("Got task request on:", msg.Subject)
+		model, err := calculateModel(msg.Data)
+		if err != nil {
+
+		}
+
+		d, err := json.Marshal(model)
+		if err != nil {
+
+		}
+
+		nc.Publish(msg.Reply, d)
 	})
-	r.Post("/{datakey}", calculateByDatakey)
-	r.Post("/calculate_all", calculateAll)
-	http.ListenAndServe(":8660", r)
+
+	nc.Subscribe("calculate_401k_by_datakey", func(msg *nats.Msg) {
+		log.Println("Got task request on:", msg.Subject)
+
+		calculationData, err := calculateDatakey(msg.Data)
+		if err != nil {
+
+		}
+
+		d, err := json.Marshal(calculationData)
+		if err != nil {
+
+		}
+
+		nc.Publish(msg.Reply, d)
+
+	})
+
+	// r.Get("/", ns.ping)
+	// r.Post("/{datakey}", ns.calculateByDatakey)
+	// r.Post("/calculate_all", ns.calculateAll)
+
+	log.Println("Server listening on port: ", os.Getenv("PORT"))
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), r); err != nil {
+		log.Fatal(err)
+	}
 }
 
-func calculateAll(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
+func ping(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "pong")
+}
+
+func calculateModel(d []byte) (map[string]data, error) {
+	decoder := json.NewDecoder(bytes.NewReader(d))
 	var input calculator.Input
 
 	err := decoder.Decode(&input)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	model := calculator.NewModel(input)
@@ -61,55 +121,86 @@ func calculateAll(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(modelMap)
-	if err != nil {
-		panic(err)
-	}
+	return modelMap, nil
 }
 
-func calculateByDatakey(w http.ResponseWriter, r *http.Request) {
-	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
-
-	calculation, exists := calculations[datakey]
-	if !exists {
-		w.Write([]byte(fmt.Sprintf("the given datakey does not exist: %s", datakey)))
-		return
-	}
-
-	decoder := json.NewDecoder(r.Body)
+func calculateDatakey(d []byte) (any, error) {
+	decoder := json.NewDecoder(bytes.NewReader(d))
 	var input calculator.Input
 
 	err := decoder.Decode(&input)
 	if err != nil {
-		panic(err)
+		return nil, err
+	}
+
+	log.Println("ARST", input, "ZXCV", input.Datakey)
+	calculation, exists := calculations[input.Datakey]
+	if !exists {
+		// send no exists message reply to nats
+		log.Println("calculation doesn't exist")
 	}
 
 	model := calculator.NewModel(input)
+	calculationData := calculator.CalculateSynchronous(model, calculation, input.Datakey)
 
-	calculationData := calculator.CalculateSynchronous(model, calculation, datakey)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(struct {
+	data := struct {
 		Datakey                    string `json:"datakey"`
 		TraditionalValue           any    `json:"traditional_value,omitempty"`
 		TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
 		RothValue                  any    `json:"roth_value,omitempty"`
 		RothRetirementValue        any    `json:"roth_retirement_value,omitempty"`
 	}{
-		Datakey:                    datakey,
+		Datakey:                    input.Datakey,
 		TraditionalValue:           calculationData.TraditionalValue,
 		TraditionalRetirementValue: calculationData.TraditionalRetirementValue,
 		RothValue:                  calculationData.RothValue,
 		RothRetirementValue:        calculationData.RothRetirementValue,
-	})
-
-	if err != nil {
-		panic(err)
 	}
+
+	return data, nil
 }
+
+// func calculateByDatakey(w http.ResponseWriter, r *http.Request) {
+// 	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
+
+// 	calculation, exists := calculations[datakey]
+// 	if !exists {
+// 		w.Write([]byte(fmt.Sprintf("the given datakey does not exist: %s", datakey)))
+// 		return
+// 	}
+
+// 	decoder := json.NewDecoder(r.Body)
+// 	var input calculator.Input
+
+// 	err := decoder.Decode(&input)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	model := calculator.NewModel(input)
+
+// 	calculationData := calculator.CalculateSynchronous(model, calculation, datakey)
+
+// 	w.Header().Set("Content-Type", "application/json")
+// 	w.WriteHeader(http.StatusOK)
+// 	err = json.NewEncoder(w).Encode(struct {
+// 		Datakey                    string `json:"datakey"`
+// 		TraditionalValue           any    `json:"traditional_value,omitempty"`
+// 		TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
+// 		RothValue                  any    `json:"roth_value,omitempty"`
+// 		RothRetirementValue        any    `json:"roth_retirement_value,omitempty"`
+// 	}{
+// 		Datakey:                    datakey,
+// 		TraditionalValue:           calculationData.TraditionalValue,
+// 		TraditionalRetirementValue: calculationData.TraditionalRetirementValue,
+// 		RothValue:                  calculationData.RothValue,
+// 		RothRetirementValue:        calculationData.RothRetirementValue,
+// 	})
+
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
 var calculations = map[string]any{
 	"ADJUSTED_GROSS_INCOME":                                                               calculator.NewAdjustedGrossIncome(),

@@ -2,6 +2,7 @@
 WASM_BINARY=wasmBin
 TINYGO_BINARY=tinygoBin.wasm
 WEBAPP_BINARY=webapp
+GATEWAY_BINARY=gateway
 
 GOROOT = $(shell go env GOROOT)
 TINYGOROOT = $(shell tinygo env TINYGOROOT)
@@ -18,7 +19,7 @@ up:
 	docker-compose up -d
 	@echo "Docker images started!"
 
-up_build: fmt build_api build_wasm build_webapp
+up_build: fmt build_api build_wasm build_webapp build_gateway
 	@echo "Stopping docker images (if running...)"
 	docker-compose down
 	@echo "Building (when required) and starting docker images..."
@@ -67,13 +68,19 @@ build_tinygo:
 	@echo "Done building tinygo binary"
 
 build_webapp: build_tinygo
-	@echo "Building the HTMX webapp..."
+	@echo "Building the webapp..."
 	cp ${TINYGOROOT}/targets/wasm_exec.js ../webapp/cmd/assets
 	cp ../401k_calculator/bin/${TINYGO_BINARY} ../webapp/cmd/assets
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' ../webapp/cmd/assets/wasm_exec.js
 	cd ../webapp && env GOOS=linux CGO_ENABLED=0 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
 	du -sh ../webapp/bin/${WEBAPP_BINARY}
 	@echo "Done building webapp binary"
+
+build_gateway: 
+	@echo "Building the api gateway..."
+	cd ../gateway && env GOOS=linux CGO_ENABLED=0 go build -o bin/${GATEWAY_BINARY} ./cmd
+	du -sh ../gateway/bin/${GATEWAY_BINARY}
+	@echo "Done building gateway binary!"
 
 fmt: 
 	gofmt -s -w ../.

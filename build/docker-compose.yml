@@ -3,6 +3,24 @@ version: '3'
 name: cultivate-finance 
 
 services:
+  gateway:
+    container_name: gateway
+    build:
+      context: ./../gateway
+      dockerfile: ./../gateway/gateway.dockerfile
+    restart: always
+    ports: 
+      - "8661:8661"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      PORT: 8661
+      NATS_URI: nats://nats:4222
+    depends_on:
+      - nats
+
+
   401k-calculator-api:
     container_name: rest-api-server
     build:
@@ -16,6 +34,9 @@ services:
       replicas: 1
     environment:
       PORT: 8660
+      NATS_URI: nats://nats:4222
+    depends_on:
+      - nats
 
   webapp:
     container_name: webapp
@@ -28,6 +49,15 @@ services:
     deploy:
       mode: replicated
       replicas: 1  
+
+  nats: 
+    image: 'nats:latest'
+    entrypoint: "nats-server -DV"
+    expose:
+      - "4222"
+    ports: 
+      - "8222:8222"
+    hostname: nats-server
 
   # sonarqube: 
   #   container_name: sonarqube

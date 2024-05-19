@@ -64,6 +64,8 @@ type Input struct {
 	OtherTaxableIncome                      float64 `json:"other_taxable_income"`
 	EstimatedTaxPercentIncreaseAtRetirement float64 `json:"estimated_tax_percent_increase_at_retirement"`
 	StandardDeductionIncreaseDecrease       float64 `json:"standard_deduction_increase_decrease"`
+
+	Datakey string `json:"datakey,omitempty"`
 }
 
 type TaxRate struct {
