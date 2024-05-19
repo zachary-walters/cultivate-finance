@@ -40,7 +40,7 @@ func TestTotalContributionsCalculateTraditional(t *testing.T) {
 		{
 			name: "Test Case 0",
 			balancesTraditional: calculator.ChartData{
-				Contribution: map[int]float64{
+				Contribution: map[int32]float64{
 					0: 100,
 					1: 200,
 				},

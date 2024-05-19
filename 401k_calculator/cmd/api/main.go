@@ -23,6 +23,22 @@ type data struct {
 	RothRetirementValue        any `json:"roth_retirement_value,omitempty"`
 }
 
+type RequestError struct {
+	Err error `json:"error"`
+}
+
+func (r *RequestError) Error() string {
+	return r.Err.Error()
+}
+
+func reqError(err error) []byte {
+	data, _ := json.Marshal(RequestError{
+		Err: err,
+	})
+
+	return data
+}
+
 func main() {
 	var nc *nats.Conn
 	var err error
@@ -47,12 +63,14 @@ func main() {
 		log.Println("Got task request on:", msg.Subject)
 		model, err := calculateModel(msg.Data)
 		if err != nil {
-
+			nc.Publish(msg.Reply, reqError(err))
+			return
 		}
 
 		d, err := json.Marshal(model)
 		if err != nil {
-
+			nc.Publish(msg.Reply, reqError(err))
+			return
 		}
 
 		nc.Publish(msg.Reply, d)
@@ -63,30 +81,24 @@ func main() {
 
 		calculationData, err := calculateDatakey(msg.Data)
 		if err != nil {
-
+			nc.Publish(msg.Reply, reqError(err))
+			return
 		}
 
 		d, err := json.Marshal(calculationData)
 		if err != nil {
-
+			nc.Publish(msg.Reply, reqError(err))
+			return
 		}
 
 		nc.Publish(msg.Reply, d)
 
 	})
 
-	// r.Get("/", ns.ping)
-	// r.Post("/{datakey}", ns.calculateByDatakey)
-	// r.Post("/calculate_all", ns.calculateAll)
-
 	log.Println("Server listening on port: ", os.Getenv("PORT"))
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), r); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func ping(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "pong")
 }
 
 func calculateModel(d []byte) (map[string]data, error) {
@@ -159,48 +171,6 @@ func calculateDatakey(d []byte) (any, error) {
 
 	return data, nil
 }
-
-// func calculateByDatakey(w http.ResponseWriter, r *http.Request) {
-// 	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
-
-// 	calculation, exists := calculations[datakey]
-// 	if !exists {
-// 		w.Write([]byte(fmt.Sprintf("the given datakey does not exist: %s", datakey)))
-// 		return
-// 	}
-
-// 	decoder := json.NewDecoder(r.Body)
-// 	var input calculator.Input
-
-// 	err := decoder.Decode(&input)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	model := calculator.NewModel(input)
-
-// 	calculationData := calculator.CalculateSynchronous(model, calculation, datakey)
-
-// 	w.Header().Set("Content-Type", "application/json")
-// 	w.WriteHeader(http.StatusOK)
-// 	err = json.NewEncoder(w).Encode(struct {
-// 		Datakey                    string `json:"datakey"`
-// 		TraditionalValue           any    `json:"traditional_value,omitempty"`
-// 		TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
-// 		RothValue                  any    `json:"roth_value,omitempty"`
-// 		RothRetirementValue        any    `json:"roth_retirement_value,omitempty"`
-// 	}{
-// 		Datakey:                    datakey,
-// 		TraditionalValue:           calculationData.TraditionalValue,
-// 		TraditionalRetirementValue: calculationData.TraditionalRetirementValue,
-// 		RothValue:                  calculationData.RothValue,
-// 		RothRetirementValue:        calculationData.RothRetirementValue,
-// 	})
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// }
 
 var calculations = map[string]any{
 	"ADJUSTED_GROSS_INCOME":                                                               calculator.NewAdjustedGrossIncome(),

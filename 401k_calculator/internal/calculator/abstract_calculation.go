@@ -36,21 +36,21 @@ type CalculationData struct {
 }
 
 type ChartData struct {
-	BeginningBalance map[int]float64 `json:"beginning_balance,omitempty"`
-	Contribution     map[int]float64 `json:"contribution,omitempty"`
-	Withdrawal       map[int]float64 `json:"withdrawal,omitempty"`
-	InterestEarned   map[int]float64 `json:"interest_earned,omitempty"`
-	EndingBalance    map[int]float64 `json:"ending_balance,omitempty"`
-	AfterTaxIncome   map[int]float64 `json:"after_tax_income,omitempty"`
+	BeginningBalance map[int32]float64 `json:"beginning_balance,omitempty"`
+	Contribution     map[int32]float64 `json:"contribution,omitempty"`
+	Withdrawal       map[int32]float64 `json:"withdrawal,omitempty"`
+	InterestEarned   map[int32]float64 `json:"interest_earned,omitempty"`
+	EndingBalance    map[int32]float64 `json:"ending_balance,omitempty"`
+	AfterTaxIncome   map[int32]float64 `json:"after_tax_income,omitempty"`
 }
 
 type Input struct {
-	CurrentAge                int     `json:"current_age"`
+	CurrentAge                int32   `json:"current_age"`
 	CurrentFilingStatus       string  `json:"current_filing_status"`
 	CurrentAnnualIncome       float64 `json:"current_annual_income"`
 	AnnualContributionsPreTax float64 `json:"annual_contributions_pretax"`
 	AnnualInvestmentGrowth    float64 `json:"annual_investment_growth"`
-	RetirementAge             int     `json:"retirement_age"`
+	RetirementAge             int32   `json:"retirement_age"`
 	RetirementFilingStatus    string  `json:"retirement_filing_status"`
 	YearlyWithdrawal          float64 `json:"yearly_withdrawal"`
 	// Extended
@@ -206,11 +206,11 @@ func translateFloatSlice(s []float64) []interface{} {
 	return x
 }
 
-func translateChartMap(m map[int]float64) map[string]interface{} {
+func translateChartMap(m map[int32]float64) map[string]interface{} {
 	n := map[string]interface{}{}
 
 	for k, v := range m {
-		n[strconv.Itoa(k)] = v
+		n[strconv.Itoa(int(k))] = v
 	}
 
 	return n

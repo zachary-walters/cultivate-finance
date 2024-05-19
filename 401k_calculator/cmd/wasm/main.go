@@ -18,12 +18,12 @@ func main() {
 
 func calculateAll(this js.Value, args []js.Value) interface{} {
 	input := calculator.Input{
-		CurrentAge:                args[0].Get("current_age").Int(),
+		CurrentAge:                int32(args[0].Get("current_age").Int()),
 		CurrentFilingStatus:       args[0].Get("current_filing_status").String(),
 		CurrentAnnualIncome:       args[0].Get("current_annual_income").Float(),
 		AnnualContributionsPreTax: args[0].Get("annual_contributions_pre_tax").Float(),
 		AnnualInvestmentGrowth:    args[0].Get("annual_investment_growth").Float(),
-		RetirementAge:             args[0].Get("retirement_age").Int(),
+		RetirementAge:             int32(args[0].Get("retirement_age").Int()),
 		RetirementFilingStatus:    args[0].Get("retirement_filing_status").String(),
 		WorkIncome:                args[0].Get("work_income").Float(),
 		QualifiedDividends:        args[0].Get("qualified_dividends").Float(),

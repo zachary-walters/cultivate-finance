@@ -41,7 +41,7 @@ func TestTotalDisburesmentsCalculateTraditional(t *testing.T) {
 		{
 			name: "Test case 0",
 			balancesTraditional: calculator.ChartData{
-				AfterTaxIncome: map[int]float64{
+				AfterTaxIncome: map[int32]float64{
 					0: 100,
 					1: 200,
 					3: 300,

@@ -3,7 +3,7 @@ package calculator
 type BalancesTraditionalCalculation ChartCalculation
 
 type BalancesTraditional struct {
-	Limit int
+	Limit int32
 
 	AnnualGrowthLessInflationCalculation
 	AnnualRetirementAccountDisbursementCalculation
@@ -25,12 +25,12 @@ func (c BalancesTraditional) Calculate(model Model) ChartData {
 	topTierTaxRate := c.TopTierTaxRateCalculation.CalculateTraditionalRetirement(model)
 
 	chartData := ChartData{
-		BeginningBalance: make(map[int]float64, c.Limit),
-		Contribution:     make(map[int]float64, c.Limit),
-		Withdrawal:       make(map[int]float64, c.Limit),
-		InterestEarned:   make(map[int]float64, c.Limit),
-		EndingBalance:    make(map[int]float64, c.Limit),
-		AfterTaxIncome:   make(map[int]float64, c.Limit),
+		BeginningBalance: make(map[int32]float64, c.Limit),
+		Contribution:     make(map[int32]float64, c.Limit),
+		Withdrawal:       make(map[int32]float64, c.Limit),
+		InterestEarned:   make(map[int32]float64, c.Limit),
+		EndingBalance:    make(map[int32]float64, c.Limit),
+		AfterTaxIncome:   make(map[int32]float64, c.Limit),
 	}
 
 	for i := model.Input.CurrentAge; i < c.Limit; i++ {
