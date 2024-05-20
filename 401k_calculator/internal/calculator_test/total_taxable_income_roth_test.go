@@ -12,12 +12,12 @@ type MockTotalTaxableIncome struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxableIncome) Calculate(model calculator.Model) float64 {
+func (m *MockTotalTaxableIncome) Calculate(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxableIncome) CalculateRetirement(model calculator.Model) float64 {
+func (m *MockTotalTaxableIncome) CalculateRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -42,15 +42,15 @@ func TestTotalTaxableIncomeCalculate(t *testing.T) {
 			mockAdjustedGrossIncome := new(MockAdjustedGrossIncome)
 			mockSocialSecurityTaxableIncome := new(MockSocialSecurityTaxableIncome)
 
-			mockAdjustedGrossIncome.On("CalculateTraditional", model).Return(test.adjustedGrossIncome)
-			mockSocialSecurityTaxableIncome.On("CalculateTraditional", model).Return(test.socialSecurityTaxbaleIncome)
+			mockAdjustedGrossIncome.On("CalculateTraditional", &model).Return(test.adjustedGrossIncome)
+			mockSocialSecurityTaxableIncome.On("CalculateTraditional", &model).Return(test.socialSecurityTaxbaleIncome)
 
 			c := &calculator.TotalTaxableIncome{
 				AdjustedGrossIncomeCalculation:                   mockAdjustedGrossIncome,
 				SocialSecurityTaxableIncomeIndividualCalculation: mockSocialSecurityTaxableIncome,
 			}
 
-			actual := c.CalculateTraditional(model)
+			actual := c.CalculateTraditional(&model)
 			expected := test.adjustedGrossIncome + test.socialSecurityTaxbaleIncome
 
 			assert.Equal(t, expected, actual)

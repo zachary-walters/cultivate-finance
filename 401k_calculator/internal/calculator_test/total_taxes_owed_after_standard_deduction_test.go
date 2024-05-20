@@ -12,22 +12,22 @@ type MockTotalTaxesOwedAfterStandardDeduction struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRoth(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -77,10 +77,10 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		totalTaxesOwedAfterStandardDeductionSingle.On("CalculateTraditional", test.model).Return(1337.0)
-		totalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateTraditional", test.model).Return(90245.7)
-		totalTaxesOwedAfterStandardDeductionMarriedSeperate.On("CalculateTraditional", test.model).Return(345.89)
-		totalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateTraditional", test.model).Return(1233214.908)
+		totalTaxesOwedAfterStandardDeductionSingle.On("CalculateTraditional", &test.model).Return(1337.0)
+		totalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateTraditional", &test.model).Return(90245.7)
+		totalTaxesOwedAfterStandardDeductionMarriedSeperate.On("CalculateTraditional", &test.model).Return(345.89)
+		totalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateTraditional", &test.model).Return(1233214.908)
 
 		totalTaxesOwedAfterStandardDeduction := calculator.TotalTaxesOwedAfterStandardDeduction{
 			TotalTaxesOwedAfterStandardDeductionSingleCalculation:          totalTaxesOwedAfterStandardDeductionSingle,
@@ -103,7 +103,7 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 				expected = 0
 			}
 
-			actual := totalTaxesOwedAfterStandardDeduction.CalculateTraditional(test.model)
+			actual := totalTaxesOwedAfterStandardDeduction.CalculateTraditional(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})

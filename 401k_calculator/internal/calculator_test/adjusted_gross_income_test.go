@@ -13,22 +13,22 @@ type MockAdjustedGrossIncome struct {
 	mock.Mock
 }
 
-func (m *MockAdjustedGrossIncome) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockAdjustedGrossIncome) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAdjustedGrossIncome) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockAdjustedGrossIncome) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAdjustedGrossIncome) CalculateRoth(model calculator.Model) float64 {
+func (m *MockAdjustedGrossIncome) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAdjustedGrossIncome) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockAdjustedGrossIncome) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -102,8 +102,8 @@ func TestAdjustedGrossIncomeTraditionalCalculateTraditional(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := calculator.AdjustedGrossIncome{}
 
-			actual := c.CalculateTraditional(test.model)
-			expected := c.CalculateTraditionalRetirement(test.model)
+			actual := c.CalculateTraditional(&test.model)
+			expected := c.CalculateTraditionalRetirement(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})
@@ -115,7 +115,7 @@ func TestAdjustedGrossIncomeTraditionalCalculateTraditionalRetirement(t *testing
 		t.Run(test.name, func(t *testing.T) {
 			c := calculator.AdjustedGrossIncome{}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := test.model.Input.WorkIncome +
 				test.model.Input.PensionIncome +
 				test.model.Input.RentalNetIncome +
@@ -132,8 +132,8 @@ func TestAdjustedGrossIncomeTraditionalCalculateRoth(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := calculator.AdjustedGrossIncome{}
 
-			actual := c.CalculateRoth(test.model)
-			expected := c.CalculateRothRetirement(test.model)
+			actual := c.CalculateRoth(&test.model)
+			expected := c.CalculateRothRetirement(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})
@@ -145,7 +145,7 @@ func TestAdjustedGrossIncomeTraditionalCalculateRothRetirement(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := calculator.AdjustedGrossIncome{}
 
-			actual := c.CalculateRoth(test.model)
+			actual := c.CalculateRoth(&test.model)
 			expected := test.model.Input.WorkIncome +
 				test.model.Input.PensionIncome +
 				test.model.Input.RentalNetIncome +

@@ -12,22 +12,22 @@ type MockStandardDeduction struct {
 	mock.Mock
 }
 
-func (m *MockStandardDeduction) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockStandardDeduction) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockStandardDeduction) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockStandardDeduction) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockStandardDeduction) CalculateRoth(model calculator.Model) float64 {
+func (m *MockStandardDeduction) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockStandardDeduction) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockStandardDeduction) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -88,7 +88,7 @@ func TestStandardDeductionCalculateTraditional(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.StandardDeduction{}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := -1.0
 
 			switch test.model.Input.CurrentFilingStatus {

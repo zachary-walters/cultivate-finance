@@ -20,7 +20,7 @@ func NewBalancesRothMatchingNetContributions() BalancesRothMatchingNetContributi
 	}
 }
 
-func (c BalancesRothMatchingNetContributions) Calculate(model Model) ChartData {
+func (c BalancesRothMatchingNetContributions) Calculate(model *Model) ChartData {
 	annualGrowthLessInflation := c.AnnualGrowthLessInflationCalculation.CalculateRothRetirement(model)
 	equivalentRothContributions := c.EquivalentRothContributionsCalculation.CalculateRothRetirement(model)
 	annualRetirementAccountDisbursementTraditional := c.AnnualRetirementAccountDisbursementCalculation.CalculateTraditionalRetirement(model)

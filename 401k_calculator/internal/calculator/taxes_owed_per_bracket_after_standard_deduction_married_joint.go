@@ -12,7 +12,7 @@ func NewTaxesOwedPerBracketAfterStandardDeductionMarriedJoint() TaxesOwedPerBrac
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateTraditional(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateTraditional(model *Model) []float64 {
 	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateTraditional(model)
 
 	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := make([]float64, len(model.MarriedJointTaxRates))
@@ -24,7 +24,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateTraditio
 	return taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateTraditionalRetirement(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateTraditionalRetirement(model *Model) []float64 {
 	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateTraditionalRetirement(model)
 
 	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := make([]float64, len(model.MarriedJointTaxRates))
@@ -36,7 +36,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateTraditio
 	return taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateRoth(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateRoth(model *Model) []float64 {
 	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRoth(model)
 
 	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := make([]float64, len(model.MarriedJointTaxRates))
@@ -48,7 +48,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateRoth(mod
 	return taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateRothRetirement(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedJoint) CalculateRothRetirement(model *Model) []float64 {
 	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRothRetirement(model)
 
 	taxesOwedPerBracketAfterStandardDeductionMarriedJoint := make([]float64, len(model.MarriedJointTaxRates))

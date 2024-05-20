@@ -1,10 +1,10 @@
 package calculator
 
 type AbstractIncomePerBracketAfterStandardDeductionCalculation interface {
-	CalculateTraditional(Model, []TaxRate) []float64
-	CalculateTraditionalRetirement(Model, []TaxRate) []float64
-	CalculateRoth(Model, []TaxRate) []float64
-	CalculateRothRetirement(Model, []TaxRate) []float64
+	CalculateTraditional(*Model, []TaxRate) []float64
+	CalculateTraditionalRetirement(*Model, []TaxRate) []float64
+	CalculateRoth(*Model, []TaxRate) []float64
+	CalculateRothRetirement(*Model, []TaxRate) []float64
 }
 
 type AbstractIncomePerBracketAfterStandardDeduction struct {
@@ -19,7 +19,7 @@ func NewAbstractIncomePerBracketAfterStandardDeduction() AbstractIncomePerBracke
 	}
 }
 
-func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateTraditional(model Model, taxRates []TaxRate) []float64 {
+func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateTraditional(model *Model, taxRates []TaxRate) []float64 {
 	incomeAfterStandardDeduction := c.IncomeAfterStandardDeductionCalculation.CalculateTraditional(model)
 
 	values := []float64{}
@@ -31,7 +31,7 @@ func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateTraditional(mod
 	return values
 }
 
-func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateTraditionalRetirement(model Model, taxRates []TaxRate) []float64 {
+func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateTraditionalRetirement(model *Model, taxRates []TaxRate) []float64 {
 	incomeAfterStandardDeduction := c.IncomeAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
 
 	values := []float64{}
@@ -43,7 +43,7 @@ func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateTraditionalReti
 	return values
 }
 
-func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateRoth(model Model, taxRates []TaxRate) []float64 {
+func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateRoth(model *Model, taxRates []TaxRate) []float64 {
 	incomeAfterStandardDeduction := c.IncomeAfterStandardDeductionCalculation.CalculateRoth(model)
 
 	values := []float64{}
@@ -55,7 +55,7 @@ func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateRoth(model Mode
 	return values
 }
 
-func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateRothRetirement(model Model, taxRates []TaxRate) []float64 {
+func (c AbstractIncomePerBracketAfterStandardDeduction) CalculateRothRetirement(model *Model, taxRates []TaxRate) []float64 {
 	incomeAfterStandardDeduction := c.IncomeAfterStandardDeductionCalculation.CalculateRothRetirement(model)
 
 	values := []float64{}

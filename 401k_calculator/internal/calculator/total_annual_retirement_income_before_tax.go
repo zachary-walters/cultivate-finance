@@ -8,7 +8,7 @@ func NewTotalAnnualRetirementIncomeBeforeTax() TotalAnnualRetirementIncomeBefore
 	return TotalAnnualRetirementIncomeBeforeTax{}
 }
 
-func (c TotalAnnualRetirementIncomeBeforeTax) CalculateTraditional(model Model) float64 {
+func (c TotalAnnualRetirementIncomeBeforeTax) CalculateTraditional(model *Model) float64 {
 	return model.Input.AnnuityIncome +
 		model.Input.OtherLongTermCapitalGains +
 		model.Input.OtherTaxableIncome +
@@ -20,14 +20,14 @@ func (c TotalAnnualRetirementIncomeBeforeTax) CalculateTraditional(model Model) 
 		model.Input.YearlyWithdrawal
 }
 
-func (c TotalAnnualRetirementIncomeBeforeTax) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalAnnualRetirementIncomeBeforeTax) CalculateTraditionalRetirement(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c TotalAnnualRetirementIncomeBeforeTax) CalculateRoth(model Model) float64 {
+func (c TotalAnnualRetirementIncomeBeforeTax) CalculateRoth(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c TotalAnnualRetirementIncomeBeforeTax) CalculateRothRetirement(model Model) float64 {
+func (c TotalAnnualRetirementIncomeBeforeTax) CalculateRothRetirement(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }

@@ -3,11 +3,11 @@ version: '3'
 name: cultivate-finance 
 
 services:
-  gateway:
-    container_name: gateway
+  api-gateway:
+    container_name: api-gateway
     build:
-      context: ./../gateway
-      dockerfile: ./../gateway/gateway.dockerfile
+      context: ./../api_gateway
+      dockerfile: ./../api_gateway/api_gateway.dockerfile
     restart: always
     ports: 
       - "8661:8661"
@@ -58,6 +58,9 @@ services:
     ports: 
       - "8222:8222"
     hostname: nats-server
+    deploy:
+      mode: replicated
+      replicas: 1
 
   # sonarqube: 
   #   container_name: sonarqube

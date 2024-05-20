@@ -12,7 +12,7 @@ type MockTotalInterest struct {
 	mock.Mock
 }
 
-func (m *MockTotalInterest) Calculate(model calculator.Model) float64 {
+func (m *MockTotalInterest) Calculate(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -37,16 +37,16 @@ func TestMockTotalInterestCalculateTraditional(t *testing.T) {
 			mockTotalDisbursements := new(MockTotalDisbursements)
 			mockTotalContributions := new(MockTotalContributions)
 
-			mockTotalDisbursements.On("CalculateTraditionalRetirement", model).Return(test.totalDisbursements)
-			mockTotalContributions.On("CalculateTraditionalRetirement", model).Return(test.totalContributions)
+			mockTotalDisbursements.On("CalculateTraditionalRetirement", &model).Return(test.totalDisbursements)
+			mockTotalContributions.On("CalculateTraditionalRetirement", &model).Return(test.totalContributions)
 
 			c := &calculator.TotalInterest{
 				TotalDisbursementsCalculation: mockTotalDisbursements,
 				TotalContributionsCalculation: mockTotalContributions,
 			}
 
-			actual := c.CalculateTraditional(model)
-			expected := c.CalculateTraditionalRetirement(model)
+			actual := c.CalculateTraditional(&model)
+			expected := c.CalculateTraditionalRetirement(&model)
 
 			assert.Equal(t, expected, actual)
 		})

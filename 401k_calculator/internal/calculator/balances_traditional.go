@@ -19,7 +19,7 @@ func NewBalancesTraditional() BalancesTraditional {
 	}
 }
 
-func (c BalancesTraditional) Calculate(model Model) ChartData {
+func (c BalancesTraditional) Calculate(model *Model) ChartData {
 	annualGrowthLessInflation := c.AnnualGrowthLessInflationCalculation.CalculateTraditionalRetirement(model)
 	annualRetirementAccountDisbursement := c.AnnualRetirementAccountDisbursementCalculation.CalculateTraditionalRetirement(model)
 	topTierTaxRate := c.TopTierTaxRateCalculation.CalculateTraditionalRetirement(model)

@@ -12,22 +12,22 @@ type MockTotalAnnualRetirementIncomeBeforeTax struct {
 	mock.Mock
 }
 
-func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateRoth(model calculator.Model) float64 {
+func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockTotalAnnualRetirementIncomeBeforeTax) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -59,7 +59,7 @@ func TestTotalAnnualRetirementIncomeBeforeTaxCalculateTraditional(t *testing.T) 
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.TotalAnnualRetirementIncomeBeforeTax{}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := test.model.Input.AnnuityIncome +
 				test.model.Input.OtherLongTermCapitalGains +
 				test.model.Input.OtherTaxableIncome +

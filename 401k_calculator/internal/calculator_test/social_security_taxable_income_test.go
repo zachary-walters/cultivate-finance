@@ -12,22 +12,22 @@ type MockSocialSecurityTaxableIncome struct {
 	mock.Mock
 }
 
-func (m *MockSocialSecurityTaxableIncome) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncome) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSocialSecurityTaxableIncome) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncome) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSocialSecurityTaxableIncome) CalculateRoth(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncome) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSocialSecurityTaxableIncome) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncome) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -78,15 +78,15 @@ func TestSocialSecurityTaxableIncomeTraditionalCalculateTraditional(t *testing.T
 			mockSocialSecurityTaxableIncomeIndividual := new(MockSocialSecurityTaxableIncomeIndividual)
 			mockSocialSecurityTaxableIncomeJoint := new(MockSocialSecurityTaxableIncomeJoint)
 
-			mockSocialSecurityTaxableIncomeIndividual.On("CalculateTraditional", test.model).Return(test.socialSecurityTaxableIncomeIndividual)
-			mockSocialSecurityTaxableIncomeJoint.On("CalculateTraditional", test.model).Return(test.socialSecurityTaxableIncomeJoint)
+			mockSocialSecurityTaxableIncomeIndividual.On("CalculateTraditional", &test.model).Return(test.socialSecurityTaxableIncomeIndividual)
+			mockSocialSecurityTaxableIncomeJoint.On("CalculateTraditional", &test.model).Return(test.socialSecurityTaxableIncomeJoint)
 
 			c := &calculator.SocialSecurityTaxableIncome{
 				SocialSecurityTaxableIncomeIndividualCalculation: mockSocialSecurityTaxableIncomeIndividual,
 				SocialSecurityTaxableIncomeJointCalculation:      mockSocialSecurityTaxableIncomeJoint,
 			}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := func() float64 {
 				switch test.model.Input.RetirementFilingStatus {
 				case "single":

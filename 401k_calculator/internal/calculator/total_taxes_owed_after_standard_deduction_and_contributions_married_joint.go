@@ -12,7 +12,7 @@ func NewTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint() Total
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateTraditional(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateTraditional(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateTraditional(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := 0.0
@@ -23,11 +23,11 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) Calcul
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateTraditionalRetirement(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRoth(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRoth(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateRoth(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := 0.0
@@ -38,6 +38,6 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) Calcul
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRothRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint) CalculateRothRetirement(model *Model) float64 {
 	return c.CalculateRoth(model)
 }

@@ -6,25 +6,25 @@ import (
 )
 
 type Calculation interface {
-	CalculateTraditional(Model) float64
-	CalculateTraditionalRetirement(Model) float64
-	CalculateRoth(Model) float64
-	CalculateRothRetirement(Model) float64
+	CalculateTraditional(*Model) float64
+	CalculateTraditionalRetirement(*Model) float64
+	CalculateRoth(*Model) float64
+	CalculateRothRetirement(*Model) float64
 }
 
 type SequenceCalculation interface {
-	CalculateTraditional(Model) []float64
-	CalculateTraditionalRetirement(Model) []float64
-	CalculateRoth(Model) []float64
-	CalculateRothRetirement(Model) []float64
+	CalculateTraditional(*Model) []float64
+	CalculateTraditionalRetirement(*Model) []float64
+	CalculateRoth(*Model) []float64
+	CalculateRothRetirement(*Model) []float64
 }
 
 type ChartCalculation interface {
-	Calculate(Model) ChartData
+	Calculate(*Model) ChartData
 }
 
 type DecisionCalculation interface {
-	Calculate(Model) string
+	Calculate(*Model) string
 }
 
 type CalculationData struct {
@@ -87,8 +87,8 @@ type Model struct {
 	STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD float64   `json:"standard_deduction_head_of_household"`
 }
 
-func NewModel(input Input) Model {
-	return Model{
+func NewModel(input Input) *Model {
+	return &Model{
 		Input:                                input,
 		SingleTaxRates:                       Constants.SingleTaxRates,
 		MarriedJointTaxRates:                 Constants.MarriedJointTaxRates,
@@ -112,7 +112,7 @@ func coalesce[T int | float64](number T) T {
 	return number
 }
 
-func CalculateSynchronous(model Model, calculation any, datakey string) CalculationData {
+func CalculateSynchronous(model *Model, calculation any, datakey string) CalculationData {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	chart, isChartCalculation := calculation.(ChartCalculation)
@@ -147,14 +147,14 @@ func CalculateSynchronous(model Model, calculation any, datakey string) Calculat
 	return calculationData
 }
 
-func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model Model) {
+func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model *Model) {
 	defer wg.Done()
 	calculationData := CalculateSynchronous(model, calculation, datakey)
 
 	ch <- calculationData
 }
 
-func CalculateSynchronousWasm(model Model, calculation any, datakey string) CalculationData {
+func CalculateSynchronousWasm(model *Model, calculation any, datakey string) CalculationData {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	chart, isChartCalculation := calculation.(ChartCalculation)
@@ -189,7 +189,7 @@ func CalculateSynchronousWasm(model Model, calculation any, datakey string) Calc
 	return calculationData
 }
 
-func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model Model) {
+func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model *Model) {
 	defer wg.Done()
 	calculationData := CalculateSynchronousWasm(model, calculation, datakey)
 

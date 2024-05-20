@@ -12,12 +12,12 @@ type MockRothOrTraditionalDecision struct {
 	mock.Mock
 }
 
-func (m *MockRothOrTraditionalDecision) Calculate(model calculator.Model) string {
+func (m *MockRothOrTraditionalDecision) Calculate(model *calculator.Model) string {
 	args := m.Called(model)
 	return args.Get(0).(string)
 }
 
-func (m *MockRothOrTraditionalDecision) CalculateRetirement(model calculator.Model) string {
+func (m *MockRothOrTraditionalDecision) CalculateRetirement(model *calculator.Model) string {
 	return m.Calculate(model)
 }
 
@@ -49,14 +49,14 @@ func TestRothOrTraditionalDecisionCalculateTraditional(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockTotalDisbursments := new(MockTotalDisbursements)
-			mockTotalDisbursments.On("CalculateTraditionalRetirement", testModel).Return(test.totalDisbursementsTraditionalRetirement)
-			mockTotalDisbursments.On("CalculateRothRetirement", testModel).Return(test.totalDisbursementsRothRetirement)
+			mockTotalDisbursments.On("CalculateTraditionalRetirement", &testModel).Return(test.totalDisbursementsTraditionalRetirement)
+			mockTotalDisbursments.On("CalculateRothRetirement", &testModel).Return(test.totalDisbursementsRothRetirement)
 
 			c := calculator.RothOrTraditionalDecision{
 				TotalDisbursementsCalculation: mockTotalDisbursments,
 			}
 
-			actual := c.Calculate(testModel)
+			actual := c.Calculate(&testModel)
 			expected := func() string {
 				if test.totalDisbursementsTraditionalRetirement >= test.totalDisbursementsRothRetirement {
 					return "Traditional"

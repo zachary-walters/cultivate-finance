@@ -12,7 +12,7 @@ func NewRothOrTraditionalDecision() RothOrTraditionalDecision {
 	}
 }
 
-func (c RothOrTraditionalDecision) Calculate(model Model) string {
+func (c RothOrTraditionalDecision) Calculate(model *Model) string {
 	totalDisbursementsTraditionalRetirement := c.TotalDisbursementsCalculation.CalculateTraditionalRetirement(model)
 	totalDisbursementsRothRetirement := c.TotalDisbursementsCalculation.CalculateRothRetirement(model)
 

@@ -18,7 +18,7 @@ func NewTaxesOwedPerBracketAfterStandardDeductionAndContributions() TaxesOwedPer
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTraditional(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTraditional(model *Model) []float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateTraditional(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateTraditional(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateTraditional(model)
@@ -38,7 +38,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTrad
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTraditionalRetirement(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTraditionalRetirement(model *Model) []float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateTraditionalRetirement(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateTraditionalRetirement(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
@@ -58,7 +58,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTrad
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRoth(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRoth(model *Model) []float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateRoth(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateRoth(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateRoth(model)
@@ -78,7 +78,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRoth
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRothRetirement(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRothRetirement(model *Model) []float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateRothRetirement(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJoint := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedJointCalculation.CalculateRothRetirement(model)
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsMarriedSeperateCalculation.CalculateRothRetirement(model)

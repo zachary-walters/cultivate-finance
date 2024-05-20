@@ -12,22 +12,22 @@ type MockHalfOfSocialSecurity struct {
 	mock.Mock
 }
 
-func (m *MockHalfOfSocialSecurity) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockHalfOfSocialSecurity) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockHalfOfSocialSecurity) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockHalfOfSocialSecurity) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockHalfOfSocialSecurity) CalculateRoth(model calculator.Model) float64 {
+func (m *MockHalfOfSocialSecurity) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockHalfOfSocialSecurity) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockHalfOfSocialSecurity) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -51,7 +51,7 @@ func TestMockHalfOfSocialSecurityCalculate(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.HalfOfSocialSecurity{}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := test.model.Input.SocialSecurity * 0.5
 
 			assert.Equal(t, expected, actual)

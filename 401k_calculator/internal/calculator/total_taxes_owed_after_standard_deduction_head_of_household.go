@@ -12,7 +12,7 @@ func NewTotalTaxesOwedAfterStandardDeductionHeadOfHousehold() TotalTaxesOwedAfte
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateTraditional(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateTraditional(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditional(model)
 
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := 0.0
@@ -24,7 +24,7 @@ func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateTraditiona
 	return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateTraditionalRetirement(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditionalRetirement(model)
 
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := 0.0
@@ -36,7 +36,7 @@ func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateTraditiona
 	return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateRoth(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateRoth(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRoth(model)
 
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := 0.0
@@ -48,7 +48,7 @@ func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateRoth(model
 	return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateRothRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionHeadOfHousehold) CalculateRothRetirement(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRothRetirement(model)
 
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := 0.0

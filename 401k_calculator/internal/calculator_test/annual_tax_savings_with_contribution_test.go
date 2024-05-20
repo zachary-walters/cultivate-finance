@@ -13,22 +13,22 @@ type MockAnnualTaxSavingsWithContribution struct {
 	mock.Mock
 }
 
-func (m *MockAnnualTaxSavingsWithContribution) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockAnnualTaxSavingsWithContribution) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAnnualTaxSavingsWithContribution) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockAnnualTaxSavingsWithContribution) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAnnualTaxSavingsWithContribution) CalculateRoth(model calculator.Model) float64 {
+func (m *MockAnnualTaxSavingsWithContribution) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAnnualTaxSavingsWithContribution) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockAnnualTaxSavingsWithContribution) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -87,10 +87,10 @@ func TestAnnualTaxSavingsWithContributionCalculateTraditional(t *testing.T) {
 			TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation: totalTaxesOwedAfterStandardDeductionAndContributions,
 		}
 
-		totalTaxesOwedAfterStandardDeduction.On("CalculateTraditional", model).Return(test.totalTaxesOwedAfterStandardDeduction)
-		totalTaxesOwedAfterStandardDeductionAndContributions.On("CalculateTraditional", model).Return(test.totalTaxesOwedAfterStandardDeductionAndContributions)
+		totalTaxesOwedAfterStandardDeduction.On("CalculateTraditional", &model).Return(test.totalTaxesOwedAfterStandardDeduction)
+		totalTaxesOwedAfterStandardDeductionAndContributions.On("CalculateTraditional", &model).Return(test.totalTaxesOwedAfterStandardDeductionAndContributions)
 
-		actual := c.CalculateTraditional(model)
+		actual := c.CalculateTraditional(&model)
 		expected := float64(test.totalTaxesOwedAfterStandardDeduction) - float64(test.totalTaxesOwedAfterStandardDeductionAndContributions)
 
 		t.Run(test.name, func(t *testing.T) {
@@ -104,7 +104,7 @@ func TestAnnualTaxSavingsWithContributionCalculateTraditionalRetirement(t *testi
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualTaxSavingsWithContribution{}
 
-			actual := c.CalculateTraditionalRetirement(calculator.Model{})
+			actual := c.CalculateTraditionalRetirement(new(calculator.Model))
 			expected := float64(0)
 
 			assert.Equal(t, expected, actual)
@@ -118,7 +118,7 @@ func TestAnnualTaxSavingsWithContributionCalculateRoth(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualTaxSavingsWithContribution{}
 
-			actual := c.CalculateRoth(calculator.Model{})
+			actual := c.CalculateRoth(new(calculator.Model))
 			expected := float64(0)
 
 			assert.Equal(t, expected, actual)
@@ -132,7 +132,7 @@ func TestAnnualTaxSavingsWithContributionCalculateRothRetirement(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualTaxSavingsWithContribution{}
 
-			actual := c.CalculateRothRetirement(calculator.Model{})
+			actual := c.CalculateRothRetirement(new(calculator.Model))
 			expected := float64(0)
 
 			assert.Equal(t, expected, actual)

@@ -12,18 +12,18 @@ func NewIncomePerBracketAfterStandardDeductionMarriedJoint() IncomePerBracketAft
 	}
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateTraditional(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateTraditional(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(model, model.MarriedJointTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateTraditionalRetirement(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateTraditionalRetirement(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model, model.MarriedJointTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRoth(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRoth(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRoth(model, model.MarriedJointTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRothRetirement(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionMarriedJoint) CalculateRothRetirement(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRothRetirement(model, model.MarriedJointTaxRates)
 }

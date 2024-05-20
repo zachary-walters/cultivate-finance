@@ -12,7 +12,7 @@ func NewSocialSecurityTaxableIncomeIndividual() SocialSecurityTaxableIncomeIndiv
 	}
 }
 
-func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditional(model Model) float64 {
+func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditional(model *Model) float64 {
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateTraditional(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
@@ -24,7 +24,7 @@ func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditional(model Model)
 	return model.SocialSecurityTaxRatesIndividual[len(model.SocialSecurityTaxRatesIndividual)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditionalRetirement(model Model) float64 {
+func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditionalRetirement(model *Model) float64 {
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateTraditionalRetirement(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
@@ -36,7 +36,7 @@ func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditionalRetirement(mo
 	return model.SocialSecurityTaxRatesIndividual[len(model.SocialSecurityTaxRatesIndividual)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeIndividual) CalculateRoth(model Model) float64 {
+func (c SocialSecurityTaxableIncomeIndividual) CalculateRoth(model *Model) float64 {
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateRoth(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
@@ -48,7 +48,7 @@ func (c SocialSecurityTaxableIncomeIndividual) CalculateRoth(model Model) float6
 	return model.SocialSecurityTaxRatesIndividual[len(model.SocialSecurityTaxRatesIndividual)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeIndividual) CalculateRetirement(model Model) float64 {
+func (c SocialSecurityTaxableIncomeIndividual) CalculateRetirement(model *Model) float64 {
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateRothRetirement(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {

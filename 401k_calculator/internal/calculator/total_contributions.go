@@ -14,7 +14,7 @@ func NewTotalContributions() TotalContributions {
 	}
 }
 
-func (c TotalContributions) CalculateTraditional(model Model) float64 {
+func (c TotalContributions) CalculateTraditional(model *Model) float64 {
 	balancesTraditional := c.BalancesTraditionalCalculation.Calculate(model)
 
 	totalContributions := 0.0
@@ -25,11 +25,11 @@ func (c TotalContributions) CalculateTraditional(model Model) float64 {
 	return totalContributions
 }
 
-func (c TotalContributions) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalContributions) CalculateTraditionalRetirement(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c TotalContributions) CalculateRoth(model Model) float64 {
+func (c TotalContributions) CalculateRoth(model *Model) float64 {
 	balancesRothMatchingNetContributions := c.BalancesRothMatchingNetContributionsCalculation.Calculate(model)
 
 	totalContributions := 0.0
@@ -40,6 +40,6 @@ func (c TotalContributions) CalculateRoth(model Model) float64 {
 	return totalContributions
 }
 
-func (c TotalContributions) CalculateRothRetirement(model Model) float64 {
+func (c TotalContributions) CalculateRothRetirement(model *Model) float64 {
 	return c.CalculateRoth(model)
 }

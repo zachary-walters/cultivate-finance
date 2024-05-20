@@ -12,7 +12,7 @@ func NewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold() To
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditional(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditional(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateTraditional(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := 0.0
@@ -23,11 +23,11 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) Cal
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditionalRetirement(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRoth(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRoth(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateRoth(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := 0.0
@@ -38,6 +38,6 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) Cal
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRothRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRothRetirement(model *Model) float64 {
 	return c.CalculateRoth(model)
 }

@@ -14,21 +14,21 @@ func NewAnnualTaxSavingsWithContribution() AnnualTaxSavingsWithContribution {
 	}
 }
 
-func (c AnnualTaxSavingsWithContribution) CalculateTraditional(model Model) float64 {
+func (c AnnualTaxSavingsWithContribution) CalculateTraditional(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditional(model)
 	totalTaxesOwedAfterStandardDeductionAndContributions := c.TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation.CalculateTraditional(model)
 
 	return totalTaxesOwedAfterStandardDeduction - totalTaxesOwedAfterStandardDeductionAndContributions
 }
 
-func (c AnnualTaxSavingsWithContribution) CalculateTraditionalRetirement(model Model) float64 {
+func (c AnnualTaxSavingsWithContribution) CalculateTraditionalRetirement(model *Model) float64 {
 	return 0
 }
 
-func (c AnnualTaxSavingsWithContribution) CalculateRoth(model Model) float64 {
+func (c AnnualTaxSavingsWithContribution) CalculateRoth(model *Model) float64 {
 	return 0
 }
 
-func (c AnnualTaxSavingsWithContribution) CalculateRothRetirement(model Model) float64 {
+func (c AnnualTaxSavingsWithContribution) CalculateRothRetirement(model *Model) float64 {
 	return 0
 }

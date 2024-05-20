@@ -14,28 +14,28 @@ func NewNetDistributionAfterTaxes() NetDistributionAfterTaxes {
 	}
 }
 
-func (c NetDistributionAfterTaxes) CalculateTraditional(model Model) float64 {
+func (c NetDistributionAfterTaxes) CalculateTraditional(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditional(model)
 	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditional(model)
 
 	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
 }
 
-func (c NetDistributionAfterTaxes) CalculateTraditionalRetirement(model Model) float64 {
+func (c NetDistributionAfterTaxes) CalculateTraditionalRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
 	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditionalRetirement(model)
 
 	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
 }
 
-func (c NetDistributionAfterTaxes) CalculateRoth(model Model) float64 {
+func (c NetDistributionAfterTaxes) CalculateRoth(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRoth(model)
 	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateRoth(model)
 
 	return totalAnnualRetirementIncomeBeforeTaxCalculation - totalTaxesOwedAfterStandardDeduction
 }
 
-func (c NetDistributionAfterTaxes) CalculateRothRetirement(model Model) float64 {
+func (c NetDistributionAfterTaxes) CalculateRothRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRothRetirement(model)
 	totalAnnualRetirementIncomeBeforeTaxCalculation := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateRothRetirement(model)
 

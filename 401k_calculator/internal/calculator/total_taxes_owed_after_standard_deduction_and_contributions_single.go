@@ -14,7 +14,7 @@ func NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle() TotalTaxesO
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTraditional(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTraditional(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateTraditional(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := 0.0
@@ -25,11 +25,11 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTra
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTraditionalRetirement(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRoth(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRoth(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := c.TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation.CalculateRoth(model)
 
 	totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle := 0.0
@@ -40,6 +40,6 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRot
 	return totalTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRothRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRothRetirement(model *Model) float64 {
 	return c.CalculateRoth(model)
 }

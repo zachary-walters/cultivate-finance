@@ -9,7 +9,7 @@ type MockBalancesRothMatchingNet struct {
 	mock.Mock
 }
 
-func (m *MockBalancesRothMatchingNet) Calculate(model calculator.Model) calculator.ChartData {
+func (m *MockBalancesRothMatchingNet) Calculate(model *calculator.Model) calculator.ChartData {
 	args := m.Called(model)
 	return args.Get(0).(calculator.ChartData)
 }

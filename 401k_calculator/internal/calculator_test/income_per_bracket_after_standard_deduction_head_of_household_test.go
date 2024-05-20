@@ -12,22 +12,22 @@ type MockIncomePerBracketAfterStandardDeductionHeadOfHousehold struct {
 	mock.Mock
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateTraditional(model calculator.Model) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateTraditional(model *calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateTraditionalRetirement(model calculator.Model) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateTraditionalRetirement(model *calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateRoth(model calculator.Model) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateRoth(model *calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateRothRetirement(model calculator.Model) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionHeadOfHousehold) CalculateRothRetirement(model *calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
 }
@@ -61,14 +61,14 @@ func TestMockIncomePerBracketAfterStandardDeductionHeadOfHousehold(t *testing.T)
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockIncomePerBracketAfterStandardDeduction := new(MockAbstractIncomePerBracketAfterStandardDeduction)
-			mockIncomePerBracketAfterStandardDeduction.On("CalculateTraditional", test.model, test.model.HeadOfHouseholdTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
+			mockIncomePerBracketAfterStandardDeduction.On("CalculateTraditional", &test.model, test.model.HeadOfHouseholdTaxRates).Return(test.incomePerBracketAfterStandardDeduction)
 
 			c := &calculator.IncomePerBracketAfterStandardDeductionHeadOfHousehold{
 				AbstractIncomePerBracketAfterStandardDeductionCalculation: mockIncomePerBracketAfterStandardDeduction,
 			}
 
-			actual := c.CalculateTraditional(test.model)
-			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(test.model, test.model.HeadOfHouseholdTaxRates)
+			actual := c.CalculateTraditional(&test.model)
+			expected := c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(&test.model, test.model.HeadOfHouseholdTaxRates)
 
 			assert.Equal(t, expected, actual)
 		})

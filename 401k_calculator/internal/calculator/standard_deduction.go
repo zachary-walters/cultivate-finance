@@ -8,7 +8,7 @@ func NewStandardDeduction() StandardDeduction {
 	return StandardDeduction{}
 }
 
-func (c StandardDeduction) CalculateTraditional(model Model) float64 {
+func (c StandardDeduction) CalculateTraditional(model *Model) float64 {
 	switch model.Input.CurrentFilingStatus {
 	case "single":
 		return model.STANDARD_DEDUCTION_SINGLE
@@ -23,7 +23,7 @@ func (c StandardDeduction) CalculateTraditional(model Model) float64 {
 	}
 }
 
-func (c StandardDeduction) CalculateTraditionalRetirement(model Model) float64 {
+func (c StandardDeduction) CalculateTraditionalRetirement(model *Model) float64 {
 	switch model.Input.RetirementFilingStatus {
 	case "single":
 		return model.STANDARD_DEDUCTION_SINGLE
@@ -38,10 +38,10 @@ func (c StandardDeduction) CalculateTraditionalRetirement(model Model) float64 {
 	}
 }
 
-func (c StandardDeduction) CalculateRoth(model Model) float64 {
+func (c StandardDeduction) CalculateRoth(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c StandardDeduction) CalculateRothRetirement(model Model) float64 {
+func (c StandardDeduction) CalculateRothRetirement(model *Model) float64 {
 	return c.CalculateTraditionalRetirement(model)
 }

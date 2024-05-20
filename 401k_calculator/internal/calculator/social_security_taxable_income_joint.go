@@ -12,7 +12,7 @@ func NewSocialSecurityTaxableIncomeJoint() SocialSecurityTaxableIncomeJoint {
 	}
 }
 
-func (c SocialSecurityTaxableIncomeJoint) CalculateTraditional(model Model) float64 {
+func (c SocialSecurityTaxableIncomeJoint) CalculateTraditional(model *Model) float64 {
 	totalTaxableIncomeRoth := c.AdjustedGrossIncomeCalculation.CalculateTraditional(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesJoint {
@@ -24,7 +24,7 @@ func (c SocialSecurityTaxableIncomeJoint) CalculateTraditional(model Model) floa
 	return model.SocialSecurityTaxRatesJoint[len(model.SocialSecurityTaxRatesJoint)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeJoint) CalculateTraditionalRetirement(model Model) float64 {
+func (c SocialSecurityTaxableIncomeJoint) CalculateTraditionalRetirement(model *Model) float64 {
 	totalTaxableIncomeRoth := c.AdjustedGrossIncomeCalculation.CalculateTraditionalRetirement(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesJoint {
@@ -36,7 +36,7 @@ func (c SocialSecurityTaxableIncomeJoint) CalculateTraditionalRetirement(model M
 	return model.SocialSecurityTaxRatesJoint[len(model.SocialSecurityTaxRatesJoint)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeJoint) CalculateRoth(model Model) float64 {
+func (c SocialSecurityTaxableIncomeJoint) CalculateRoth(model *Model) float64 {
 	totalTaxableIncomeRoth := c.AdjustedGrossIncomeCalculation.CalculateRoth(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesJoint {
@@ -48,7 +48,7 @@ func (c SocialSecurityTaxableIncomeJoint) CalculateRoth(model Model) float64 {
 	return model.SocialSecurityTaxRatesJoint[len(model.SocialSecurityTaxRatesJoint)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeJoint) CalculateRothRetirement(model Model) float64 {
+func (c SocialSecurityTaxableIncomeJoint) CalculateRothRetirement(model *Model) float64 {
 	totalTaxableIncomeRoth := c.AdjustedGrossIncomeCalculation.CalculateRothRetirement(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesJoint {

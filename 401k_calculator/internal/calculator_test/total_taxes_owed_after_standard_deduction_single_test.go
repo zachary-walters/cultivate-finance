@@ -12,22 +12,22 @@ type MockTotalTaxesOwedAfterStandardDeductionSingle struct {
 	mock.Mock
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRoth(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockTotalTaxesOwedAfterStandardDeductionSingle) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -59,12 +59,12 @@ func TestTotalTaxesOwedPerBracketAfterStandardDeductionSingleCalculate(t *testin
 			TaxesOwedPerBracketAfterStandardDeductionSingleCalculation: mockTaxesOwedPerBracketAfterStandardDeductionsSingle,
 		}
 
-		mockTaxesOwedPerBracketAfterStandardDeductionsSingle.On("CalculateTraditional", test.model).Return(test.taxesOwedPerBracketAfterStandardDeductions)
+		mockTaxesOwedPerBracketAfterStandardDeductionsSingle.On("CalculateTraditional", &test.model).Return(test.taxesOwedPerBracketAfterStandardDeductions)
 
-		actual := c.CalculateTraditional(test.model)
+		actual := c.CalculateTraditional(&test.model)
 		expected := func() float64 {
 			expected := 0.0
-			taxesOwedPerBracketAfterStandardDudections := mockTaxesOwedPerBracketAfterStandardDeductionsSingle.CalculateTraditional(test.model)
+			taxesOwedPerBracketAfterStandardDudections := mockTaxesOwedPerBracketAfterStandardDeductionsSingle.CalculateTraditional(&test.model)
 			for _, value := range taxesOwedPerBracketAfterStandardDudections {
 				expected += value
 			}

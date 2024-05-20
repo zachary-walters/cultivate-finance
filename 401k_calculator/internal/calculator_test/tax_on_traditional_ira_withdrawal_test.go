@@ -9,22 +9,22 @@ type MockTaxOnTraditionalIRAWithdrawal struct {
 	mock.Mock
 }
 
-func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateRoth(model calculator.Model) float64 {
+func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockTaxOnTraditionalIRAWithdrawal) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }

@@ -12,7 +12,7 @@ func NewTotalTaxesOwedAfterStandardDeductionSingle() TotalTaxesOwedAfterStandard
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditional(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditional(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateTraditional(model)
 
 	totalTaxesOwedAfterStandardDeductionSingle := 0.0
@@ -24,7 +24,7 @@ func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditional(model M
 	return totalTaxesOwedAfterStandardDeductionSingle
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditionalRetirement(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateTraditionalRetirement(model)
 
 	totalTaxesOwedAfterStandardDeductionSingle := 0.0
@@ -36,7 +36,7 @@ func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateTraditionalRetireme
 	return totalTaxesOwedAfterStandardDeductionSingle
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateRoth(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateRoth(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateRoth(model)
 
 	totalTaxesOwedAfterStandardDeductionSingle := 0.0
@@ -48,7 +48,7 @@ func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateRoth(model Model) f
 	return totalTaxesOwedAfterStandardDeductionSingle
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateRothRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeductionSingle) CalculateRothRetirement(model *Model) float64 {
 	taxesOwedPerBracketAfterStandardDeductionSingle := c.TaxesOwedPerBracketAfterStandardDeductionSingleCalculation.CalculateRothRetirement(model)
 
 	totalTaxesOwedAfterStandardDeductionSingle := 0.0

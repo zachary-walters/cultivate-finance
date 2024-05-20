@@ -8,11 +8,11 @@ func NewAdjustedGrossIncome() AdjustedGrossIncome {
 	return AdjustedGrossIncome{}
 }
 
-func (c AdjustedGrossIncome) CalculateTraditional(model Model) float64 {
+func (c AdjustedGrossIncome) CalculateTraditional(model *Model) float64 {
 	return c.CalculateTraditionalRetirement(model)
 }
 
-func (c AdjustedGrossIncome) CalculateTraditionalRetirement(model Model) float64 {
+func (c AdjustedGrossIncome) CalculateTraditionalRetirement(model *Model) float64 {
 	return model.Input.WorkIncome +
 		model.Input.PensionIncome +
 		model.Input.RentalNetIncome +
@@ -20,11 +20,11 @@ func (c AdjustedGrossIncome) CalculateTraditionalRetirement(model Model) float64
 		model.Input.YearlyWithdrawal
 }
 
-func (c AdjustedGrossIncome) CalculateRoth(model Model) float64 {
+func (c AdjustedGrossIncome) CalculateRoth(model *Model) float64 {
 	return c.CalculateRothRetirement(model)
 }
 
-func (c AdjustedGrossIncome) CalculateRothRetirement(model Model) float64 {
+func (c AdjustedGrossIncome) CalculateRothRetirement(model *Model) float64 {
 	return model.Input.WorkIncome +
 		model.Input.PensionIncome +
 		model.Input.RentalNetIncome +

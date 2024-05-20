@@ -12,22 +12,22 @@ type MockSocialSecurityTaxableIncomeJoint struct {
 	mock.Mock
 }
 
-func (m *MockSocialSecurityTaxableIncomeJoint) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncomeJoint) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSocialSecurityTaxableIncomeJoint) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncomeJoint) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSocialSecurityTaxableIncomeJoint) CalculateRoth(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncomeJoint) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSocialSecurityTaxableIncomeJoint) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockSocialSecurityTaxableIncomeJoint) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -65,13 +65,13 @@ func TestSocialSecurityTaxableIncomeJointCalculateTraditional(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockAdjustedGrossIncome := new(MockAdjustedGrossIncome)
-			mockAdjustedGrossIncome.On("CalculateTraditional", test.model).Return(test.adjustedGrossIncome)
+			mockAdjustedGrossIncome.On("CalculateTraditional", &test.model).Return(test.adjustedGrossIncome)
 
 			c := &calculator.SocialSecurityTaxableIncomeJoint{
 				AdjustedGrossIncomeCalculation: mockAdjustedGrossIncome,
 			}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := func() float64 {
 				for _, taxRate := range test.model.SocialSecurityTaxRatesJoint {
 					if taxRate.Cap > test.adjustedGrossIncome {

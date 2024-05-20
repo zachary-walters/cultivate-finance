@@ -12,22 +12,22 @@ type MockTotalDisbursements struct {
 	mock.Mock
 }
 
-func (m *MockTotalDisbursements) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockTotalDisbursements) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalDisbursements) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockTotalDisbursements) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalDisbursements) CalculateRoth(model calculator.Model) float64 {
+func (m *MockTotalDisbursements) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTotalDisbursements) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockTotalDisbursements) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -55,7 +55,7 @@ func TestTotalDisburesmentsCalculateTraditional(t *testing.T) {
 
 			c := &calculator.TotalDisbursements{}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := float64(0)
 
 			assert.Equal(t, expected, actual)

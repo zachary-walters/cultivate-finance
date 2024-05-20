@@ -12,18 +12,18 @@ func NewIncomePerBracketAfterStandardDeductionAndContributionsSingle() IncomePer
 	}
 }
 
-func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateTraditional(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateTraditional(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateTraditional(model, model.SingleTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateTraditionalRetirement(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateTraditionalRetirement(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateTraditionalRetirement(model, model.SingleTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateRoth(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateRoth(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRoth(model, model.SingleTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateRothRetirement(model Model) []float64 {
+func (c IncomePerBracketAfterStandardDeductionAndContributionsSingle) CalculateRothRetirement(model *Model) []float64 {
 	return c.AbstractIncomePerBracketAfterStandardDeductionAndContributionsCalculation.CalculateRothRetirement(model, model.SingleTaxRates)
 }

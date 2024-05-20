@@ -12,7 +12,7 @@ func NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditional(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditional(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateTraditional(model)
 
 	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.HeadOfHouseholdTaxRates))
@@ -24,7 +24,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	return taxesOwedPerBracketAfterStandardDudectionAndContributions
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditionalRetirement(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateTraditionalRetirement(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateTraditionalRetirement(model)
 
 	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.HeadOfHouseholdTaxRates))
@@ -36,7 +36,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	return taxesOwedPerBracketAfterStandardDudectionAndContributions
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRoth(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRoth(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateRoth(model)
 
 	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.HeadOfHouseholdTaxRates))
@@ -48,7 +48,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	return taxesOwedPerBracketAfterStandardDudectionAndContributions
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRothRetirement(model Model) []float64 {
+func (c TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold) CalculateRothRetirement(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation.CalculateRothRetirement(model)
 
 	taxesOwedPerBracketAfterStandardDudectionAndContributions := make([]float64, len(model.HeadOfHouseholdTaxRates))

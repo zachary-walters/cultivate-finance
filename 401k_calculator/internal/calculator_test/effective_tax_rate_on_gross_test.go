@@ -12,22 +12,22 @@ type MockEffectiveTaxRateOnGross struct {
 	mock.Mock
 }
 
-func (m *MockEffectiveTaxRateOnGross) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockEffectiveTaxRateOnGross) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockEffectiveTaxRateOnGross) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockEffectiveTaxRateOnGross) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockEffectiveTaxRateOnGross) CalculateRoth(model calculator.Model) float64 {
+func (m *MockEffectiveTaxRateOnGross) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockEffectiveTaxRateOnGross) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockEffectiveTaxRateOnGross) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -58,7 +58,7 @@ func TestEffectiveTaxRateOnGrossCalculateTraditional(t *testing.T) {
 				TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation: mockTotalTaxesOwedAfterStandardDeductionAndContributions,
 			}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := func() float64 {
 				return test.totalTaxesOwedAfterStandardDeductionAndContributions / test.model.Input.CurrentAnnualIncome
 			}()

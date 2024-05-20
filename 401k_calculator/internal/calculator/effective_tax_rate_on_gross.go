@@ -18,7 +18,7 @@ func NewEffectiveTaxRateOnGross() EffectiveTaxRateOnGross {
 	}
 }
 
-func (c EffectiveTaxRateOnGross) CalculateTraditional(model Model) float64 {
+func (c EffectiveTaxRateOnGross) CalculateTraditional(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionAndContributions := c.TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation.CalculateTraditional(model)
 	currentAnnualIncome := model.Input.CurrentAnnualIncome
 
@@ -29,7 +29,7 @@ func (c EffectiveTaxRateOnGross) CalculateTraditional(model Model) float64 {
 	return totalTaxesOwedAfterStandardDeductionAndContributions / currentAnnualIncome
 }
 
-func (c EffectiveTaxRateOnGross) CalculateTraditionalRetirement(model Model) float64 {
+func (c EffectiveTaxRateOnGross) CalculateTraditionalRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
 	totalAnnualRetirementIncomeBeforeTax := c.TotalAnnualRetirementIncomeBeforeTaxCalculation.CalculateTraditionalRetirement(model)
 
@@ -40,11 +40,11 @@ func (c EffectiveTaxRateOnGross) CalculateTraditionalRetirement(model Model) flo
 	return totalTaxesOwedAfterStandardDeduction / totalAnnualRetirementIncomeBeforeTax
 }
 
-func (c EffectiveTaxRateOnGross) CalculateRoth(model Model) float64 {
+func (c EffectiveTaxRateOnGross) CalculateRoth(model *Model) float64 {
 	return c.CalculateTraditional(model)
 }
 
-func (c EffectiveTaxRateOnGross) CalculateRothRetirement(model Model) float64 {
+func (c EffectiveTaxRateOnGross) CalculateRothRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeduction := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRothRetirement(model)
 	totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal := c.TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawalCalculation.CalculateRothRetirement(model)
 

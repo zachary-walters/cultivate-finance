@@ -12,22 +12,22 @@ type MockAnnualGrowthLessInflation struct {
 	mock.Mock
 }
 
-func (m *MockAnnualGrowthLessInflation) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockAnnualGrowthLessInflation) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAnnualGrowthLessInflation) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockAnnualGrowthLessInflation) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAnnualGrowthLessInflation) CalculateRoth(model calculator.Model) float64 {
+func (m *MockAnnualGrowthLessInflation) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockAnnualGrowthLessInflation) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockAnnualGrowthLessInflation) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -59,7 +59,7 @@ func TestAnnualGrowthLessInflationCalculateTraditional(t *testing.T) {
 			c := &calculator.AnnualGrowthLessInflation{}
 
 			expected := test.model.Input.AnnualInvestmentGrowth - 0.03
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})
@@ -71,8 +71,8 @@ func TestAnnualGrowthLessInflationCalculateTraditionalRetirement(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualGrowthLessInflation{}
 
-			expected := c.CalculateTraditional(test.model)
-			actual := c.CalculateTraditionalRetirement(test.model)
+			expected := c.CalculateTraditional(&test.model)
+			actual := c.CalculateTraditionalRetirement(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})
@@ -84,8 +84,8 @@ func TestAnnualGrowthLessInflationCalculateRoth(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualGrowthLessInflation{}
 
-			expected := c.CalculateTraditional(test.model)
-			actual := c.CalculateRoth(test.model)
+			expected := c.CalculateTraditional(&test.model)
+			actual := c.CalculateRoth(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})
@@ -97,8 +97,8 @@ func TestAnnualGrowthLessInflationCalculateRothRetirement(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualGrowthLessInflation{}
 
-			expected := c.CalculateTraditional(test.model)
-			actual := c.CalculateRothRetirement(test.model)
+			expected := c.CalculateTraditional(&test.model)
+			actual := c.CalculateRothRetirement(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})

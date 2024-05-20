@@ -12,22 +12,22 @@ type MockTaxRateOfSavings struct {
 	mock.Mock
 }
 
-func (m *MockTaxRateOfSavings) CalculateTraditional(model calculator.Model) float64 {
+func (m *MockTaxRateOfSavings) CalculateTraditional(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTaxRateOfSavings) CalculateTraditionalRetirement(model calculator.Model) float64 {
+func (m *MockTaxRateOfSavings) CalculateTraditionalRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTaxRateOfSavings) CalculateRoth(model calculator.Model) float64 {
+func (m *MockTaxRateOfSavings) CalculateRoth(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockTaxRateOfSavings) CalculateRothRetirement(model calculator.Model) float64 {
+func (m *MockTaxRateOfSavings) CalculateRothRetirement(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
@@ -70,13 +70,13 @@ func TestTaxRateOfSavingsCalculateTraditional(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			mockAnnualTaxSavingsWithContribution := new(MockAnnualTaxSavingsWithContribution)
-			mockAnnualTaxSavingsWithContribution.On("CalculateTraditional", test.model).Return(test.annualTaxSavingsWithContribution)
+			mockAnnualTaxSavingsWithContribution.On("CalculateTraditional", &test.model).Return(test.annualTaxSavingsWithContribution)
 
 			c := &calculator.TaxRateOfSavings{
 				AnnualTaxSavingsWithContributionCalculation: mockAnnualTaxSavingsWithContribution,
 			}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := test.annualTaxSavingsWithContribution / test.model.Input.AnnualContributionsPreTax
 
 			assert.Equal(t, actual, expected)

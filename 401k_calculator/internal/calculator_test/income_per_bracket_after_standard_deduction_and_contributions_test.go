@@ -12,22 +12,22 @@ type MockIncomePerBracketAfterStandardDeductionAndContributions struct {
 	mock.Mock
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditional(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditional(model *calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	args := m.Called(model, taxRates)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditionalRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditionalRetirement(model *calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	args := m.Called(model, taxRates)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateRoth(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateRoth(model *calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	args := m.Called(model, taxRates)
 	return args.Get(0).([]float64)
 }
 
-func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateRothRetirement(model calculator.Model, taxRates []calculator.TaxRate) []float64 {
+func (m *MockIncomePerBracketAfterStandardDeductionAndContributions) CalculateRothRetirement(model *calculator.Model, taxRates []calculator.TaxRate) []float64 {
 	args := m.Called(model, taxRates)
 	return args.Get(0).([]float64)
 }
@@ -141,10 +141,10 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsCalculate(t *test
 			mockIncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate := new(MockIncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate)
 			mockIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := new(MockIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold)
 
-			mockIncomePerBracketAfterStandardDeductionAndContributionsSingle.On("CalculateTraditional", test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsSingle)
-			mockIncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint.On("CalculateTraditional", test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsMarriedJoint)
-			mockIncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate.On("CalculateTraditional", test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate)
-			mockIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold.On("CalculateTraditional", test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold)
+			mockIncomePerBracketAfterStandardDeductionAndContributionsSingle.On("CalculateTraditional", &test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsSingle)
+			mockIncomePerBracketAfterStandardDeductionAndContributionsMarriedJoint.On("CalculateTraditional", &test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsMarriedJoint)
+			mockIncomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate.On("CalculateTraditional", &test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsMarriedSeperate)
+			mockIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold.On("CalculateTraditional", &test.model).Return(test.incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold)
 
 			c := calculator.IncomePerBracketAfterStandardDeductionAndContributions{
 				IncomePerBracketAfterStandardDeductionAndContributionsSingleCalculation:          mockIncomePerBracketAfterStandardDeductionAndContributionsSingle,
@@ -153,7 +153,7 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsCalculate(t *test
 				IncomePerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: mockIncomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold,
 			}
 
-			actual := c.CalculateTraditional(test.model)
+			actual := c.CalculateTraditional(&test.model)
 			expected := func() []float64 {
 				switch test.model.Input.CurrentFilingStatus {
 				case "single":

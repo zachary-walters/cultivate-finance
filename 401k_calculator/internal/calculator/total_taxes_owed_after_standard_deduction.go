@@ -18,7 +18,7 @@ func NewTotalTaxesOwedAfterStandardDeduction() TotalTaxesOwedAfterStandardDeduct
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateTraditional(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateTraditional(model)
 	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditional(model)
@@ -38,7 +38,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model Model) 
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateTraditionalRetirement(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateTraditionalRetirement(model)
 	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
@@ -58,7 +58,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(mod
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateRoth(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateRoth(model)
 	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateRoth(model)
@@ -78,7 +78,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model Model) float64
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model Model) float64 {
+func (c TotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateRothRetirement(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateRothRetirement(model)
 	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateRothRetirement(model)

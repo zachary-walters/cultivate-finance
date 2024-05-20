@@ -14,7 +14,7 @@ func NewSocialSecurityTaxableIncome() SocialSecurityTaxableIncome {
 	}
 }
 
-func (c SocialSecurityTaxableIncome) CalculateTraditional(model Model) float64 {
+func (c SocialSecurityTaxableIncome) CalculateTraditional(model *Model) float64 {
 	socialSecurityTaxableIncomeIndividualRoth := c.SocialSecurityTaxableIncomeIndividualCalculation.CalculateTraditional(model)
 	socialSecurityTaxableIncomeJointRoth := c.SocialSecurityTaxableIncomeJointCalculation.CalculateTraditional(model)
 
@@ -32,7 +32,7 @@ func (c SocialSecurityTaxableIncome) CalculateTraditional(model Model) float64 {
 	}
 }
 
-func (c SocialSecurityTaxableIncome) CalculateTraditionalRetirement(model Model) float64 {
+func (c SocialSecurityTaxableIncome) CalculateTraditionalRetirement(model *Model) float64 {
 	socialSecurityTaxableIncomeIndividualRoth := c.SocialSecurityTaxableIncomeIndividualCalculation.CalculateTraditionalRetirement(model)
 	socialSecurityTaxableIncomeJointRoth := c.SocialSecurityTaxableIncomeJointCalculation.CalculateTraditionalRetirement(model)
 
@@ -50,7 +50,7 @@ func (c SocialSecurityTaxableIncome) CalculateTraditionalRetirement(model Model)
 	}
 }
 
-func (c SocialSecurityTaxableIncome) CalculateRoth(model Model) float64 {
+func (c SocialSecurityTaxableIncome) CalculateRoth(model *Model) float64 {
 	socialSecurityTaxableIncomeIndividualRoth := c.SocialSecurityTaxableIncomeIndividualCalculation.CalculateRoth(model)
 	socialSecurityTaxableIncomeJointRoth := c.SocialSecurityTaxableIncomeJointCalculation.CalculateRoth(model)
 
@@ -68,7 +68,7 @@ func (c SocialSecurityTaxableIncome) CalculateRoth(model Model) float64 {
 	}
 }
 
-func (c SocialSecurityTaxableIncome) CalculateRothRetirement(model Model) float64 {
+func (c SocialSecurityTaxableIncome) CalculateRothRetirement(model *Model) float64 {
 	socialSecurityTaxableIncomeIndividualRoth := c.SocialSecurityTaxableIncomeIndividualCalculation.CalculateRothRetirement(model)
 	socialSecurityTaxableIncomeJointRoth := c.SocialSecurityTaxableIncomeJointCalculation.CalculateRothRetirement(model)
 
