@@ -3,6 +3,17 @@ version: '3'
 name: cultivate-finance 
 
 services:
+  # message queue
+  nats: 
+    container_name: nats
+    image: 'nats:latest'
+    entrypoint: "nats-server -DV"
+    hostname: nats-server
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  # front facing api gateway
   api-gateway:
     container_name: api-gateway
     build:
@@ -20,6 +31,18 @@ services:
     depends_on:
       - nats
 
+  # front facing webapp
+  webapp:
+    container_name: webapp
+    build: 
+      context: ./../webapp
+      dockerfile: ./../webapp/webapp.dockerfile
+    restart: always
+    ports: 
+      - "8662:8662"
+    deploy:
+      mode: replicated
+      replicas: 1  
 
   401k-calculator-api:
     container_name: rest-api-server
@@ -38,30 +61,6 @@ services:
     depends_on:
       - nats
 
-  webapp:
-    container_name: webapp
-    build: 
-      context: ./../webapp
-      dockerfile: ./../webapp/webapp.dockerfile
-    restart: always
-    ports: 
-      - "8662:8662"
-    deploy:
-      mode: replicated
-      replicas: 1  
-
-  nats: 
-    image: 'nats:latest'
-    entrypoint: "nats-server -DV"
-    expose:
-      - "4222"
-    ports: 
-      - "8222:8222"
-    hostname: nats-server
-    deploy:
-      mode: replicated
-      replicas: 1
-
   # sonarqube: 
   #   container_name: sonarqube
   #   build:
@@ -71,18 +70,6 @@ services:
   #   ports:
   #     - "9998:9092"
   #     - "9999:9000"
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 1
-
-  # webapp_vue:
-  #   container_name: webapp_vue
-  #   build:
-  #     context: ./../webapp_vue
-  #     dockerfile: ./../webapp_vue/webapp_vue.dockerfile
-  #   restart: always
-  #   ports:
-  #     - "8661:80"
   #   deploy:
   #     mode: replicated
   #     replicas: 1
