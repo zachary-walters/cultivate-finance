@@ -30,16 +30,15 @@ func main() {
 	var ns server
 	var err error
 	r := chi.NewRouter()
-	uri := os.Getenv("NATS_URI")
 
+	uri := os.Getenv("NATS_URI")
 	for i := 0; i < 5; i++ {
-		nc, err := nats.Connect(uri)
+		ns.nc, err = nats.Connect(uri)
 		if err == nil {
-			ns.nc = nc
 			break
 		}
 
-		fmt.Println("Waiting before connecting to NATS at:", uri)
+		log.Println("Waiting before connecting to NATS at:", uri)
 		time.Sleep(1 * time.Second)
 	}
 	if err != nil {
