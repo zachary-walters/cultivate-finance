@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calculator-401k-service
+  labels: 
+    app: calculator-401k-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calculator-401k-service
+  template:
+    metadata:
+      labels:
+        app: calculator-401k-service
+    spec:
+      containers:
+      - name: calculator-401k-service
+        image: "zacharywalters/cultivate-finance-401k-calculator-service:latest"
+        ports:
+          - containerPort: 8661
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
+        env:
+          - name: NATS_URI
+            value: "http://nats:4222"
+          - name: PORT
+            value: "8660"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: calculator-401k-service
+spec:
+  selector:
+    app: calculator-401k-service
+  ports:
+    - protocol: TCP
+      name: main-port
+      port: 8661
+      targetPort: 8661
+    - protocol: TCP
+      name: nats-port
+      port: 4222
+      targetPort: 4222

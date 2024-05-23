@@ -45,7 +45,7 @@ func main() {
 	r := chi.NewRouter()
 
 	uri := os.Getenv("NATS_URI")
-	for i := 0; i < 5; i++ {
+	for {
 		nc, err = nats.Connect(uri)
 		if err == nil {
 			break
@@ -53,9 +53,6 @@ func main() {
 
 		log.Println("Waiting before connecting to NATS at:", uri)
 		time.Sleep(1 * time.Second)
-	}
-	if err != nil {
-		log.Fatal("Error establishing connection to NATS:", err)
 	}
 	log.Println("Connected to NATS at:", nc.ConnectedUrl())
 
