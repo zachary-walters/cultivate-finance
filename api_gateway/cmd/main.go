@@ -32,7 +32,7 @@ func main() {
 	r := chi.NewRouter()
 
 	uri := os.Getenv("NATS_URI")
-	for  {
+	for {
 		ns.nc, err = nats.Connect(uri)
 		if err == nil {
 			break

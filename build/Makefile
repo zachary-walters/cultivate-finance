@@ -13,7 +13,7 @@ up:
 	@echo "Docker images started!"
 
 #### up: starts all containers in after building
-up_build: fmt build_401k_api build_webapp build_api_gateway
+up_build: fmt build_401k_api build_webapp build_api_gateway wiki
 	@echo "Stopping docker images (if running...)"
 	docker-compose down
 	@echo "Building (when required) and starting docker images..."
@@ -42,6 +42,7 @@ api: fmt build_401k_api
 wiki: 
 	@echo "building and starting wiki"
 	docker-compose up -d --build wiki
+	cd ${WIKI_DIR}/scripts && ./backup.sh restore
 
 build_401k_api: 
 	@echo "Building api 401k_calculator binary..."
