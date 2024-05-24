@@ -61,15 +61,14 @@ services:
     depends_on:
       - nats
 
-  # sonarqube: 
-  #   container_name: sonarqube
-  #   build:
-  #     context: ./../sonarqube
-  #     dockerfile: ./../sonarqube/sonarqube.dockerfile
-  #   restart: always
-  #   ports:
-  #     - "9998:9092"
-  #     - "9999:9000"
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 1
+  wiki: 
+    container_name: wiki
+    build: 
+      context: ./../wiki
+      dockerfile: ./../wiki/wiki.dockerfile
+    restart: always
+    ports: 
+      - "8080:8080"
+      - "8443:8443"
+      - "8181:8181"
+      - "8143:8143"

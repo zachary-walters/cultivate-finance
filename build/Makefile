@@ -39,6 +39,10 @@ api: fmt build_401k_api
 	@echo "rebuilding and starting api"
 	docker-compose up -d --build  401k-calculator-api 
 
+wiki: 
+	@echo "building and starting wiki"
+	docker-compose up -d --build wiki
+
 build_401k_api: 
 	@echo "Building api 401k_calculator binary..."
 	cd $(401K_CALCULATOR_DIR) && env GOOS=linux CGO_ENABLED=0 go build -o bin/${401K_CALCULATOR_BINARY} ./cmd/api
