@@ -35,7 +35,7 @@ webapp: fmt build_401k_tinygo build_webapp
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' $(WEBAPP_DIR)/cmd/assets/wasm_exec.js
 	docker-compose up -d --build webapp
 
-api: fmt build_401k_api
+401k_api: fmt build_401k_api
 	@echo "rebuilding and starting api"
 	docker-compose up -d --build  401k-calculator-api 
 
