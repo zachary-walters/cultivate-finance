@@ -75,7 +75,7 @@ build_api_gateway:
 fmt: 
 	gofmt -s -w ../.
 
-#### DOCKER BUILD/PUSH
+### DOCKER BUILD/PUSH
 docker_build: docker_webapp docker_api_gateway docker_401k_api
 
 docker_webapp: build_webapp
@@ -117,3 +117,12 @@ k_deploy_401k:
 
 k_deploy_api:
 		kubectl apply -f k8s/api_gateway.yml
+
+### Versioning
+backup_wiki:
+	@echo "backing up the wiki..."
+	cd ${WIKI_DIR}/scripts && ./backup.sh backup
+
+restore_wiki:
+	@echo "restoring the wiki"
+	cd ${WIKI_DIR}/scripts && ./backup.sh restore
