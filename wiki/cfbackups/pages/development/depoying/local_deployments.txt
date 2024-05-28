@@ -1,0 +1,69 @@
+====== Local Deployments ======
+
+===== Docker Compose =====
+
+Docker Compose is the easiest way to do local deployments for testing and development.
+
+==== Prerequisites ====
+
+=== Installing Docker Compose ===
+
+Run the following command to install docker compose: <code bash>brew install docker-compose</code>
+
+==== Deployment Steps ====
+
+=== Manual Deployment ===
+
+Makes sure you are in the build directory by running the following:<code bash>cd build</code>
+
+You can use the ''%%docker-compose up%%'' command to manually spin up containers:
+<code bash>docker-compose up -d --build <container name></code>
+
+Here are some examples: 
+
+<code bash>
+docker-compose up -d --build 401k-calculator-api  # spins up the 401k calculator api container
+docker-compose up -d --build webapp # spins up the webapp container
+</code>
+
+You can deploy all of the containers by running the following command: 
+<code bash>docker-compose up --build -d</code>
+
+You can bring down all containers by running the following command: 
+<code bash>docker-compose down</code> 
+
+=== Makefile deployment ===
+
+You can find all of the makefile targets [[https://github.com/zachary-walters/cultivate-finance/blob/main/build/Makefile|here]].
+
+Makes sure you are in the build directory by running the following:<code bash>cd build</code>
+
+You can deploy (and redeploy) all of the containers by running: <code bash>make up_build</code>
+
+
+===== Minikube =====
+
+Minikube is how we can locally deploy our kubernetes cluster. 
+
+==== Prerequisites ====
+
+=== Installing Minikube ===
+
+Run the following command to install minikube: <code bash>brew install minikube</code>
+
+=== Updating your /etc/hosts ===
+
+We need to update our /etc/hosts file to properly route requests to our minikube cluster. We can do that by adding the following line to /etc/hosts file <code bash>127.0.0.1 cultivatefinance.org</code>
+
+You can do that with a single command: <code bash>sudo echo '127.0.0.1 cultivatefinance.org' >> /etc/hosts</code>
+
+==== Deployment Steps ====
+
+  - Start Minikube: <code bash>minikube start</code>
+  - Enable ingress to our minikube cluster: <code bash>minikube addons enable ingress</code>
+  - Deploy our ingress: <code bash>
+cd build
+make k_deploy_ingress
+</code>
+  - Deploy the webapp: <code bash>make k_deploy_webapp</code>
+  - Create minikube tunnel (only for macOS): <code bash>sudo minikube tunnel</code>

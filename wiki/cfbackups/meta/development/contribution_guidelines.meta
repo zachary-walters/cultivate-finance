@@ -1,0 +1,17 @@
+a:2:{s:7:"current";a:9:{s:4:"date";a:2:{s:7:"created";i:1716519351;s:8:"modified";i:1716845247;}s:7:"creator";s:5:"admin";s:4:"user";s:5:"admin";s:11:"last_change";a:10:{s:4:"date";i:1716927889;s:2:"ip";s:9:"127.0.0.1";s:4:"type";s:1:"E";s:2:"id";s:35:"development:contribution_guidelines";s:4:"user";s:0:"";s:3:"sum";s:13:"external edit";s:5:"extra";s:0:"";s:10:"sizechange";i:0;s:9:"timestamp";i:1716927889;s:4:"mode";s:4:"page";}s:11:"contributor";a:1:{s:5:"admin";s:5:"admin";}s:5:"title";s:10:"Guidelines";s:11:"description";a:2:{s:15:"tableofcontents";a:13:{i:0;a:4:{s:3:"hid";s:10:"guidelines";s:5:"title";s:10:"Guidelines";s:4:"type";s:2:"ul";s:5:"level";i:1;}i:1;a:4:{s:3:"hid";s:8:"services";s:5:"title";s:8:"Services";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:2;a:4:{s:3:"hid";s:4:"apis";s:5:"title";s:4:"APIs";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:3;a:4:{s:3:"hid";s:15:"web_application";s:5:"title";s:15:"Web Application";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:4;a:4:{s:3:"hid";s:19:"system_architecture";s:5:"title";s:19:"System Architecture";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:5;a:4:{s:3:"hid";s:13:"software_list";s:5:"title";s:13:"Software List";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:6;a:4:{s:3:"hid";s:31:"must_haves_for_all_contributors";s:5:"title";s:31:"Must Haves for all Contributors";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:7;a:4:{s:3:"hid";s:26:"must_haves_for_maintainers";s:5:"title";s:26:"Must Haves for Maintainers";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:8;a:4:{s:3:"hid";s:17:"software_services";s:5:"title";s:17:"Software Services";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:9;a:4:{s:3:"hid";s:15:"code_versioning";s:5:"title";s:15:"Code Versioning";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:10;a:4:{s:3:"hid";s:20:"container_versioning";s:5:"title";s:20:"Container Versioning";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:11;a:4:{s:3:"hid";s:12:"cloud_hosing";s:5:"title";s:12:"Cloud Hosing";s:4:"type";s:2:"ul";s:5:"level";i:3;}i:12;a:4:{s:3:"hid";s:9:"deploying";s:5:"title";s:9:"Deploying";s:4:"type";s:2:"ul";s:5:"level";i:3;}}s:8:"abstract";s:314:"Guidelines
+
+Services
+
+APIs
+
+	*  401k Calculator
+
+Web Application
+
+	*  Web Application
+
+System Architecture
+
+Software List
+
+While we welcome contributions made from Windows users, this software was developed on and for Unix machines. Therefore, this documentation will only be maintained with Unix machines in mind.";}s:8:"relation";a:2:{s:10:"references";a:3:{s:32:"development:apis:401k_calculator";b:1;s:25:"development:webapp:webapp";b:1;s:38:"development:depoying:local_deployments";b:1;}s:10:"firstimage";s:0:"";}s:8:"internal";a:2:{s:5:"cache";b:1;s:3:"toc";b:1;}}s:10:"persistent";a:5:{s:4:"date";a:2:{s:7:"created";i:1716519351;s:8:"modified";i:1716845247;}s:7:"creator";s:5:"admin";s:4:"user";s:5:"admin";s:11:"last_change";a:10:{s:4:"date";i:1716927889;s:2:"ip";s:9:"127.0.0.1";s:4:"type";s:1:"E";s:2:"id";s:35:"development:contribution_guidelines";s:4:"user";s:0:"";s:3:"sum";s:13:"external edit";s:5:"extra";s:0:"";s:10:"sizechange";i:0;s:9:"timestamp";i:1716927889;s:4:"mode";s:4:"page";}s:11:"contributor";a:1:{s:5:"admin";s:5:"admin";}}}

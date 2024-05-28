@@ -1,0 +1,33 @@
+====== Contribution Frequently Asked Questions ======
+
+===== What is a codebase? ===== 
+
+A codebase is a collection of source code that is used to build a particular software system, application, or software component.
+
+===== How do I start contributing to a codebase? ===== 
+
+Start by forking the repository, and then cloning the fork to your local machine. Then, create a new branch for your changes. Make sure to pull the latest changes from the main branch before starting your work.
+
+===== What should I do before I start coding? ===== 
+
+Before you start coding, make sure you understand the project’s coding standards and guidelines. Also, ensure you have a clear understanding of the feature or bug you are working on.
+
+===== How do I submit my changes? =====
+
+After you’ve made your changes, commit them to your branch and push the branch to the repository. Then, open a pull request for your changes.
+
+===== What happens after I submit a pull request? =====
+
+After you submit a pull request, other contributors to the project will review your changes. They may suggest changes or improvements. Once your pull request is approved, it will be merged into the main branch.
+
+===== What if my pull request is rejected? ===== 
+
+If your pull request is rejected, don’t be discouraged. Review the feedback you received, make the necessary changes, and submit a new pull request.
+
+===== What should I do if I find a bug? ===== 
+
+If you find a bug, start by opening an issue in the project’s issue tracker. Describe the bug, how to reproduce it, and any potential solutions you can think of.
+
+===== Can I contribute even if I’m not a programmer? =====
+
+Yes, non-programmers can contribute to a project in many ways, such as improving documentation, reporting bugs, or helping with project management.

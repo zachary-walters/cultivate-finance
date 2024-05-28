@@ -1,0 +1,25 @@
+====== Cultivate Finance Documentation ======
+
+===== User Documentation =====
+
+==== Using the Webapp ====
+
+==== Using the API ====
+
+==== Methodologies ====
+
+===== Developer Documentation =====
+
+==== Contributing ====
+
+  - [[https://github.com/zachary-walters/cultivate-finance|Github]]
+  - [[https://github.com/zachary-walters/cultivate-finance/issues|Issues Tracker]]
+  - [[https://github.com/zachary-walters/cultivate-finance/projects|Projects]]
+
+=== Getting Started ===
+
+Before making contributions to Cultivate Finance, please read our contribution [[development:contribution guidelines|guidelines]], read our contribution [[development:contribution_faq|FAQs]], and familiarize yourself with our [[development:code_of_conduct|code of conduct]].
+
+==== Processes ====
+
+Our process documentation can be found [[development:processes|here]], and covers different processes such as building, deploying, committing code, etc.

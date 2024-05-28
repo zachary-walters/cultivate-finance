@@ -1,0 +1,34 @@
+====== Makefile Macros ======
+
+All macros can be found in the [[https://github.com/zachary-walters/cultivate-finance/blob/main/build/Makefile|makefile itself]]
+
+===== test =====
+
+This macro runs all of the tests
+
+<code bash>make test</code>
+
+
+===== coverage =====
+
+This macro uses go's test coverage tool to generate and open an html page that displays test coverage.
+
+<code bash>make coverage</code>
+
+===== up_build =====
+
+This macro builds all of the binaries, then builds the docker containers, and then deploys them locally using docker-compose
+
+<code bash>make up_build</code>
+
+===== docker_push =====
+
+This macro builds all docker containers, and then pushes the containers to [[https://hub.docker.com/?search=cultivate-finance|dockerhub]]
+
+<code bash>make docker_push</code>
+
+===== k_deploy =====
+
+This macro deploys to kubernetes
+
+<code bash>make k_deploy</code>

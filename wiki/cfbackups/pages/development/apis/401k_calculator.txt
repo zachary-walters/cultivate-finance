@@ -1,0 +1,13 @@
+====== 401k Calculator API ======
+
+The 401k Calculator's intention is to give the user a definitive answer to whether they should be investing in a TRADITIONAL 401k or a ROTH 401k, given the option, and given their inputs. This API allows the user to obtain values of specific calculations, or the entire financial model of all calculations.
+
+===== For Developers =====
+
+This api can, and should, be used to do end-user QA testing. 
+
+==== Building and Running the API ====
+
+Follow these steps to build and run the api:
+
+  - Change directory to the build directory<code bash>cd build</code>

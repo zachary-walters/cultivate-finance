@@ -1,0 +1,54 @@
+====== Guidelines ======
+
+===== Services =====
+
+==== APIs ====
+
+  * [[development:apis:401k_calculator|401k Calculator]]
+
+==== Web Application ====
+
+  * [[development:webapp:webapp|Web Application]]
+
+===== System Architecture =====
+
+===== Software List =====
+
+While we welcome contributions made from Windows users, this software was developed on and for Unix machines. Therefore, this documentation will only be maintained with Unix machines in mind.
+
+==== Must Haves for all Contributors ====
+
+The following software must be installed to contribute to the codebase:
+
+  * [[https://go.dev/doc/install|Go]]: Go is the primary language used for our backend services. 
+  * [[https://docs.docker.com/engine/install/|Docker]]: Docker is our primary containerization software. We use this for local deployments and builds
+  * [[https://www.gnu.org/software/bash/|Bash (or some unix shell)]]: A unix terminal with bash is necessary to run some of the commands used in the development of this software
+  * [[https://tinygo.org/|TinyGo]]: TinyGo is our compiler of choice for compiling our WASM binaries for our [[development:webapp:webapp|web application]]
+
+==== Must Haves for Maintainers ====
+
+The following software is necessary for all maintainers, or anyone with production deployment control, to have installed on their machine
+
+  * [[https://kubernetes.io/releases/download/|Kubernetes]] - Kubernetes is used for cloud deployments and builds.
+  * [[https://minikube.sigs.k8s.io/docs/start/|Minikube]] - Minikube is what we use to test local kubernetes deployments
+
+===== Software Services =====
+
+==== Code Versioning ====
+
+We use [[https://github.com/|github]] for our code versioning provider. Our github repo can be found [[https://github.com/zachary-walters/cultivate-finance|here]].
+
+==== Container Versioning ====
+
+We version our docker containers on [[https://hub.docker.com/|docker hub]]. The containers relevant to this project can be found [[https://hub.docker.com/?search=cultivate-finance|here]].
+
+==== Cloud Hosing ====
+
+We use [[https://www.civo.com/|Civo]] as our cloud host for no other reason than it is a cheap way to host kubernetes deployments. 
+
+
+==== Deploying ====
+
+=== Local Deployments ===
+
+Our local deployment guidelines can be found [[development:depoying:local_deployments|here]]

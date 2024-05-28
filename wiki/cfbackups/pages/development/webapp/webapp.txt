@@ -1,0 +1,33 @@
+====== Web Application ======
+
+The web application service serves the webapp via http.
+
+===== Frameworks and Intricacies ===== 
+
+  * Template engine: 
+    * We serve templated html pages via [[https://pkg.go.dev/html/template|Go's built in template package]].
+    * Philosophies behind using templates over other javascript frontend frameworks:
+      * It allows development to be more backend focused
+      * Rendering performance: Templates are often faster as they are rendered on the server-side, reducing the load on the client-side.
+      * No Duplication: With templates, you don’t need to duplicate your work on both the server and client side
+      * Less Javascript: Templates can reduce the amount of JavaScript required, which can be beneficial for performance and compatibility
+      * No advanced interactivity with the site is needed (at this time).
+  * [[https://webassembly.org/|Web Assembly (WASM)]]: 
+    * "The client's browser is a free compute resource" - citation needed
+    * All of our advanced calculators are written in Go. We compile them to WASM to be served with our webapp templates
+    * Philosophies behind using WASM:
+      * Reduce Waste and Duplicate Engineering: WASM reduces waste and duplicate engineering by letting us use what we already have. For instance, the calculator REST Api's use the exact same code as the WASM calculators.
+      * Efficient Execution: WASM provides efficient execution and compact representation of code on modern processors, including in a web browser. It is designed to be executed at near-native speeds.
+      * Potentially save network resources: Once an end user renders a WASM calculator, they can freely use it, and even spam it, as much as they want without impacting or relying on Cultivate Finance's resources.
+      * Portability: Once an end user renders a WASM calculator, it can still be used without network connection from either the client or server. 
+
+===== Building and Running the Webapp locally=====
+
+You can build and run the webapp locally by doing the following:
+
+  - Confirm docker is running on your machine
+  - Change directory to the build directory<code bash>cd build</code>
+  - Use docker-compose to build and run the webapp<code bash>
+make webapp</code>
+  - Navigate to to http://localhost:8662/
+

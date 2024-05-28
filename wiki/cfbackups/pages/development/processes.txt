@@ -1,0 +1,30 @@
+====== Processes ======
+
+===== The Makefile =====
+
+==== What is a Makefile? ====
+
+[[https://www.tutorialspoint.com/makefile/makefile_quick_guide.htm|Makefiles are special format files that help build and manage the projects automatically.]]
+
+We use our [[https://github.com/zachary-walters/cultivate-finance/blob/main/build/Makefile|makefile]] to coordinate compiling our code, building our containers, and deploying our services. 
+
+You can find a list of the makefile macros we use [[development:makefile_macros|here]].
+
+===== Deploy Locally =====
+
+==== Docker Compose ====
+
+=== Deploy All Containers ===
+
+You can deploy all the containers at once by running the following commands:
+
+<code bash>cd cultivate-finance/build # change to the build directory
+make up_build</code>
+
+==== Kubernetes ====
+
+===== Deploy Production =====
+
+==== Docker Compose ====
+
+==== Kubernetes ====
