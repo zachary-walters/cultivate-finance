@@ -4,13 +4,23 @@ metadata:
   name: cultivate-finance-ingress
   labels:
     name: cultivate-finance-ingress
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: "nginx"
   rules:
   - host: cultivatefinance.org
     http:
       paths:
-      - pathType: Prefix
-        path: "/"
+      - path: "/api/401k_calculator/"
+        pathType: Prefix
+        backend: 
+          service:
+            name: api-gateway-service
+            port:
+              number: 8661
+      - path: "/"
+        pathType: Prefix
         backend:
           service:
             name: webapp-service 

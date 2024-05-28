@@ -116,7 +116,10 @@ k_deploy_401k:
 	kubectl apply -f k8s/401k_calculator.yml
 
 k_deploy_api:
-		kubectl apply -f k8s/api_gateway.yml
+	kubectl apply -f k8s/api_gateway.yml
+
+k_deploy_ingress:
+	kubectl apply -f k8s/ingress.yml
 
 ### Versioning
 backup_wiki:
