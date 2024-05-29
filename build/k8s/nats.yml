@@ -20,6 +20,13 @@ spec:
           image: nats:latest
           ports:
             - containerPort: 4222
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
 
 ---
 

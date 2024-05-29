@@ -99,11 +99,9 @@ docker_push: docker_build
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-401k-calculator-service
 	
 ### K8S
-k_deploy: k_delete k_deploy_nats k_deploy_api k_deploy_webapp k_deploy_401k
+k_deploy: k_delete k_deploy_nats k_deploy_api k_deploy_webapp k_deploy_401k k_deploy_ingress
 
-k_delete: k_delete_kubectl
-
-k_delete_kubectl:
+k_delete: 
 	kubectl delete pods,services,deployment --all
 
 k_deploy_nats:
@@ -119,9 +117,23 @@ k_deploy_api:
 	kubectl apply -f k8s/api_gateway.yml
 
 k_deploy_ingress:
-	kubectl apply -f k8s/ingress.yml
+	until kubectl apply -f k8s/ingress.yml; do echo "Retrying ingress deploy..." && sleep 5; done
 
-### Versioning
+### Minikube 
+m_deploy: m_down m_up k_deploy
+	@echo "NOTE: if on macOS, you will need to tunnel your traffic by running the following: "
+	@echo "sudo minikube tunnel"
+
+m_up: 
+	@echo "starting minikube..."
+	minikube start 
+	minikube addons enable ingress
+
+m_down:
+	@echo "deleting minikube"
+	minikube delete
+
+### Wiki Versioning
 backup_wiki:
 	@echo "backing up the wiki..."
 	cd ${WIKI_DIR}/scripts && ./backup.sh backup

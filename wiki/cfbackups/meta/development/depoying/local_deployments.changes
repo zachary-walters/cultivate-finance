@@ -4,3 +4,6 @@
 1716846994	192.168.65.1	E	development:depoying:local_deployments	admin			-105
 1716920361	192.168.65.1	E	development:depoying:local_deployments	admin			1267
 1716921385	192.168.65.1	E	development:depoying:local_deployments	admin			97
+1716927889	127.0.0.1	E	development:depoying:local_deployments		external edit		0
+1716931397	172.23.0.1	E	development:depoying:local_deployments	admin			107
+1716931595	172.23.0.1	E	development:depoying:local_deployments	admin	[Deployment Steps] 		42

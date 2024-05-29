@@ -61,9 +61,12 @@ You can do that with a single command: <code bash>sudo echo '127.0.0.1 cultivate
 
   - Start Minikube: <code bash>minikube start</code>
   - Enable ingress to our minikube cluster: <code bash>minikube addons enable ingress</code>
-  - Deploy our ingress: <code bash>
+  - Deploy our services: <code bash>
 cd build
-make k_deploy_ingress
+make k_deploy_ingress # deploys our ingress
+make k_deploy_webapp # deploys the webapp service
+make k_deploy_nats # deploys our NATS message queue
+make k_deploy_api # deploys our API Gateway
+make k_deploy_401k # deploys our 401k API
 </code>
-  - Deploy the webapp: <code bash>make k_deploy_webapp</code>
   - Create minikube tunnel (only for macOS): <code bash>sudo minikube tunnel</code>
