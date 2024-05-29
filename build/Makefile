@@ -39,11 +39,6 @@ webapp: fmt build_401k_tinygo build_webapp
 	@echo "rebuilding and starting api"
 	docker-compose up -d --build  401k-calculator-api 
 
-wiki: 
-	@echo "building and starting wiki"
-	docker-compose up -d --build wiki
-	cd ${WIKI_DIR}/scripts && ./backup.sh restore
-
 build_401k_api: 
 	@echo "Building api 401k_calculator binary..."
 	cd $(401K_CALCULATOR_DIR) && env GOOS=linux CGO_ENABLED=0 go build -o bin/${401K_CALCULATOR_BINARY} ./cmd/api
@@ -133,7 +128,8 @@ m_down:
 	@echo "deleting minikube"
 	minikube delete
 
-### Wiki Versioning
+###### Wiki 
+### Versioning
 backup_wiki:
 	@echo "backing up the wiki..."
 	cd ${WIKI_DIR}/scripts && ./backup.sh backup
@@ -141,3 +137,14 @@ backup_wiki:
 restore_wiki:
 	@echo "restoring the wiki"
 	cd ${WIKI_DIR}/scripts && ./backup.sh restore
+
+### Deploys
+wiki: 
+	@echo "building and starting wiki"
+	docker-compose up -d --build wiki
+	cd ${WIKI_DIR}/scripts && ./backup.sh restore
+
+wiki_prd: 
+	@echo "building and starting wiki for a prod environment"
+	docker-compose up -d --build wiki 
+	cd ${WIKI_DIR}/scripts && ./backup.sh restore_prd

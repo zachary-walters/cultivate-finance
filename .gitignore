@@ -6,3 +6,5 @@ tmp/
 .DS_Store
 wasm_exec.js
 *.wasm
+
+cfbackups_prd/
