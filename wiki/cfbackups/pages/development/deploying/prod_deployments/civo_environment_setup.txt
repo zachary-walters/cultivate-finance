@@ -1,0 +1,80 @@
+====== Civo Environment Setup ======
+
+===== Civo CLI ===== 
+
+Civo has their own [[https://www.civo.com/docs/overview/civo-cli|cli tool]] that can be used to interact with their hosting products. You can install it by running the following (macOS): 
+
+<code bash>
+brew tap civo/tools
+brew install civo
+</code>
+
+You need to obtain your api key from the civo dashboard: 
+
+{{:development:deploying:screen_shot_2024-05-29_at_13.02.55.png?600|}}
+
+Once you have your api key in hand, you can connect the civo cli with the following steps:
+
+  - Run the following command: <code bash>civo apikey save</code>
+  - When prompted to "Enter a nice name for this account/API Key", enter: <code>cultivate-finance</code>
+  - When prompted to "Enter the API key", enter the your Civo API key obtained from previous steps.
+
+Once your API key is set, you can run civo commands to interact with your cluster. 
+
+===== Creating a new cluster =====
+
+We can use the following command to create a new kubernetes cluster: <code bash>
+set -k 
+
+# delete cluster if exists
+civo kubernetes delete cultivate-finance
+
+# create the new cluster
+civo kubernetes create cultivate-finance -n 1 -s g4s.kube.medium --cluster-type k3s --create-firewall --firewall-rules "6443" --region NYC1 --wait --save --merge --switch --create-firewall --firewall-rules '80;443;6443'
+</code>
+
+
+
+
+You can download your civo kubernetes cluster config with the following command: 
+<code bash>civo kubernetes config cultivate-finance --save</code>
+
+Confirm you can see stats from your civo kubernetes cluster with the following command:
+
+<code bash>civo kubernetes show cultivate-finance</code>
+
+===== Setting up the network to your cluster =====
+
+  - Obtain the DNS Record for the cluster by running the following command: <code bash>civo kubernetes show cultivate-finance -o custom -f "DNSEntry"</code>
+  - Under the CIVO web panel, navigate to Networking -> DNS
+  - Under cultivatefinance.org, click Actions -> DNS Records
+  - Click Add Record
+  - Select CNAME
+  - Under Name use ''%%cultivatefinance.org%%''
+  - Under Value use the DNS record given from step 2
+  - Set TTL to 3600
+  - Click Add Record
+  - Select CNAME
+  - Under Name use ''%%www.cultivatefinance.org%%''
+  - Under Value use the DNS record given from step 2
+  - Set TTL to 3600
+
+===== Install the necessary applications to the cluster =====
+
+We use Kubernetes Dashboard for monitoring and Cert Manager for managing our TLS certificates. You can install both of them by running the following: <code bash>
+civo kubernetes applications add kubernetes-dashboard --cluster cultivate-finance
+civo kubernetes applications add cert-manager --cluster cultivate-finance</code>
+
+===== Monitoring with Kubernetes Dashboard =====
+
+Generate an admin user token by running the following:
+<code bash> 
+kubectl -n kubernetes-dashboard create token admin-user
+</code>
+
+Once you have your token, you can proxy into the control plane with the following command: 
+<code bash>kubectl proxy</code>
+
+Then browse the dashboard at: 
+
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login

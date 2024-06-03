@@ -1,0 +1,48 @@
+====== Deploying for Production ====== 
+
+===== Civo =====
+
+We use [[https://www.civo.com|Civo]] for our production kubernetes hosting. We do this because their pricing is/was the most competitive at the time of development. As the project scales up, our host is subject to change.
+
+==== Preliminary Setup ====
+
+  - Please follow these instructions to setup a civo environment locally: [[development:deploying:prod_deployments:civo_environment_setup|Setup Civo Environment]]
+  - After your Civo Kubernetes environment is setup, we can secure our kubernetes services with SSL with this process: [[development:deploying:prod_deployments:SSL Setup]]
+
+==== Deploying Ingress ====
+
+By default, Civo uses [[https://traefik.io/traefik/|Traefik]] as the proxy into our cluster. Our Ingress serves as the main entrypoint to our application. 
+
+=== Deploying Staging Ingress ===
+
+We use a staging ingress that uses staging based TLS keys. These keys are, for all intents and purposes, useless outside of testing.
+
+You can deploy the ingress using the following:
+
+  - Confirm you are in the build directory: <code bash>cd build</code>
+  - You can deploy using EITHER the make command OR kubectl
+    - make command: <code bash>make k_deploy_ingress_staging</code>
+    - kubectl: <code bash>kubectl apply -f k8s/ingress-traefik-staging.yml</code>
+
+
+=== Deploying Production Ingress ===
+
+You can deploy the ingress using the following:
+
+  - Confirm you are in the build directory: <code bash>cd build</code>
+  - You can deploy using EITHER the make command OR kubectl
+    - make command: <code bash>make k_deploy_ingress_prod</code>
+    - kubectl: <code bash>kubectl apply -f k8s/ingress-traefik-prod.yml</code>
+
+
+Confirm your ingress is up and running: <code bash>
+kubectl get ing
+## Confirm you see 3 entries
+# 1. cultivate-finance-base-ingress
+# 2. cultivate-finance-ingress-www
+# 3. cultivate-finance-ingress-base-dns
+</code>
+
+==== Deploying the Web Application ====
+
+You can find guide for deploying our web application to our kubernetes cluser here: [[development:webapp:webapp#building_and_running_the_webapp_in_kubernetes_production|Building and Running the Webapp in Kubernetes production]] 

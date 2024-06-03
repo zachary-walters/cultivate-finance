@@ -17,6 +17,7 @@ spec:
       containers:
       - name: webapp-service
         image: "zacharywalters/cultivate-finance-webapp-service:latest"
+        imagePullPolicy: Always
         ports:
           - containerPort: 8662
         resources:

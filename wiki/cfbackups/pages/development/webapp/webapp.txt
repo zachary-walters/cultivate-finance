@@ -21,7 +21,7 @@ The web application service serves the webapp via http.
       * Potentially save network resources: Once an end user renders a WASM calculator, they can freely use it, and even spam it, as much as they want without impacting or relying on Cultivate Finance's resources.
       * Portability: Once an end user renders a WASM calculator, it can still be used without network connection from either the client or server. 
 
-===== Building and Running the Webapp locally=====
+===== Building and Running the Webapp locally =====
 
 You can build and run the webapp locally by doing the following:
 
@@ -31,3 +31,12 @@ You can build and run the webapp locally by doing the following:
 make webapp</code>
   - Navigate to to http://localhost:8662/
 
+===== Building and Running the Webapp in Kubernetes production =====
+
+You can deploy the webapp to our production kubernetes cluster by:
+
+  - Confirm you are in the build directory: <code bash>cd build</code>
+  - You can deploy using EITHER the make command OR kubectl
+    - make command: <code bash>make k_depoy_webapp</code>
+    - kubectl: <code bash>kubectl apply -f k8s/webapp.yml</code>
+  - Confirm the webapp service is deployed: <code bash>kubectl get service webapp-service</code>

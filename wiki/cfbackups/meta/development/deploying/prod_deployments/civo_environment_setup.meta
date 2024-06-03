@@ -1,0 +1,12 @@
+a:2:{s:7:"current";a:9:{s:4:"date";a:2:{s:7:"created";i:1717101769;s:8:"modified";i:1717431605;}s:7:"creator";s:5:"admin";s:4:"user";s:5:"admin";s:11:"last_change";a:9:{s:4:"date";i:1717431605;s:2:"ip";s:10:"172.24.0.1";s:4:"type";s:1:"E";s:2:"id";s:61:"development:deploying:prod_deployments:civo_environment_setup";s:4:"user";s:5:"admin";s:3:"sum";s:52:"[Install the necessary applications to the cluster] ";s:5:"extra";s:0:"";s:10:"sizechange";i:74;s:4:"mode";s:4:"page";}s:11:"contributor";a:1:{s:5:"admin";s:5:"admin";}s:5:"title";s:22:"Civo Environment Setup";s:11:"description";a:2:{s:15:"tableofcontents";a:6:{i:0;a:4:{s:3:"hid";s:22:"civo_environment_setup";s:5:"title";s:22:"Civo Environment Setup";s:4:"type";s:2:"ul";s:5:"level";i:1;}i:1;a:4:{s:3:"hid";s:8:"civo_cli";s:5:"title";s:8:"Civo CLI";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:2;a:4:{s:3:"hid";s:22:"creating_a_new_cluster";s:5:"title";s:22:"Creating a new cluster";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:3;a:4:{s:3:"hid";s:38:"setting_up_the_network_to_your_cluster";s:5:"title";s:38:"Setting up the network to your cluster";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:4;a:4:{s:3:"hid";s:49:"install_the_necessary_applications_to_the_cluster";s:5:"title";s:49:"Install the necessary applications to the cluster";s:4:"type";s:2:"ul";s:5:"level";i:2;}i:5;a:4:{s:3:"hid";s:36:"monitoring_with_kubernetes_dashboard";s:5:"title";s:36:"Monitoring with Kubernetes Dashboard";s:4:"type";s:2:"ul";s:5:"level";i:2;}}s:8:"abstract";s:272:"Civo Environment Setup
+
+Civo CLI
+
+Civo has their own cli tool that can be used to interact with their hosting products. You can install it by running the following (macOS): 
+
+
+brew tap civo/tools
+brew install civo
+
+
+You need to obtain your api key from the civo dashboard:";}s:8:"relation";a:2:{s:5:"media";a:1:{s:60:"development:deploying:screen_shot_2024-05-29_at_13.02.55.png";b:1;}s:10:"firstimage";s:60:"development:deploying:screen_shot_2024-05-29_at_13.02.55.png";}s:8:"internal";a:2:{s:5:"cache";b:1;s:3:"toc";b:1;}}s:10:"persistent";a:5:{s:4:"date";a:2:{s:7:"created";i:1717101769;s:8:"modified";i:1717431605;}s:7:"creator";s:5:"admin";s:4:"user";s:5:"admin";s:11:"last_change";a:9:{s:4:"date";i:1717431605;s:2:"ip";s:10:"172.24.0.1";s:4:"type";s:1:"E";s:2:"id";s:61:"development:deploying:prod_deployments:civo_environment_setup";s:4:"user";s:5:"admin";s:3:"sum";s:52:"[Install the necessary applications to the cluster] ";s:5:"extra";s:0:"";s:10:"sizechange";i:74;s:4:"mode";s:4:"page";}s:11:"contributor";a:1:{s:5:"admin";s:5:"admin";}}}

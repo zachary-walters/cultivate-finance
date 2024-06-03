@@ -1,0 +1,82 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cultivate-finance-base-ingress
+  namespace: default
+  labels:
+    name: cultivate-finance-base-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+  - hosts:
+    - 'cultivatefinance.org'
+    secretName: cultivate-finance-prod-base-cert
+  rules:
+  - host: 'cultivatefinance.org'
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp-service 
+            port: 
+              number: 8662
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cultivate-finance-ingress-www
+  namespace: default
+  labels:
+    name: cultivate-finance-ingress-www
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+  - hosts:
+    - 'www.cultivatefinance.org'
+    secretName: cultivate-finance-prod-www-cert 
+  rules:
+  - host: 'www.cultivatefinance.org'
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp-service 
+            port: 
+              number: 8662
+
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cultivate-finance-ingress-base-dns
+  namespace: default
+  labels:
+    name: cultivate-finance-ingress-base-dns
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+  - hosts:
+    - '66eeaa6f-f453-4f3e-9154-15666539831b.k8s.civo.com'
+    secretName: 66eeaa6f-f453-4f3e-9154-15666539831b-prod-cert
+  rules:
+  - host: '66eeaa6f-f453-4f3e-9154-15666539831b.k8s.civo.com'
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp-service 
+            port: 
+              number: 8662

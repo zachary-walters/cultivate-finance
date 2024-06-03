@@ -1,0 +1,47 @@
+#######################
+## Production Certificates
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cultivate-finance-prod-www-cert
+  namespace: default
+spec:
+  commonName: 'www.cultivatefinance.org'
+  dnsNames:
+  - 'www.cultivatefinance.org'
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod 
+  secretName: cultivate-finance-prod-www-cert
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cultivate-finance-prod-base-cert
+  namespace: default
+spec:
+  commonName: 'cultivatefinance.org'
+  dnsNames:
+  - 'cultivatefinance.org'
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod 
+  secretName: cultivate-finance-prod-base-cert
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: 66eeaa6f-f453-4f3e-9154-15666539831b-prod-cert
+  namespace: default
+spec:
+  commonName: '66eeaa6f-f453-4f3e-9154-15666539831b.k8s.civo.com'
+  dnsNames:
+  - '66eeaa6f-f453-4f3e-9154-15666539831b.k8s.civo.com'
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod 
+  secretName: 66eeaa6f-f453-4f3e-9154-15666539831b-prod-cert

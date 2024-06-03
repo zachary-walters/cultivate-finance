@@ -1,0 +1,10 @@
+1717101769	172.24.0.1	C	development:deploying:prod_deployments:civo_environment_setup	admin	created		1890
+1717190146	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin			402
+1717191250	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Creating a new cluster] 		464
+1717259498	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Setting up the network to your cluster] 		303
+1717274229	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Creating a new cluster] 		1
+1717274254	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Setting up the network to your cluster] 		13
+1717280376	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Creating a new cluster] 		49
+1717431468	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Setting up the network to your cluster] 		-127
+1717431571	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Monitoring with Kubernetes Dashboard] 		61
+1717431605	172.24.0.1	E	development:deploying:prod_deployments:civo_environment_setup	admin	[Install the necessary applications to the cluster] 		74

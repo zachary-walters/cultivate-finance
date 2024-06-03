@@ -41,7 +41,7 @@ webapp: fmt build_401k_tinygo build_webapp
 
 build_401k_api: 
 	@echo "Building api 401k_calculator binary..."
-	cd $(401K_CALCULATOR_DIR) && env GOOS=linux CGO_ENABLED=0 go build -o bin/${401K_CALCULATOR_BINARY} ./cmd/api
+	cd $(401K_CALCULATOR_DIR) && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${401K_CALCULATOR_BINARY} ./cmd/api
 	du -sh $(401K_CALCULATOR_DIR)/bin/${401K_CALCULATOR_BINARY}
 	@echo "Done building 401k_calculator binary!"
 
@@ -57,13 +57,13 @@ build_webapp: build_401k_tinygo
 	cp ${TINYGOROOT}/targets/wasm_exec.js $(WEBAPP_DIR)/cmd/assets
 	cp $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY} $(WEBAPP_DIR)/cmd/assets
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' $(WEBAPP_DIR)/cmd/assets/wasm_exec.js
-	cd $(WEBAPP_DIR) && env GOOS=linux CGO_ENABLED=0 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
+	cd $(WEBAPP_DIR) && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
 	du -sh $(WEBAPP_DIR)/bin/${WEBAPP_BINARY}
 	@echo "Done building webapp binary"
 
 build_api_gateway: 
 	@echo "Building the api gateway..."
-	cd ../api_gateway && env GOOS=linux CGO_ENABLED=0 go build -o bin/${API_GATEWAY_BINARY} ./cmd
+	cd ../api_gateway && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${API_GATEWAY_BINARY} ./cmd
 	du -sh ../api_gateway/bin/${API_GATEWAY_BINARY}
 	@echo "Done building api gateway binary!"
 
@@ -92,12 +92,16 @@ docker_push: docker_build
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-webapp-service
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-api-gateway-service
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-401k-calculator-service
+
+docker_push_webapp: docker_webapp
+	docker push $(DOCKERHUB_REPO)/cultivate-finance-webapp-service	
 	
-### K8S
-k_deploy: k_delete k_deploy_nats k_deploy_api k_deploy_webapp k_deploy_401k k_deploy_ingress
+##### K8S
+### Development (Minikube)
+k_deploy: k_delete k_deploy_nats k_deploy_api k_deploy_webapp k_deploy_401k k_deploy_ingress_staging
 
 k_delete: 
-	kubectl delete pods,services,deployment --all
+	kubectl delete pods,services,deployment,ingress --all
 
 k_deploy_nats:
 	kubectl apply -f k8s/nats.yml
@@ -111,10 +115,12 @@ k_deploy_401k:
 k_deploy_api:
 	kubectl apply -f k8s/api_gateway.yml
 
-k_deploy_ingress:
-	until kubectl apply -f k8s/ingress.yml; do echo "Retrying ingress deploy..." && sleep 5; done
+k_deploy_ingress_staging:
+	until kubectl apply -f k8s/ingress-traefik-staging.yml; do echo "Retrying ingress deploy..." && sleep 5; done
 
-### Minikube 
+k_deploy_ingress_prod:
+	until kubectl apply -f k8s/ingress-traefik-prod.yml; do echo "Retrying ingress deploy..." && sleep 5; done
+
 m_deploy: m_down m_up k_deploy
 	@echo "NOTE: if on macOS, you will need to tunnel your traffic by running the following: "
 	@echo "sudo minikube tunnel"

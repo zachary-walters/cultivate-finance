@@ -1,0 +1,167 @@
+====== Setting up SSL for our Civo Kubernetes Cluster ======
+
+===== Supplemental Material =====
+
+[[https://www.civo.com/learn/get-a-wildcard-certificate-with-cert-manager-and-civo-dns|Civo's documentation on how to Secure your Kubernetes services with Let's Encrypt and cert-manager]]
+
+[[https://www.civo.com/learn/get-a-tls-certificate-for-your-application-with-jetstack-s-cert-manager|Get a TLS Certificate For Your Application With JetStack's Cert-Manager]]
+
+===== Prerequisites =====
+
+  * If you have not, please complete the [[development:deploying:prod_deployments:civo_environment_setup|Civo Environment Setup procedure]]
+  * It is highly recommended to [[development:deploying:prod_deployments:civo_environment_setup#monitoring_with_kubernetes_dashboard|monitor each installation step with kubernetes-dashboard]]
+===== Procedure =====
+
+==== Install Cert Manager ==== 
+
+  - Confirm you are in the build directory: <code bash>cd build</code>
+  - Run the following command to install cert-manager only if you did not install it in the [[development:deploying:prod_deployments:civo_environment_setup#install_the_necessary_applications_to_the_cluster|Civo Setup Steps]]: <code bash>civo kubernetes applications add cert-manager --cluster cultivate-finance</code>
+  - Confirm cert manager is running on it's own namespace entitled 'cert-manager': <code bash>kubectl get pods --namespace cert-manager
+# you should see 3 entries:
+# 1. cert-manager-cainjector-<uid>
+# 2. cert-manager-<uid>
+# 3. cert-manager-webhook-<uid>
+</code> 
+
+==== Create Certificate Issuers ====
+
+We are going to use ClusterIssuers because we are going to be creating certificates in the 'default' namespace using issuers in the cert-manager namespace. 
+
+  - Create the cert issuer: <code bash>kubectl apply -f k8s/ssl-certificate/cert-issuer.yml</code>
+  - Confirm your cert-issuers exist in the cert-manager namespace: <code bash>kubectl get secrets --namespace cert-manager
+# you should see 2 entries:
+# letsencrypt-prod
+# letsencrypt-staging</code>
+
+==== Fixing our DNS ====
+
+Civo's default DNS is a uuid followed by .k8s.civo.com, or looks something like ''%%798a2f3d-a352-40aa-a882-ef5000d3653a.k8s.civo.com%%''. We need change the entries in ''%%k8s/certificates-staging.yml%%'' and ''%%k8s/certificates-prod.yml%%'' to match our DNS name.
+
+  - Get the uuid that matches our dns: <code bash>civo kubernetes show cultivate-finance -o custom -f "DNSEntry" | sed "s/\..*//"</code>
+  - Edit ''%%k8s/certificates-staging.yml%%'': <code yaml>
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: <UUID GOES HERE>-staging-cert
+  namespace: default
+spec:
+  commonName: '<UUID GOES HERE>.k8s.civo.com'
+  dnsNames:
+  - '<UUID GOES HERE>.k8s.civo.com'
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-staging 
+  secretName: <UUID GOES HERE>-staging-cert
+
+### EXAMPLE 
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: 798a2f3d-a352-40aa-a882-ef5000d3653a-staging-cert
+#   namespace: default
+# spec:
+#   commonName: '798a2f3d-a352-40aa-a882-ef5000d3653a.k8s.civo.com'
+#   dnsNames:
+#   - '798a2f3d-a352-40aa-a882-ef5000d3653a.k8s.civo.com'
+#   issuerRef:
+#     kind: ClusterIssuer
+#     name: letsencrypt-staging 
+#   secretName: 798a2f3d-a352-40aa-a882-ef5000d3653a-staging-cert
+</code>
+  - Do the same with ''%%k8s/certificates-prod.yml%%'': <code yaml>
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: <UUID GOES HERE>-prod-cert
+  namespace: default
+spec:
+  commonName: '<UUID GOES HERE>.k8s.civo.com'
+  dnsNames:
+  - '<UUID GOES HERE>.k8s.civo.com'
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod 
+  secretName: <UUID GOES HERE>-prod-cert
+</code>
+  - Do the same with our ingress controller: <code yaml>
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cultivate-finance-ingress-base-dns
+  namespace: default
+  labels:
+    name: cultivate-finance-ingress-base-dns
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+  - hosts:
+    - '<UUID GOES HERE>.k8s.civo.com'
+    secretName: <UUID GOES HERE>-staging-cert
+  rules:
+  - host: '<UUID GOES HERE>.k8s.civo.com'
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp-service 
+            port: 
+              number: 8662
+</code>
+
+==== Create Staging/Testing certificates ====
+
+Staging certificates are not functional, but since we are using letsencrypt's api, we want to make sure our certificate creation is working as expected before creating real certificates.
+
+  - Create the staging certificates: <code bash>kubectl apply -f k8s/ssl-certificate/certificates-staging.yml</code>
+  - Confirm you see the certificates in your cluster: <code bash>
+kubectl get certificate --namespace default
+## You should see 3 entries
+# cultivate-finance-staging-www-cert
+# cultivate-finance-staging-base-cert
+# <UUID from earlier>-staging-cert
+</code>
+  - These certs will not be considered valid until their ''%%READY%%'' status is ''%%True%%''. You can repeat the command over and over again to check their ready status, but you can also check the event log in kubernetes dashboard
+  - This section can only be considered complete when all 3 of the certificates are marked as ''%%READY%%'' 
+
+==== Testing Cert Compatibility ==== 
+
+Now that we have our test certificates, we need to smoke test them by confirming they are attached to our webapp. In order to do that, we must confirm our ingress and webapp pods are deployed by doing the following:
+
+  - Follow the instructions for deploying our ingress: [[development:deploying:prod_deployments#deploying_ingress|Deploy Ingress]]
+  - Follow the instructions for deploying our webapp: [[development:webapp:webapp#building_and_running_the_webapp_in_kubernetes_production|Deploying the Webapp]]
+
+Once those are deployed you can confirm they are using our testing certificates from earlier:
+
+  - Test our www domain: <code bash>openssl s_client -connect www.cultivatefinance.org:443
+
+## Confirm you see something along the lines of:
+# depth=1 C=US, O=(STAGING) Let's Encrypt, CN=(STAGING) Wannabe Watercress R11
+# issuer=C=US, O=(STAGING) Let's Encrypt, CN=(STAGING) Wannabe Watercress R11
+# 
+# The important part is O=(STAGING) Let's Encrypt, CN=(STAGING)</code>
+  - Repeat the process with our non-www domain: <code bash>openssl s_client -connect cultivatefinance.org:443</code>
+  - Repeat the process with our civo domain: <code bash>openssl s_client -connect $(civo kubernetes show cultivate-finance -o custom -f "DNSEntry"):443</code>
+
+==== Generate Production Certificates ====
+**
+* NOTE: ONLY CONTINUE TO THESE STEPS AFTER YOU HAVE SUCCESSFULLY COMPLETED THE PREVIOUS ONES WITHOUT ISSUE.**
+
+Now that we have confirmed our application is running with testing tls certificates, we can do the real thing. 
+
+  - Generate the production certificates:<code bash>kubectl apply -f k8s/ssl-certificate/certificates-prod.yml</code>
+  - Confirm the certificates have been properly issued: <code bash>kubectl get certificate --namespace default
+## You should see 3 new entries
+# cultivate-finance-prod-www-cert
+# cultivate-finance-prod-base-cert
+# <UUID from earlier>-prod-cert
+</code>
+  - Wait until the certificates are in the ''%%READY%%'' state. It could take up to 30 minutes.
+  - Delete the staging ingress:<code bash>kubectl delete -f k8s/ingress-traefik-staging.yml</code>
+  - Deploy the production ingress:<code bash>kubectl apply -f k8s/ingress-traefik-prod.yml</code>
+  - Use the links to confirm the connection is secure:
+    - https://cultivatefinance.org
+    - https://www.cultivatefinance.org
+

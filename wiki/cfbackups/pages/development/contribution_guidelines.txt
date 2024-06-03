@@ -51,4 +51,8 @@ We use [[https://www.civo.com/|Civo]] as our cloud host for no other reason than
 
 === Local Deployments ===
 
-Our local deployment guidelines can be found [[development:depoying:local_deployments|here]]
+Our local deployment guidelines can be found [[development:deploying:local_deployments|here]]
+
+=== Production Deployments ===
+
+Our production deployment guidelines can be found [[development:deploying:prod_deployments|here]]

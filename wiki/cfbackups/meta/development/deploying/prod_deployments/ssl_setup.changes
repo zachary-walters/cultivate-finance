@@ -1,0 +1,44 @@
+1717168221	172.24.0.1	C	development:deploying:prod_deployments:ssl_setup	admin	created		284
+1717170458	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			973
+1717170489	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			1
+1717171899	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			490
+1717172107	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			706
+1717172409	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			-64
+1717179196	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			129
+1717180059	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			334
+1717180098	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			16
+1717180851	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			253
+1717180935	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Install Okteto's Civo DNS Webhook] 		-32
+1717180961	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Install Okteto's Civo DNS Webhook] 		-2
+1717180993	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Install Okteto's Civo DNS Webhook] 		96
+1717181050	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Configuring the Civo DNS Issuer] 		-2
+1717181687	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Configuring the Civo DNS Issuer] 		-25
+1717181762	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Configuring the Civo DNS Issuer] 		-25
+1717181801	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Configuring the Civo DNS Issuer] 		73
+1717187896	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Install Okteto's Civo DNS Webhook] 		25
+1717188883	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Install Okteto's Civo DNS Webhook] 		126
+1717188975	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Configuring the Civo DNS Issuer] 		109
+1717190396	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			4
+1717258933	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			176
+1717384397	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			-2238
+1717385064	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			50
+1717385418	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			396
+1717386654	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			1948
+1717386998	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Create Staging/Testing certificates] 		672
+1717387022	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Create Staging/Testing certificates] 		9
+1717427891	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Fixing our DNS] 		-3
+1717429058	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			550
+1717429939	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Testing Cert Compatibility] 		697
+1717430224	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Testing Cert Compatibility] 		47
+1717431644	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Install Cert Manager] 		171
+1717438028	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Create Certificate Issuers] 		0
+1717439109	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Fixing our DNS] 		621
+1717439211	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Fixing our DNS] 		17
+1717439487	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			168
+1717439521	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		-11
+1717439787	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		119
+1717440250	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		213
+1717440399	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		255
+1717440408	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		-3
+1717440704	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		194
+1717441065	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		130

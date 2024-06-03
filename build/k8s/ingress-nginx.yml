@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: "nginx"
   rules:
-  - host: cultivatefinance.org
+  - host: cultivatefinance.69a647ae-f0bd-4517-8be3-281c686f37f1.k8s.civo.com
     http:
       paths:
       - path: "/api/401k_calculator/"
