@@ -39,13 +39,17 @@ function restore() {
 }
 
 function restore_prd() {
+  build_prd
+  restore
+}
+
+function build_prd() {
   RESTORE_DIR=/cfrestore_prd
   BACKUPS_DIR=/cfbackups_prd
   cp -r ../cfbackups ..${BACKUPS_DIR}
   rm ..${BACKUPS_DIR}/conf/users.auth.php
   rm ..${BACKUPS_DIR}/conf/users.auth.php.dist
   echo "\$conf['disableactions'] = 'login,register';" >> ..${BACKUPS_DIR}/conf/local.php
-  restore
 }
 
 if [[ ${arg} == "backup" ]]; then 
@@ -54,6 +58,8 @@ elif [[ ${arg} == "restore" ]]; then
   restore;
 elif [[ ${arg} == "restore_prd" ]]; then 
   restore_prd;
+elif [[ ${arg} == "build_prd" ]]; then
+  build_prd;
 else 
   echo "The script needs an argument ('backup' or 'restore' or 'restore_prd')"
 fi

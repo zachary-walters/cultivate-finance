@@ -52,7 +52,6 @@ spec:
             port: 
               number: 8662
 
-
 ---
 
 apiVersion: networking.k8s.io/v1
@@ -80,3 +79,31 @@ spec:
             name: webapp-service 
             port: 
               number: 8662
+
+--- 
+# WIKI
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cultivate-finance-ingress-wiki
+  namespace: default
+  labels:
+    name: cultivate-finance-ingress-wiki
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  tls:
+  - hosts:
+    - 'wiki.cultivatefinance.org'
+    secretName: cultivate-finance-prod-wiki-cert
+  rules:
+  - host: 'wiki.cultivatefinance.org'
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service: 
+            name: wiki-service
+            port: 
+              number: 8181

@@ -73,6 +73,12 @@ fmt:
 ### DOCKER BUILD/PUSH
 docker_build: docker_webapp docker_api_gateway docker_401k_api
 
+docker_wiki_prod:
+	@echo "Building the wiki for production..."
+	cd ${WIKI_DIR}/scripts && ./backup.sh build_prd
+	cd ${WIKI_DIR} && docker build -t cultivate-finance-wiki-service -f wiki.dockerfile .
+	docker tag cultivate-finance-wiki-service $(DOCKERHUB_REPO)/cultivate-finance-wiki-service
+
 docker_webapp: build_webapp
 	@echo building docker webapp container...
 	cd $(WEBAPP_DIR) && docker build -t cultivate-finance-webapp-service -f webapp.dockerfile .
@@ -94,7 +100,10 @@ docker_push: docker_build
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-401k-calculator-service
 
 docker_push_webapp: docker_webapp
-	docker push $(DOCKERHUB_REPO)/cultivate-finance-webapp-service	
+	docker push $(DOCKERHUB_REPO)/cultivate-finance-webapp-service
+
+docker_push_wiki_prod: docker_wiki_prod
+	docker push $(DOCKERHUB_REPO)/cultivate-finance-wiki-service		
 	
 ##### K8S
 ### Development (Minikube)
@@ -148,7 +157,6 @@ restore_wiki:
 wiki: 
 	@echo "building and starting wiki"
 	docker-compose up -d --build wiki
-	cd ${WIKI_DIR}/scripts && ./backup.sh restore
 
 wiki_prd: 
 	@echo "building and starting wiki for a prod environment"

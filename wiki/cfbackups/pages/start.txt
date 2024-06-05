@@ -20,6 +20,8 @@
 
 Before making contributions to Cultivate Finance, please read our contribution [[development:contribution guidelines|guidelines]], read our contribution [[development:contribution_faq|FAQs]], and familiarize yourself with our [[development:code_of_conduct|code of conduct]].
 
+After you have familiarized yourself with the above, you can continue on with our [[development:quick_start|Contributing Quick Start Guide]]
+
 ==== Processes ====
 
 Our process documentation can be found [[development:processes|here]], and covers different processes such as building, deploying, committing code, etc.

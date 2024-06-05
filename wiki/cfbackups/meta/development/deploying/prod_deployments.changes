@@ -5,3 +5,5 @@
 1717428904	172.24.0.1	E	development:deploying:prod_deployments	admin			991
 1717439842	172.24.0.1	E	development:deploying:prod_deployments	admin	[Deploying Ingress] 		8
 1717440111	172.24.0.1	E	development:deploying:prod_deployments	admin	[Deploying Ingress] 		541
+1717517640	127.0.0.1	E	development:deploying:prod_deployments		external edit		0
+1717601644	192.168.65.1	E	development:deploying:prod_deployments	admin	[Deploying the Web Application] 		221

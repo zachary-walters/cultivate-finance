@@ -1,4 +1,4 @@
-FROM bitnami/dokuwiki:latest
+FROM --platform=linux/amd64 bitnami/dokuwiki:latest
 
 ## Change user to perform privileged actions
 USER 0
@@ -15,3 +15,6 @@ RUN sed -i -r 's/#LoadModule ratelimit_module/LoadModule ratelimit_module/' /opt
 ENV APACHE_HTTP_PORT_NUMBER=8181
 ENV APACHE_HTTPS_PORT_NUMBER=8143
 EXPOSE 8181 8143
+
+COPY cfbackups_prd /cfbackups_prd
+COPY scripts/prodrestore.sh /prodrestore.sh

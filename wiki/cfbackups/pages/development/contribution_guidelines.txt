@@ -2,6 +2,8 @@
 
 ===== Services =====
 
+
+
 ==== APIs ====
 
   * [[development:apis:401k_calculator|401k Calculator]]
@@ -9,6 +11,10 @@
 ==== Web Application ====
 
   * [[development:webapp:webapp|Web Application]]
+
+==== Wiki ====
+
+  * [[development:wiki|Wiki]]
 
 ===== System Architecture =====
 
@@ -40,19 +46,23 @@ We use [[https://github.com/|github]] for our code versioning provider. Our gith
 
 ==== Container Versioning ====
 
-We version our docker containers on [[https://hub.docker.com/|docker hub]]. The containers relevant to this project can be found [[https://hub.docker.com/?search=cultivate-finance|here]].
+We version our docker containers on [[https://hub.docker.com/|docker hub]]. The containers relevant to this project can be found here: 
+  * [[https://hub.docker.com/repository/docker/zacharywalters/cultivate-finance-wiki-service/general|Wiki]]
+  * [[https://hub.docker.com/repository/docker/zacharywalters/cultivate-finance-401k-calculator-service/general|401k Calculator]]
+  * [[https://hub.docker.com/repository/docker/zacharywalters/cultivate-finance-api-gateway-service/general|Api Gateway]]
+  * [[https://hub.docker.com/repository/docker/zacharywalters/cultivate-finance-webapp-service/general|Web Application]]
 
 ==== Cloud Hosing ====
 
 We use [[https://www.civo.com/|Civo]] as our cloud host for no other reason than it is a cheap way to host kubernetes deployments. 
 
 
-==== Deploying ====
+===== Deploying =====
 
-=== Local Deployments ===
+==== Local Deployments ====
 
 Our local deployment guidelines can be found [[development:deploying:local_deployments|here]]
 
-=== Production Deployments ===
+==== Production Deployments ====
 
 Our production deployment guidelines can be found [[development:deploying:prod_deployments|here]]

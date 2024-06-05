@@ -1,0 +1,79 @@
+====== Wiki ======
+
+This wiki is our main source of documentation. 
+
+===== Intricacies =====
+
+  * [[https://www.dokuwiki.org/dokuwiki|Dokuwiki]]: We use Dokuwiki for a number of reasons:
+    * No Database: There is less involved in maintenance tasks, such as backing up/restoring
+    * Plain Text Datafiles: Datafiles are stored in plain text, making them easy to back up, read, modify, compare, generate with external (non-wiki) programs, and move from one DokuWiki-installation to another.
+    * Simple and Consistent 
+  * Local vs Production
+    * Our local builds are editable
+      * Username for local: admin
+      * Password for local: admin
+    * Our production builds remove login functionality, so the world-facing wiki cannot actually be edited
+
+===== Local Deploy =====
+
+  - Confirm you are in the build directory:<code bash>cd build</code>
+  - Deploy the wiki locally by running the following make command:<code bash>make wiki</code>
+  - Go to localhost and confirm the wiki is up: http://localhost:8181
+
+==== Restoring ====
+
+Once the wiki is deployed, we need to restore the contents of our versioned wiki.
+
+  - Confirm you are in the build directory:<code bash>cd build</code>
+  - Run the make command: <code bash>make restore_wiki</code>
+  - Confirm the wiki is restored by going to http://localhost:8181
+
+===== Production Deploy =====
+
+  - Confirm you are in the build directory:<code bash>cd build</code>
+  - Build the docker container and push it the dockerhub repository: <code bash>make docker_push_wiki_prod</code>
+  - Delete the current wiki pod and service in the kubernetes cluster: <code bash>kubectl delete -f k8s/wiki.yml</code>
+  - Apply the new image to the kubernetes cluster: <code bash>kubectl apply -f k8s/wiki.yml</code>
+  - Forward the port on the pod so we can check it is working: <code bash>kubectl port-forward service/wiki-service 8181:8181</code>
+  - Confirm the wiki is restored by going to http://localhost:8181
+
+=== Restoring === 
+
+Restoring the state of the wiki in our production environment is a little more involved than in our development environment. We need to shell into the pod in the cluster and manually run some commands.
+
+  - Shell into the pod: <code bash>kubectl exec -it deployment/wiki-service -n default -- bash</code>
+  - Run the following commands: <code bash>
+cp -r /cfbackups_prd/conf /bitnami/dokuwiki
+cp -r /cfbackups_prd/pages /bitnami/dokuwiki/data
+cp -r /cfbackups_prd/attic /bitnami/dokuwiki/data
+cp -r /cfbackups_prd/meta /bitnami/dokuwiki/data
+cp -r /cfbackups_prd/meta_attic /bitnami/dokuwiki/data
+cp -r /cfbackups_prd/media /bitnami/dokuwiki/data
+cp -r /cfbackups_prd/media_meta /bitnami/dokuwiki/data
+cp -r /cfbackups_prd/media_attic /bitnami/dokuwiki/data
+
+echo '' > /bitnami/dokuwiki/conf/users.auth.php
+</code>
+  - Port forward: <code bash>kubectl port-forward service/wiki-service 8181:8181</code>
+  - Confirm the wiki now has data at http://localhost:8181
+
+===== Making Updates to the Wiki =====
+
+==== Updating ====
+
+Updates to the wiki are only allowed to be made locally. The process for doing so is as follows:
+
+  - Confirm you are in the build directory<code bash>cd build</code>
+  - Deploy the wiki locally following these steps: [[development:wiki#local_deploy|Deploy Wiki Locally]]
+  - Login using the username:password: ''%%admin:admin%%''
+  - Make your changes
+
+==== Versioning ====
+
+The process for versioning updates to the wiki is as follows:
+
+  - Confirm you are in the build directory<code bash>cd build</code>
+  - Backup the changes you made by running the following: <code bash>
+make backup_wiki
+</code>
+  - Commit your changes

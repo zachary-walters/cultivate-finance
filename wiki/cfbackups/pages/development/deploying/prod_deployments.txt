@@ -45,4 +45,8 @@ kubectl get ing
 
 ==== Deploying the Web Application ====
 
-You can find guide for deploying our web application to our kubernetes cluser here: [[development:webapp:webapp#building_and_running_the_webapp_in_kubernetes_production|Building and Running the Webapp in Kubernetes production]] 
+You can find the guide for deploying our web application to our kubernetes cluster here: [[development:webapp:webapp#building_and_running_the_webapp_in_kubernetes_production|Building and Running the Webapp in Kubernetes production]] 
+
+==== Deploying the Wiki ====
+
+You can find the guide for deploying our Wiki documentation to our kubernetes cluster here: [[development:wiki#production_deploy|Building and Running the Wiki in Kubernetes production]]
