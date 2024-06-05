@@ -17,4 +17,3 @@ ENV APACHE_HTTPS_PORT_NUMBER=8143
 EXPOSE 8181 8143
 
 COPY cfbackups_prd /cfbackups_prd
-COPY scripts/prodrestore.sh /prodrestore.sh

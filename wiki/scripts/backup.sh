@@ -44,8 +44,8 @@ function restore_prd() {
 }
 
 function build_prd() {
-  RESTORE_DIR=/cfrestore_prd
   BACKUPS_DIR=/cfbackups_prd
+  rm -rf ../${BACKUPS_DIR}
   cp -r ../cfbackups ..${BACKUPS_DIR}
   rm ..${BACKUPS_DIR}/conf/users.auth.php
   rm ..${BACKUPS_DIR}/conf/users.auth.php.dist
