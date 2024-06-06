@@ -9,3 +9,5 @@
 1717556845	192.168.65.1	E	development:wiki	admin	[Making Updates to the Wiki] 		648
 1717599938	192.168.65.1	E	development:wiki	admin	[Intricacies] 		235
 1717601495	192.168.65.1	E	development:wiki	admin			49
+1717603140	127.0.0.1	E	development:wiki		external edit		0
+1717603342	172.26.0.1	E	development:wiki	admin	[Local Deploy] 		548

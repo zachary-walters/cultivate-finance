@@ -1,0 +1,88 @@
+====== Contributing Quick Start ======
+
+===== Supplemental =====
+
+We use the [[https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow|Fork-Rebase workflow]] for our PR's
+
+===== Install Supporting Software =====
+
+==== MacOS ====
+
+=== Homebrew ===
+
+[[https://brew.sh/|Homebrew installation documentation]]
+
+Install homebrew with the following command: <code bash>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code>
+
+=== Go === 
+
+[[https://go.dev/doc/install|Go installation documentation]]
+
+Install Go with the following command: <code bash>brew install go</code>
+
+=== TinyGo ===
+
+[[https://tinygo.org/getting-started/install/macos/|TinyGo installation documentation]]
+
+Install TinyGo with the following command: <code bash>brew tap tinygo-org/tools
+brew install tinygo</code>
+
+=== Github CLI ===
+
+[[https://cli.github.com/|Github CLI installation documentation]]
+
+Install Github CLI with the following command: <code bash>brew install gh</code>
+
+===== Initial Repo Pull =====
+
+  - Run the following to get the repository onto your machine: <code bash>
+set -k
+
+mkdir -p ~/code
+cd ~/code
+
+# Fork the repo
+gh repo fork zachary-walters/cultivate-finance
+</code>
+  - Update the main branch: <code bash>git checkout main
+git pull origin main
+</code>
+  - Re-familiarize yourself with our [[development:conventions#branch_naming|branch naming conventions]]
+  - Create a feature branch: <code bash>
+git checkout -b feature/<title-of-the-feature-branch>
+git push origin feature/<title-of-the-feature-branch>
+</code>
+
+===== Raising a Pull Request =====
+
+==== Updating forked repository ====
+
+Make sure your forked repo is up to date with the upstream repository: <code bash>
+set -k 
+
+git remote add upstream zachary-walters/cultivate-finance
+git checkout main
+git pull upstream
+git merge upstream/main
+git push
+</code>
+
+Prepare your branch for a PR: <code bash>git checkout feature/<name-of-your-branch>
+git merge main
+# resolve any merge conflicts at this point
+git push
+</code>
+
+==== Raising the PR ====
+
+  - Login to github's website
+  - Navigate to your forked repository
+  - Open a new Pull Request
+  - Ensure the "base" branch is set to the main branch of the upstream repository
+  - Confirm the "compare" branch is set to your feature branch
+  - Provide Details: 
+    - Use our [[development:conventions#pull_request_conventions|PR Description Guide]] for reference
+    - Fill in a descriptive title for your pull request.
+    - Write a detailed description, including the purpose of your changes and any relevant information.
+  - Add Reviewers
+    - At the moment, Zachary Walters should be a reviewer on all incoming changes. 

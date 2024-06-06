@@ -158,6 +158,10 @@ wiki:
 	@echo "building and starting wiki"
 	docker-compose up -d --build wiki
 
+wiki_arm:
+	@echo "building and starting wiki"
+	docker-compose up -d --build wiki_arm 
+
 wiki_prd: 
 	@echo "building and starting wiki for a prod environment"
 	docker-compose up -d --build wiki 

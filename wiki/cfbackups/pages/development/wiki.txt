@@ -20,6 +20,16 @@ This wiki is our main source of documentation.
   - Deploy the wiki locally by running the following make command:<code bash>make wiki</code>
   - Go to localhost and confirm the wiki is up: http://localhost:8181
 
+==== Handling Container Crashes on ARM Macs ====
+
+Our dockerfile specifies linux/amd64 as the container platform. Some mac's have issues running this in Docker. In the case your wiki container keeps crashing, follow these supplemental steps:
+
+  - Confirm you are in the build directory:<code bash>cd build</code>
+  - Confirm you have deleted the wiki container that is crashing
+  - Deploy the wiki locally by running the following make command:<code bash>make wiki_arm</code>
+  - Go to localhost and confirm the wiki is up: http://localhost:8181
+
+
 ==== Restoring ====
 
 Once the wiki is deployed, we need to restore the contents of our versioned wiki.

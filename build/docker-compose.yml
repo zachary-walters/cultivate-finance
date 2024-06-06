@@ -72,3 +72,15 @@ services:
       - "8443:8443"
       - "8181:8181"
       - "8143:8143"
+
+  wiki_arm: 
+    container_name: wiki
+    build: 
+      context: ./../wiki
+      dockerfile: ./../wiki/wiki_arm.dockerfile
+    restart: always
+    ports: 
+      - "8080:8080"
+      - "8443:8443"
+      - "8181:8181"
+      - "8143:8143"

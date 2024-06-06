@@ -1,15 +1,6 @@
-1716845247	192.168.65.1	E	development:contribution_guidelines	admin			143
-1716845893	192.168.65.1	C	development:depoying:local_deployments	admin	created		641
-1716846359	192.168.65.1	E	development:depoying:local_deployments	admin			220
-1716846653	192.168.65.1	E	development:depoying:local_deployments	admin			251
-1716846994	192.168.65.1	E	development:depoying:local_deployments	admin			-105
-1716920361	192.168.65.1	E	development:depoying:local_deployments	admin			1267
-1716921385	192.168.65.1	E	development:depoying:local_deployments	admin			97
-1716927889	127.0.0.1	E	development:depoying:local_deployments		external edit		0
-1716931397	172.23.0.1	E	development:depoying:local_deployments	admin			107
-1716931595	172.23.0.1	E	development:depoying:local_deployments	admin	[Deployment Steps] 		42
 1717099846	127.0.0.1	E	development:depoying:local_deployments		external edit		0
 1717099846	127.0.0.1	E	development:contribution_guidelines		external edit		0
+1717099846	127.0.0.1	E	development:webapp:webapp		external edit		0
 1717100089	172.24.0.1	D	development:depoying:local_deployments	admin	removed		-2520
 1717100097	172.24.0.1	E	development:contribution_guidelines	admin			132
 1717100102	172.24.0.1	C	development:deploying:local_deployments	admin	created		2520
@@ -53,7 +44,6 @@
 1717387022	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Create Staging/Testing certificates] 		9
 1717427891	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Fixing our DNS] 		-3
 1717428052	172.24.0.1	E	development:deploying:prod_deployments	admin	[Preliminary Setup] 		7
-1717099846	127.0.0.1	E	development:webapp:webapp		external edit		0
 1717428782	172.24.0.1	E	development:webapp:webapp	admin	[Building and Running the Webapp locally] 		489
 1717428904	172.24.0.1	E	development:deploying:prod_deployments	admin			991
 1717429058	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin			550
@@ -77,6 +67,8 @@
 1717440704	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		194
 1717441065	172.24.0.1	E	development:deploying:prod_deployments:ssl_setup	admin	[Generate Production Certificates] 		130
 1717517640	127.0.0.1	E	development:contribution_guidelines		external edit		0
+1717517640	127.0.0.1	E	start		external edit		0
+1717517640	127.0.0.1	E	development:deploying:prod_deployments		external edit		0
 1717517980	192.168.65.1	E	development:contribution_guidelines	admin			49
 1717518659	192.168.65.1	C	development:wiki	admin	created		520
 1717522248	192.168.65.1	E	development:wiki	admin			261
@@ -91,8 +83,21 @@
 1717557271	192.168.65.1	E	development:contribution_guidelines	admin	[Container Versioning] 		-2
 1717599938	192.168.65.1	E	development:wiki	admin	[Intricacies] 		235
 1717600038	192.168.65.1	E	development:contribution_guidelines	admin	[Deploying] 		6
-1717517640	127.0.0.1	E	start		external edit		0
 1717600117	192.168.65.1	E	start	admin	[Contributing] 		142
 1717601495	192.168.65.1	E	development:wiki	admin			49
-1717517640	127.0.0.1	E	development:deploying:prod_deployments		external edit		0
 1717601644	192.168.65.1	E	development:deploying:prod_deployments	admin	[Deploying the Web Application] 		221
+1717603140	127.0.0.1	E	development:wiki		external edit		0
+1717603342	172.26.0.1	E	development:wiki	admin	[Local Deploy] 		548
+1717616542	172.26.0.1	C	development:quick_start	admin	created		1004
+1717616913	172.26.0.1	E	development:quick_start	admin	[Maintainers and Collaborators] 		-104
+1717617325	172.26.0.1	E	development:quick_start	admin	[MacOS] 		169
+1717618979	172.26.0.1	E	development:quick_start	admin			289
+1717620499	172.26.0.1	E	development:quick_start	admin			517
+1717621276	172.26.0.1	E	development:quick_start	admin	[Updating forked repository] 		629
+1717622758	172.26.0.1	C	development:conventions	admin	created		1466
+1717622792	172.26.0.1	E	development:quick_start	admin	[Initial Repo Pull] 		14
+1717622909	172.26.0.1	E	development:quick_start	admin			153
+1717623039	172.26.0.1	E	development:conventions	admin			610
+1717623060	172.26.0.1	E	development:quick_start	admin	[Raising the PR] 		25
+1717603140	127.0.0.1	E	start		external edit		0
+1717691406	172.26.0.1	E	start	admin			-110
