@@ -75,7 +75,7 @@ var effectiveTaxRateOnGrossTests = []struct {
 	},
 }
 
-func TestNewNewEffectiveTaxRateOnGross(t *testing.T) {
+func TestNewEffectiveTaxRateOnGross(t *testing.T) {
 	actual := calculator.NewEffectiveTaxRateOnGross()
 	expected := calculator.EffectiveTaxRateOnGross{
 		TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation:                  calculator.NewTotalTaxesOwedAfterStandardDeductionAndContributions(),
