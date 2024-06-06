@@ -32,27 +32,66 @@ func (m *MockEffectiveTaxRateOnGross) CalculateRothRetirement(model *calculator.
 	return args.Get(0).(float64)
 }
 
-func TestEffectiveTaxRateOnGrossCalculateTraditional(t *testing.T) {
-	tests := []struct {
-		name                                                 string
-		model                                                calculator.Model
-		totalTaxesOwedAfterStandardDeductionAndContributions float64
-	}{
-		{
-			name: "Test Case 0",
-			totalTaxesOwedAfterStandardDeductionAndContributions: 100,
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentAnnualIncome: 41987,
-				},
+var effectiveTaxRateOnGrossTests = []struct {
+	name                                                                  string
+	model                                                                 calculator.Model
+	totalTaxesOwedAfterStandardDeductionAndContributions                  float64
+	totalTaxesOwedAfterStandardDeduction                                  float64
+	totalAnnualRetirementIncomeBeforeTax                                  float64
+	totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal float64
+}{
+	{
+		name: "Test Case 0",
+		totalTaxesOwedAfterStandardDeductionAndContributions: 100,
+		totalTaxesOwedAfterStandardDeduction:                 200,
+		totalAnnualRetirementIncomeBeforeTax:                 23409,
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentAnnualIncome: 41987,
 			},
 		},
+	},
+	{
+		name: "Test Case 1",
+		totalTaxesOwedAfterStandardDeductionAndContributions: 0,
+		totalTaxesOwedAfterStandardDeduction:                 0,
+		totalAnnualRetirementIncomeBeforeTax:                 12312,
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentAnnualIncome: 10000,
+			},
+		},
+	},
+	{
+		name: "Test Case 2",
+		totalTaxesOwedAfterStandardDeductionAndContributions: 10000,
+		totalTaxesOwedAfterStandardDeduction:                 214500,
+		totalAnnualRetirementIncomeBeforeTax:                 0,
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentAnnualIncome: 0,
+			},
+		},
+	},
+}
+
+func TestNewNewEffectiveTaxRateOnGross(t *testing.T) {
+	actual := calculator.NewEffectiveTaxRateOnGross()
+	expected := calculator.EffectiveTaxRateOnGross{
+		TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation:                  calculator.NewTotalTaxesOwedAfterStandardDeductionAndContributions(),
+		TotalTaxesOwedAfterStandardDeductionCalculation:                                  calculator.NewTotalTaxesOwedAfterStandardDeduction(),
+		TotalAnnualRetirementIncomeBeforeTaxCalculation:                                  calculator.NewTotalAnnualRetirementIncomeBeforeTax(),
+		TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawalCalculation: calculator.NewTotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal(),
 	}
 
-	for _, test := range tests {
+	assert.Equal(t, expected, actual)
+}
+
+func TestEffectiveTaxRateOnGrossCalculateTraditional(t *testing.T) {
+	for _, test := range effectiveTaxRateOnGrossTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockTotalTaxesOwedAfterStandardDeductionAndContributions := new(MockTotalTaxesOwedAfterStandardDeductionAndContributions)
-			mockTotalTaxesOwedAfterStandardDeductionAndContributions.On("CalculateTraditional", mock.Anything).Return(test.totalTaxesOwedAfterStandardDeductionAndContributions)
+			mockTotalTaxesOwedAfterStandardDeductionAndContributions.On("CalculateTraditional", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionAndContributions)
 
 			c := &calculator.EffectiveTaxRateOnGross{
 				TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation: mockTotalTaxesOwedAfterStandardDeductionAndContributions,
@@ -60,7 +99,85 @@ func TestEffectiveTaxRateOnGrossCalculateTraditional(t *testing.T) {
 
 			actual := c.CalculateTraditional(&test.model)
 			expected := func() float64 {
+				if test.model.Input.CurrentAnnualIncome == 0 {
+					return 0
+				}
+
 				return test.totalTaxesOwedAfterStandardDeductionAndContributions / test.model.Input.CurrentAnnualIncome
+			}()
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestEffectiveTaxRateOnGrossCalculateTraditionalRetirement(t *testing.T) {
+	for _, test := range effectiveTaxRateOnGrossTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeduction := new(MockTotalTaxesOwedAfterStandardDeduction)
+			mockTotalTaxesOwedAfterStandardDeduction.On("CalculateTraditionalRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeduction)
+
+			mockTotalAnnualRetirementIncomeBeforeTax := new(MockTotalAnnualRetirementIncomeBeforeTax)
+			mockTotalAnnualRetirementIncomeBeforeTax.On("CalculateTraditionalRetirement", &test.model).Return(test.totalAnnualRetirementIncomeBeforeTax)
+
+			c := &calculator.EffectiveTaxRateOnGross{
+				TotalTaxesOwedAfterStandardDeductionCalculation: mockTotalTaxesOwedAfterStandardDeduction,
+				TotalAnnualRetirementIncomeBeforeTaxCalculation: mockTotalAnnualRetirementIncomeBeforeTax,
+			}
+
+			actual := c.CalculateTraditionalRetirement(&test.model)
+			expected := func() float64 {
+				if test.totalAnnualRetirementIncomeBeforeTax == 0.0 {
+					return 0
+				}
+
+				return test.totalTaxesOwedAfterStandardDeduction / test.totalAnnualRetirementIncomeBeforeTax
+			}()
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestEffectiveTaxRateOnGrossCalculateRoth(t *testing.T) {
+	for _, test := range effectiveTaxRateOnGrossTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeductionAndContributions := new(MockTotalTaxesOwedAfterStandardDeductionAndContributions)
+			mockTotalTaxesOwedAfterStandardDeductionAndContributions.On("CalculateTraditional", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionAndContributions)
+
+			c := &calculator.EffectiveTaxRateOnGross{
+				TotalTaxesOwedAfterStandardDeductionAndContributionsCalculation: mockTotalTaxesOwedAfterStandardDeductionAndContributions,
+			}
+
+			actual := c.CalculateRoth(&test.model)
+			expected := c.CalculateRoth(&test.model)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestEffectiveTaxRateOnGrossCalculateRothRetirement(t *testing.T) {
+	for _, test := range effectiveTaxRateOnGrossTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeduction := new(MockTotalTaxesOwedAfterStandardDeduction)
+			mockTotalTaxesOwedAfterStandardDeduction.On("CalculateRothRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeduction)
+
+			mockTotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal := new(MockTotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal)
+			mockTotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal.On("CalculateRothRetirement", &test.model).Return(test.totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal)
+
+			c := &calculator.EffectiveTaxRateOnGross{
+				TotalTaxesOwedAfterStandardDeductionCalculation:                                  mockTotalTaxesOwedAfterStandardDeduction,
+				TotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawalCalculation: mockTotalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal,
+			}
+
+			actual := c.CalculateRothRetirement(&test.model)
+			expected := func() float64 {
+				if test.totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal == 0 {
+					return 0
+				}
+
+				return test.totalAnnualRetirementIncomeBeforeTax / test.totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal
 			}()
 
 			assert.Equal(t, expected, actual)
