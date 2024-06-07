@@ -33,40 +33,125 @@ func (m *MockIncomeAfterStandardDeduction) CalculateRothRetirement(model *calcul
 	return args.Get(0).(float64)
 }
 
-func TestIncomeAfterStandardDeductionCalculate(t *testing.T) {
-	mockStandardDeduction := new(MockStandardDeduction)
-	mockStandardDeduction.On("CalculateTraditional", mock.Anything).Return(10000.0)
-
-	calc := &calculator.IncomeAfterStandardDeduction{
-		StandardDeductionCalculation: mockStandardDeduction,
-	}
-
-	tests := []struct {
-		name  string
-		model calculator.Model
-	}{
-		{
-			name: "Test Case Basic",
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentAnnualIncome: 60000,
-				},
+var incomeAfterStandardDeductionTests = []struct {
+	name               string
+	model              calculator.Model
+	standardDeduction  float64
+	totalTaxableIncome float64
+}{
+	{
+		name: "Test Case Basic",
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentAnnualIncome: 60000,
 			},
 		},
-		{
-			name: "Test Case Infinity",
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentAnnualIncome: math.Inf(1),
-				},
+		standardDeduction:  32984.0,
+		totalTaxableIncome: 9503.0,
+	},
+	{
+		name: "Test Case Infinity",
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentAnnualIncome: math.MaxFloat64,
 			},
 		},
+		standardDeduction:  320984.0,
+		totalTaxableIncome: 2947.0,
+	},
+}
+
+func TestNewIncomeAfterStandardDeduction(t *testing.T) {
+	actual := calculator.NewIncomeAfterStandardDeduction()
+	expected := calculator.IncomeAfterStandardDeduction{
+		StandardDeductionCalculation:  calculator.NewStandardDeduction(),
+		TotalTaxableIncomeCalculation: calculator.NewTotalTaxableIncome(),
 	}
 
-	for _, test := range tests {
+	assert.Equal(t, expected, actual)
+}
+
+func TestIncomeAfterStandardDeductionCalculateTraditional(t *testing.T) {
+	for _, test := range incomeAfterStandardDeductionTests {
 		t.Run(test.name, func(t *testing.T) {
-			result := calc.CalculateTraditional(&test.model)
-			expected := test.model.Input.CurrentAnnualIncome - float64(mockStandardDeduction.CalculateTraditional(&test.model))
+			mockStandardDeduction := new(MockStandardDeduction)
+			mockStandardDeduction.On("CalculateTraditional", mock.Anything).Return(test.standardDeduction)
+
+			c := &calculator.IncomeAfterStandardDeduction{
+				StandardDeductionCalculation: mockStandardDeduction,
+			}
+
+			result := c.CalculateTraditional(&test.model)
+			expected := test.model.Input.CurrentAnnualIncome - test.standardDeduction
+			assert.Equal(t, expected, result)
+		})
+	}
+}
+
+func TestIncomeAfterStandardDeductionCalculateTraditionalRetirement(t *testing.T) {
+	for _, test := range incomeAfterStandardDeductionTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockStandardDeduction := new(MockStandardDeduction)
+			mockStandardDeduction.On("CalculateTraditionalRetirement", mock.Anything).Return(test.standardDeduction)
+
+			mockTotalTaxableIncome := new(MockStandardDeduction)
+			mockTotalTaxableIncome.On("CalculateTraditionalRetirement", mock.Anything).Return(test.totalTaxableIncome)
+
+			c := &calculator.IncomeAfterStandardDeduction{
+				StandardDeductionCalculation:  mockStandardDeduction,
+				TotalTaxableIncomeCalculation: mockTotalTaxableIncome,
+			}
+
+			result := c.CalculateTraditionalRetirement(&test.model)
+			expected := func() float64 {
+				if test.totalTaxableIncome-test.standardDeduction <= 0 {
+					return 0.0
+				}
+				return test.totalTaxableIncome - test.standardDeduction
+			}()
+			assert.Equal(t, expected, result)
+		})
+	}
+}
+
+func TestIncomeAfterStandardDeductionCalculateRoth(t *testing.T) {
+	for _, test := range incomeAfterStandardDeductionTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockStandardDeduction := new(MockStandardDeduction)
+			mockStandardDeduction.On("CalculateRoth", mock.Anything).Return(test.standardDeduction)
+
+			c := &calculator.IncomeAfterStandardDeduction{
+				StandardDeductionCalculation: mockStandardDeduction,
+			}
+
+			result := c.CalculateRoth(&test.model)
+			expected := test.model.Input.CurrentAnnualIncome - test.standardDeduction
+			assert.Equal(t, expected, result)
+		})
+	}
+}
+
+func TestIncomeAfterStandardDeductionCalculateRothRetirement(t *testing.T) {
+	for _, test := range incomeAfterStandardDeductionTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockStandardDeduction := new(MockStandardDeduction)
+			mockStandardDeduction.On("CalculateRothRetirement", mock.Anything).Return(test.standardDeduction)
+
+			mockTotalTaxableIncome := new(MockStandardDeduction)
+			mockTotalTaxableIncome.On("CalculateRothRetirement", mock.Anything).Return(test.totalTaxableIncome)
+
+			c := &calculator.IncomeAfterStandardDeduction{
+				StandardDeductionCalculation:  mockStandardDeduction,
+				TotalTaxableIncomeCalculation: mockTotalTaxableIncome,
+			}
+
+			result := c.CalculateRothRetirement(&test.model)
+			expected := func() float64 {
+				if test.totalTaxableIncome-test.standardDeduction <= 0 {
+					return 0.0
+				}
+				return test.totalTaxableIncome - test.standardDeduction
+			}()
 			assert.Equal(t, expected, result)
 		})
 	}
