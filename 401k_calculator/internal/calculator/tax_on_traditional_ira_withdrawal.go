@@ -13,10 +13,7 @@ func NewTaxOnTraditionalIRAWithdrawal() TaxOnTraditionalIRAWithdrawal {
 }
 
 func (c TaxOnTraditionalIRAWithdrawal) CalculateTraditional(model *Model) float64 {
-	totalTaxesOwedAfterStandardDeductionTraditional := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
-	totalTaxesOwedAfterStandardDeductionRoth := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRothRetirement(model)
-
-	return totalTaxesOwedAfterStandardDeductionTraditional - totalTaxesOwedAfterStandardDeductionRoth
+	return c.CalculateTraditionalRetirement(model)
 }
 
 func (c TaxOnTraditionalIRAWithdrawal) CalculateTraditionalRetirement(model *Model) float64 {
@@ -27,15 +24,9 @@ func (c TaxOnTraditionalIRAWithdrawal) CalculateTraditionalRetirement(model *Mod
 }
 
 func (c TaxOnTraditionalIRAWithdrawal) CalculateRoth(model *Model) float64 {
-	totalTaxesOwedAfterStandardDeductionTraditional := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
-	totalTaxesOwedAfterStandardDeductionRoth := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRothRetirement(model)
-
-	return totalTaxesOwedAfterStandardDeductionTraditional - totalTaxesOwedAfterStandardDeductionRoth
+	return c.CalculateTraditionalRetirement(model)
 }
 
 func (c TaxOnTraditionalIRAWithdrawal) CalculateRothRetirement(model *Model) float64 {
-	totalTaxesOwedAfterStandardDeductionTraditional := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model)
-	totalTaxesOwedAfterStandardDeductionRoth := c.TotalTaxesOwedAfterStandardDeductionCalculation.CalculateRothRetirement(model)
-
-	return totalTaxesOwedAfterStandardDeductionTraditional - totalTaxesOwedAfterStandardDeductionRoth
+	return c.CalculateTraditionalRetirement(model)
 }
