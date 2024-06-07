@@ -21,6 +21,15 @@ func (m *MockRothOrTraditionalDecision) CalculateRetirement(model *calculator.Mo
 	return m.Calculate(model)
 }
 
+func TestNewRothOrTraditionalDecision(t *testing.T) {
+	actual := calculator.NewRothOrTraditionalDecision()
+	expected := calculator.RothOrTraditionalDecision{
+		TotalDisbursementsCalculation: calculator.NewTotalDisbursements(),
+	}
+
+	assert.Equal(t, expected, actual)
+}
+
 func TestRothOrTraditionalDecisionCalculateTraditional(t *testing.T) {
 	tests := []struct {
 		name                                    string
