@@ -13,6 +13,10 @@ func NewSocialSecurityTaxableIncomeIndividual() SocialSecurityTaxableIncomeIndiv
 }
 
 func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditional(model *Model) float64 {
+	if len(model.SocialSecurityTaxRatesIndividual) == 0 {
+		return 0.0
+	}
+
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateTraditional(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
@@ -25,6 +29,10 @@ func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditional(model *Model
 }
 
 func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditionalRetirement(model *Model) float64 {
+	if len(model.SocialSecurityTaxRatesIndividual) == 0 {
+		return 0.0
+	}
+
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateTraditionalRetirement(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
@@ -37,6 +45,10 @@ func (c SocialSecurityTaxableIncomeIndividual) CalculateTraditionalRetirement(mo
 }
 
 func (c SocialSecurityTaxableIncomeIndividual) CalculateRoth(model *Model) float64 {
+	if len(model.SocialSecurityTaxRatesIndividual) == 0 {
+		return 0.0
+	}
+
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateRoth(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
@@ -48,7 +60,11 @@ func (c SocialSecurityTaxableIncomeIndividual) CalculateRoth(model *Model) float
 	return model.SocialSecurityTaxRatesIndividual[len(model.SocialSecurityTaxRatesIndividual)-1].Rate * model.Input.SocialSecurity
 }
 
-func (c SocialSecurityTaxableIncomeIndividual) CalculateRetirement(model *Model) float64 {
+func (c SocialSecurityTaxableIncomeIndividual) CalculateRothRetirement(model *Model) float64 {
+	if len(model.SocialSecurityTaxRatesIndividual) == 0 {
+		return 0.0
+	}
+
 	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateRothRetirement(model)
 
 	for _, taxRate := range model.SocialSecurityTaxRatesIndividual {
