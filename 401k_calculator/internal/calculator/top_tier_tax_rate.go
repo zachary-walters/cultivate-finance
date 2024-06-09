@@ -19,6 +19,10 @@ func (c TopTierTaxRate) CalculateTraditional(model *Model) float64 {
 func (c TopTierTaxRate) CalculateTraditionalRetirement(model *Model) float64 {
 	taxOnTraditionalIRAWithdrawal := c.TaxOnTraditionalIRAWithdrawalCalculation.CalculateTraditional(model)
 
+	if model.Input.YearlyWithdrawal == 0 {
+		return 0.0
+	}
+
 	return taxOnTraditionalIRAWithdrawal / model.Input.YearlyWithdrawal
 }
 
