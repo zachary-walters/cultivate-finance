@@ -20,13 +20,13 @@ func (c TaxRateOfSavings) CalculateTraditional(model *Model) float64 {
 }
 
 func (c TaxRateOfSavings) CalculateTraditionalRetirement(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	return 0.0
 }
 
 func (c TaxRateOfSavings) CalculateRoth(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	return 0.0
 }
 
 func (c TaxRateOfSavings) CalculateRothRetirement(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	return 0.0
 }
