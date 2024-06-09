@@ -59,7 +59,7 @@ var incomePerBracketAfterStandardDeductionSingleTests = []struct {
 	},
 }
 
-func TestNewTaxesOwedPerBracketAfterStandardDeductionSingle(t *testing.T) {
+func NewIncomePerBracketAfterStandardDeductionSingle(t *testing.T) {
 	actual := calculator.NewIncomePerBracketAfterStandardDeductionSingle()
 	expected := calculator.IncomePerBracketAfterStandardDeductionSingle{
 		AbstractIncomePerBracketAfterStandardDeductionCalculation: calculator.NewAbstractIncomePerBracketAfterStandardDeduction(),

@@ -5,7 +5,7 @@ type IncomePerBracketAfterStandardDeductionCalculation SequenceCalculation
 type IncomePerBracketAfterStandardDeduction struct {
 	IncomePerBracketAfterStandardDeductionSingleCalculation
 	IncomePerBracketAfterStandardDeductionMarriedJointCalculation
-	IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation
+	IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation
 	IncomePerBracketAfterStandardDeductionHeadOfHouseholdCalculation
 }
 
@@ -13,7 +13,7 @@ func NewIncomePerBracketAfterStandardDeduction() IncomePerBracketAfterStandardDe
 	return IncomePerBracketAfterStandardDeduction{
 		IncomePerBracketAfterStandardDeductionSingleCalculation:          NewIncomePerBracketAfterStandardDeductionSingle(),
 		IncomePerBracketAfterStandardDeductionMarriedJointCalculation:    NewIncomePerBracketAfterStandardDeductionMarriedJoint(),
-		IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation: NewIncomePerBracketAfterStandardDeductionMarriedSeperate(),
+		IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation: NewIncomePerBracketAfterStandardDeductionMarriedSeparate(),
 		IncomePerBracketAfterStandardDeductionHeadOfHouseholdCalculation: NewIncomePerBracketAfterStandardDeductionHeadOfHousehold(),
 	}
 }
@@ -21,7 +21,7 @@ func NewIncomePerBracketAfterStandardDeduction() IncomePerBracketAfterStandardDe
 func (c IncomePerBracketAfterStandardDeduction) CalculateTraditional(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionSingle := c.IncomePerBracketAfterStandardDeductionSingleCalculation.CalculateTraditional(model)
 	incomePerBracketAfterStandardDeductionMarriedJoint := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateTraditional(model)
-	incomePerBracketAfterStandardDeductionMarriedSeperate := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditional(model)
+	incomePerBracketAfterStandardDeductionMarriedSeparate := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditional(model)
 	incomePerBracketAfterStandardDeductionHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditional(model)
 
 	switch model.Input.CurrentFilingStatus {
@@ -30,7 +30,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateTraditional(model *Mode
 	case "married-joint":
 		return incomePerBracketAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return incomePerBracketAfterStandardDeductionMarriedSeperate
+		return incomePerBracketAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionHeadOfHousehold
 	default:
@@ -41,7 +41,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateTraditional(model *Mode
 func (c IncomePerBracketAfterStandardDeduction) CalculateTraditionalRetirement(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionSingle := c.IncomePerBracketAfterStandardDeductionSingleCalculation.CalculateTraditionalRetirement(model)
 	incomePerBracketAfterStandardDeductionMarriedJoint := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateTraditionalRetirement(model)
-	incomePerBracketAfterStandardDeductionMarriedSeperate := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
+	incomePerBracketAfterStandardDeductionMarriedSeparate := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditionalRetirement(model)
 	incomePerBracketAfterStandardDeductionHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditionalRetirement(model)
 
 	switch model.Input.RetirementFilingStatus {
@@ -50,7 +50,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateTraditionalRetirement(m
 	case "married-joint":
 		return incomePerBracketAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return incomePerBracketAfterStandardDeductionMarriedSeperate
+		return incomePerBracketAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionHeadOfHousehold
 	default:
@@ -61,7 +61,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateTraditionalRetirement(m
 func (c IncomePerBracketAfterStandardDeduction) CalculateRoth(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionSingle := c.IncomePerBracketAfterStandardDeductionSingleCalculation.CalculateRoth(model)
 	incomePerBracketAfterStandardDeductionMarriedJoint := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRoth(model)
-	incomePerBracketAfterStandardDeductionMarriedSeperate := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRoth(model)
+	incomePerBracketAfterStandardDeductionMarriedSeparate := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateRoth(model)
 	incomePerBracketAfterStandardDeductionHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRoth(model)
 
 	switch model.Input.CurrentFilingStatus {
@@ -70,7 +70,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateRoth(model *Model) []fl
 	case "married-joint":
 		return incomePerBracketAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return incomePerBracketAfterStandardDeductionMarriedSeperate
+		return incomePerBracketAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionHeadOfHousehold
 	default:
@@ -81,7 +81,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateRoth(model *Model) []fl
 func (c IncomePerBracketAfterStandardDeduction) CalculateRothRetirement(model *Model) []float64 {
 	incomePerBracketAfterStandardDeductionSingle := c.IncomePerBracketAfterStandardDeductionSingleCalculation.CalculateRothRetirement(model)
 	incomePerBracketAfterStandardDeductionMarriedJoint := c.IncomePerBracketAfterStandardDeductionMarriedJointCalculation.CalculateRothRetirement(model)
-	incomePerBracketAfterStandardDeductionMarriedSeperate := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRothRetirement(model)
+	incomePerBracketAfterStandardDeductionMarriedSeparate := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateRothRetirement(model)
 	incomePerBracketAfterStandardDeductionHeadOfHousehold := c.IncomePerBracketAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRothRetirement(model)
 
 	switch model.Input.RetirementFilingStatus {
@@ -90,7 +90,7 @@ func (c IncomePerBracketAfterStandardDeduction) CalculateRothRetirement(model *M
 	case "married-joint":
 		return incomePerBracketAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return incomePerBracketAfterStandardDeductionMarriedSeperate
+		return incomePerBracketAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionHeadOfHousehold
 	default:

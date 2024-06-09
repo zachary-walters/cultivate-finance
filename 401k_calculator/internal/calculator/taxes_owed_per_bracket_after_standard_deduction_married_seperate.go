@@ -1,61 +1,61 @@
 package calculator
 
-type TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation SequenceCalculation
+type TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation SequenceCalculation
 
-type TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate struct {
-	IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation
+type TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate struct {
+	IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation
 }
 
-func NewTaxesOwedPerBracketAfterStandardDeductionMarriedSeperate() TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate {
-	return TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate{
-		IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation: NewIncomePerBracketAfterStandardDeductionMarriedSeperate(),
+func NewTaxesOwedPerBracketAfterStandardDeductionMarriedSeparate() TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate {
+	return TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate{
+		IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation: NewIncomePerBracketAfterStandardDeductionMarriedSeparate(),
 	}
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate) CalculateTraditional(model *Model) []float64 {
-	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditional(model)
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate) CalculateTraditional(model *Model) []float64 {
+	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditional(model)
 
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := make([]float64, len(model.MarriedSeperateTaxRates))
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := make([]float64, len(model.MarriedSeparateTaxRates))
 
-	for idx, taxRate := range model.MarriedSeperateTaxRates {
-		taxesOwedPerBracketAfterStandardDeductionMarriedSeperate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
+	for idx, taxRate := range model.MarriedSeparateTaxRates {
+		taxesOwedPerBracketAfterStandardDeductionMarriedSeparate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
 	}
 
-	return taxesOwedPerBracketAfterStandardDeductionMarriedSeperate
+	return taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate) CalculateTraditionalRetirement(model *Model) []float64 {
-	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate) CalculateTraditionalRetirement(model *Model) []float64 {
+	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditionalRetirement(model)
 
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := make([]float64, len(model.MarriedSeperateTaxRates))
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := make([]float64, len(model.MarriedSeparateTaxRates))
 
-	for idx, taxRate := range model.MarriedSeperateTaxRates {
-		taxesOwedPerBracketAfterStandardDeductionMarriedSeperate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
+	for idx, taxRate := range model.MarriedSeparateTaxRates {
+		taxesOwedPerBracketAfterStandardDeductionMarriedSeparate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
 	}
 
-	return taxesOwedPerBracketAfterStandardDeductionMarriedSeperate
+	return taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate) CalculateRoth(model *Model) []float64 {
-	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRoth(model)
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate) CalculateRoth(model *Model) []float64 {
+	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateRoth(model)
 
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := make([]float64, len(model.MarriedSeperateTaxRates))
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := make([]float64, len(model.MarriedSeparateTaxRates))
 
-	for idx, taxRate := range model.MarriedSeperateTaxRates {
-		taxesOwedPerBracketAfterStandardDeductionMarriedSeperate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
+	for idx, taxRate := range model.MarriedSeparateTaxRates {
+		taxesOwedPerBracketAfterStandardDeductionMarriedSeparate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
 	}
 
-	return taxesOwedPerBracketAfterStandardDeductionMarriedSeperate
+	return taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 }
 
-func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeperate) CalculateRothRetirement(model *Model) []float64 {
-	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRothRetirement(model)
+func (c TaxesOwedPerBracketAfterStandardDeductionMarriedSeparate) CalculateRothRetirement(model *Model) []float64 {
+	incomePerBracketAfterStandardDeduction := c.IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateRothRetirement(model)
 
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := make([]float64, len(model.MarriedSeperateTaxRates))
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := make([]float64, len(model.MarriedSeparateTaxRates))
 
-	for idx, taxRate := range model.MarriedSeperateTaxRates {
-		taxesOwedPerBracketAfterStandardDeductionMarriedSeperate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
+	for idx, taxRate := range model.MarriedSeparateTaxRates {
+		taxesOwedPerBracketAfterStandardDeductionMarriedSeparate[idx] = incomePerBracketAfterStandardDeduction[idx] * taxRate.Rate
 	}
 
-	return taxesOwedPerBracketAfterStandardDeductionMarriedSeperate
+	return taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 }

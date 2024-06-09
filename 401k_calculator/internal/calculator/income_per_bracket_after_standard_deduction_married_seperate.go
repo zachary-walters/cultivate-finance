@@ -1,29 +1,29 @@
 package calculator
 
-type IncomePerBracketAfterStandardDeductionMarriedSeperateCalculation SequenceCalculation
+type IncomePerBracketAfterStandardDeductionMarriedSeparateCalculation SequenceCalculation
 
-type IncomePerBracketAfterStandardDeductionMarriedSeperate struct {
+type IncomePerBracketAfterStandardDeductionMarriedSeparate struct {
 	AbstractIncomePerBracketAfterStandardDeductionCalculation
 }
 
-func NewIncomePerBracketAfterStandardDeductionMarriedSeperate() IncomePerBracketAfterStandardDeductionMarriedSeperate {
-	return IncomePerBracketAfterStandardDeductionMarriedSeperate{
+func NewIncomePerBracketAfterStandardDeductionMarriedSeparate() IncomePerBracketAfterStandardDeductionMarriedSeparate {
+	return IncomePerBracketAfterStandardDeductionMarriedSeparate{
 		AbstractIncomePerBracketAfterStandardDeductionCalculation: NewAbstractIncomePerBracketAfterStandardDeduction(),
 	}
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedSeperate) CalculateTraditional(model *Model) []float64 {
-	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(model, model.MarriedSeperateTaxRates)
+func (c IncomePerBracketAfterStandardDeductionMarriedSeparate) CalculateTraditional(model *Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditional(model, model.MarriedSeparateTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedSeperate) CalculateTraditionalRetirement(model *Model) []float64 {
-	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model, model.MarriedSeperateTaxRates)
+func (c IncomePerBracketAfterStandardDeductionMarriedSeparate) CalculateTraditionalRetirement(model *Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateTraditionalRetirement(model, model.MarriedSeparateTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedSeperate) CalculateRoth(model *Model) []float64 {
-	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRoth(model, model.MarriedSeperateTaxRates)
+func (c IncomePerBracketAfterStandardDeductionMarriedSeparate) CalculateRoth(model *Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRoth(model, model.MarriedSeparateTaxRates)
 }
 
-func (c IncomePerBracketAfterStandardDeductionMarriedSeperate) CalculateRothRetirement(model *Model) []float64 {
-	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRothRetirement(model, model.MarriedSeperateTaxRates)
+func (c IncomePerBracketAfterStandardDeductionMarriedSeparate) CalculateRothRetirement(model *Model) []float64 {
+	return c.AbstractIncomePerBracketAfterStandardDeductionCalculation.CalculateRothRetirement(model, model.MarriedSeparateTaxRates)
 }

@@ -35,7 +35,7 @@ func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRoth
 func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 	totalTaxesOwedAfterStandardDeductionAndContributionsSingle := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsSingle)
 	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint)
-	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate)
+	totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate)
 	totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold)
 
 	tests := []struct {
@@ -59,7 +59,7 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 			},
 		},
 		{
-			name: "Test Case Married Seperate",
+			name: "Test Case Married Separate",
 			model: calculator.Model{
 				Input: calculator.Input{
 					CurrentFilingStatus: "married-seperate",
@@ -79,14 +79,14 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributions(t *testing.T) {
 	c := &calculator.TotalTaxesOwedAfterStandardDeductionAndContributions{
 		TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation:          totalTaxesOwedAfterStandardDeductionAndContributionsSingle,
 		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedJointCalculation:    totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint,
-		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperateCalculation: totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate,
+		TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparateCalculation: totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate,
 		TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold,
 	}
 
 	for _, test := range tests {
 		totalTaxesOwedAfterStandardDeductionAndContributionsSingle.On("CalculateTraditional", &test.model).Return(1337.0)
 		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint.On("CalculateTraditional", &test.model).Return(349587.0)
-		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeperate.On("CalculateTraditional", &test.model).Return(10003.0)
+		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate.On("CalculateTraditional", &test.model).Return(10003.0)
 		totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold.On("CalculateTraditional", &test.model).Return(4387.8)
 
 		expected := 0.0

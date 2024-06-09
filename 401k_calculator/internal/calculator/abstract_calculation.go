@@ -77,7 +77,7 @@ type Model struct {
 	Input                                Input
 	SingleTaxRates                       []TaxRate `json:"single_tax_rates"`
 	MarriedJointTaxRates                 []TaxRate `json:"married_joint_tax_rates"`
-	MarriedSeperateTaxRates              []TaxRate `json:"married_seperate_tax_rates"`
+	MarriedSeparateTaxRates              []TaxRate `json:"married_seperate_tax_rates"`
 	HeadOfHouseholdTaxRates              []TaxRate `json:"head_of_household_tax_rates"`
 	SocialSecurityTaxRatesIndividual     []TaxRate `json:"social_security_tax_rates_individual"`
 	SocialSecurityTaxRatesJoint          []TaxRate `json:"social_security_tax_rates_joint"`
@@ -92,7 +92,7 @@ func NewModel(input Input) *Model {
 		Input:                                input,
 		SingleTaxRates:                       Constants.SingleTaxRates,
 		MarriedJointTaxRates:                 Constants.MarriedJointTaxRates,
-		MarriedSeperateTaxRates:              Constants.MarriedSeperateTaxRates,
+		MarriedSeparateTaxRates:              Constants.MarriedSeparateTaxRates,
 		HeadOfHouseholdTaxRates:              Constants.HeadOfHouseholdTaxRates,
 		SocialSecurityTaxRatesIndividual:     Constants.SocialSecurityTaxRatesIndividual,
 		SocialSecurityTaxRatesJoint:          Constants.SocialSecurityTaxRatesJoint,

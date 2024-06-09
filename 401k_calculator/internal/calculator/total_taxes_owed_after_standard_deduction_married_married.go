@@ -1,61 +1,61 @@
 package calculator
 
-type TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation Calculation
+type TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation Calculation
 
-type TotalTaxesOwedAfterStandardDeductionMarriedSeperate struct {
-	TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation
+type TotalTaxesOwedAfterStandardDeductionMarriedSeparate struct {
+	TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation
 }
 
-func NewTotalTaxesOwedAfterStandardDeductionMarriedSeperate() TotalTaxesOwedAfterStandardDeductionMarriedSeperate {
-	return TotalTaxesOwedAfterStandardDeductionMarriedSeperate{
-		TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation: NewTaxesOwedPerBracketAfterStandardDeductionMarriedSeperate(),
+func NewTotalTaxesOwedAfterStandardDeductionMarriedSeparate() TotalTaxesOwedAfterStandardDeductionMarriedSeparate {
+	return TotalTaxesOwedAfterStandardDeductionMarriedSeparate{
+		TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation: NewTaxesOwedPerBracketAfterStandardDeductionMarriedSeparate(),
 	}
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionMarriedSeperate) CalculateTraditional(model *Model) float64 {
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditional(model)
+func (c TotalTaxesOwedAfterStandardDeductionMarriedSeparate) CalculateTraditional(model *Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditional(model)
 
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := 0.0
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := 0.0
 
-	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeperate {
-		totalTaxesOwedAfterStandardDeductionMarriedSeperate += value
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeparate {
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate += value
 	}
 
-	return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+	return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionMarriedSeperate) CalculateTraditionalRetirement(model *Model) float64 {
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
+func (c TotalTaxesOwedAfterStandardDeductionMarriedSeparate) CalculateTraditionalRetirement(model *Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditionalRetirement(model)
 
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := 0.0
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := 0.0
 
-	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeperate {
-		totalTaxesOwedAfterStandardDeductionMarriedSeperate += value
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeparate {
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate += value
 	}
 
-	return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+	return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionMarriedSeperate) CalculateRoth(model *Model) float64 {
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRoth(model)
+func (c TotalTaxesOwedAfterStandardDeductionMarriedSeparate) CalculateRoth(model *Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateRoth(model)
 
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := 0.0
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := 0.0
 
-	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeperate {
-		totalTaxesOwedAfterStandardDeductionMarriedSeperate += value
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeparate {
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate += value
 	}
 
-	return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+	return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 }
 
-func (c TotalTaxesOwedAfterStandardDeductionMarriedSeperate) CalculateRothRetirement(model *Model) float64 {
-	taxesOwedPerBracketAfterStandardDeductionMarriedSeperate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeperateCalculation.CalculateRothRetirement(model)
+func (c TotalTaxesOwedAfterStandardDeductionMarriedSeparate) CalculateRothRetirement(model *Model) float64 {
+	taxesOwedPerBracketAfterStandardDeductionMarriedSeparate := c.TaxesOwedPerBracketAfterStandardDeductionMarriedSeparateCalculation.CalculateRothRetirement(model)
 
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := 0.0
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := 0.0
 
-	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeperate {
-		totalTaxesOwedAfterStandardDeductionMarriedSeperate += value
+	for _, value := range taxesOwedPerBracketAfterStandardDeductionMarriedSeparate {
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate += value
 	}
 
-	return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+	return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 }

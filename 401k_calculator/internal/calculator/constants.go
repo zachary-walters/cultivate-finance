@@ -4,7 +4,7 @@ type constants struct {
 	InflationRate                        float64
 	SingleTaxRates                       []TaxRate
 	MarriedJointTaxRates                 []TaxRate
-	MarriedSeperateTaxRates              []TaxRate
+	MarriedSeparateTaxRates              []TaxRate
 	HeadOfHouseholdTaxRates              []TaxRate
 	SocialSecurityTaxRatesIndividual     []TaxRate
 	SocialSecurityTaxRatesJoint          []TaxRate
@@ -76,7 +76,7 @@ var Constants = constants{
 			Rate: 0.37,
 		},
 	},
-	MarriedSeperateTaxRates: []TaxRate{
+	MarriedSeparateTaxRates: []TaxRate{
 		{
 			Cap:  10275,
 			Rate: 0.10,

@@ -35,7 +35,7 @@ func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model
 func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 	totalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeperate)
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeparate)
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
 
 	tests := []struct {
@@ -59,7 +59,7 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 			},
 		},
 		{
-			name: "Test Case Married Seperate",
+			name: "Test Case Married Separate",
 			model: calculator.Model{
 				Input: calculator.Input{
 					CurrentFilingStatus: "married_seperate",
@@ -79,13 +79,13 @@ func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
 	for _, test := range tests {
 		totalTaxesOwedAfterStandardDeductionSingle.On("CalculateTraditional", &test.model).Return(1337.0)
 		totalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateTraditional", &test.model).Return(90245.7)
-		totalTaxesOwedAfterStandardDeductionMarriedSeperate.On("CalculateTraditional", &test.model).Return(345.89)
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate.On("CalculateTraditional", &test.model).Return(345.89)
 		totalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateTraditional", &test.model).Return(1233214.908)
 
 		totalTaxesOwedAfterStandardDeduction := calculator.TotalTaxesOwedAfterStandardDeduction{
 			TotalTaxesOwedAfterStandardDeductionSingleCalculation:          totalTaxesOwedAfterStandardDeductionSingle,
 			TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    totalTaxesOwedAfterStandardDeductionMarriedJoint,
-			TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation: totalTaxesOwedAfterStandardDeductionMarriedSeperate,
+			TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: totalTaxesOwedAfterStandardDeductionMarriedSeparate,
 			TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: totalTaxesOwedAfterStandardDeductionHeadOfHousehold,
 		}
 		t.Run(test.name, func(t *testing.T) {

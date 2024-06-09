@@ -5,7 +5,7 @@ type TotalTaxesOwedAfterStandardDeductionCalculation Calculation
 type TotalTaxesOwedAfterStandardDeduction struct {
 	TotalTaxesOwedAfterStandardDeductionSingleCalculation
 	TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation
-	TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation
+	TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation
 	TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation
 }
 
@@ -13,7 +13,7 @@ func NewTotalTaxesOwedAfterStandardDeduction() TotalTaxesOwedAfterStandardDeduct
 	return TotalTaxesOwedAfterStandardDeduction{
 		TotalTaxesOwedAfterStandardDeductionSingleCalculation:          NewTotalTaxesOwedAfterStandardDeductionSingle(),
 		TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    NewTotalTaxesOwedAfterStandardDeductionMarriedJoint(),
-		TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation: NewTotalTaxesOwedAfterStandardDeductionMarriedSeperate(),
+		TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: NewTotalTaxesOwedAfterStandardDeductionMarriedSeparate(),
 		TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: NewTotalTaxesOwedAfterStandardDeductionHeadOfHousehold(),
 	}
 }
@@ -21,7 +21,7 @@ func NewTotalTaxesOwedAfterStandardDeduction() TotalTaxesOwedAfterStandardDeduct
 func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateTraditional(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateTraditional(model)
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditional(model)
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditional(model)
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditional(model)
 
 	switch model.Input.CurrentFilingStatus {
@@ -30,7 +30,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model *Model)
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
@@ -41,7 +41,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model *Model)
 func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateTraditionalRetirement(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateTraditionalRetirement(model)
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateTraditionalRetirement(model)
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation.CalculateTraditionalRetirement(model)
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation.CalculateTraditionalRetirement(model)
 
 	switch model.Input.RetirementFilingStatus {
@@ -50,7 +50,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(mod
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
@@ -61,7 +61,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(mod
 func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateRoth(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateRoth(model)
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateRoth(model)
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation.CalculateRoth(model)
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRoth(model)
 
 	switch model.Input.CurrentFilingStatus {
@@ -70,7 +70,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model *Model) float6
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
@@ -81,7 +81,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model *Model) float6
 func (c TotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model *Model) float64 {
 	totalTaxesOwedAfterStandardDeductionSingle := c.TotalTaxesOwedAfterStandardDeductionSingleCalculation.CalculateRothRetirement(model)
 	totalTaxesOwedAfterStandardDeductionMarriedJoint := c.TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation.CalculateRothRetirement(model)
-	totalTaxesOwedAfterStandardDeductionMarriedSeperate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeperateCalculation.CalculateRothRetirement(model)
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate := c.TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation.CalculateRothRetirement(model)
 	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := c.TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation.CalculateRothRetirement(model)
 
 	switch model.Input.RetirementFilingStatus {
@@ -90,7 +90,7 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model *Mod
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
 	case "married-seperate":
-		return totalTaxesOwedAfterStandardDeductionMarriedSeperate
+		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:

@@ -59,7 +59,7 @@ var incomePerBracketAfterStandardDeductionMarriedJointTests = []struct {
 	},
 }
 
-func TestNewTaxesOwedPerBracketAfterStandardDeductionMarriedJoint(t *testing.T) {
+func NewIncomePerBracketAfterStandardDeductionMarriedJoint(t *testing.T) {
 	actual := calculator.NewIncomePerBracketAfterStandardDeductionMarriedJoint()
 	expected := calculator.IncomePerBracketAfterStandardDeductionMarriedJoint{
 		AbstractIncomePerBracketAfterStandardDeductionCalculation: calculator.NewAbstractIncomePerBracketAfterStandardDeduction(),
