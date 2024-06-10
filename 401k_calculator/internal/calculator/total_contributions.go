@@ -26,7 +26,7 @@ func (c TotalContributions) CalculateTraditional(model *Model) float64 {
 }
 
 func (c TotalContributions) CalculateTraditionalRetirement(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	return 0.0
 }
 
 func (c TotalContributions) CalculateRoth(model *Model) float64 {
@@ -41,5 +41,5 @@ func (c TotalContributions) CalculateRoth(model *Model) float64 {
 }
 
 func (c TotalContributions) CalculateRothRetirement(model *Model) float64 {
-	return c.CalculateRoth(model)
+	return 0.0
 }

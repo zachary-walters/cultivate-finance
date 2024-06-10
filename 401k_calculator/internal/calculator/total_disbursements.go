@@ -31,7 +31,7 @@ func (c TotalDisbursements) CalculateTraditionalRetirement(model *Model) float64
 }
 
 func (c TotalDisbursements) CalculateRoth(model *Model) float64 {
-	return c.CalculateRothRetirement(model)
+	return 0
 }
 
 func (c TotalDisbursements) CalculateRothRetirement(model *Model) float64 {

@@ -22,7 +22,10 @@ func (c TotalTaxableIncome) CalculateTraditional(model *Model) float64 {
 }
 
 func (c TotalTaxableIncome) CalculateTraditionalRetirement(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateTraditionalRetirement(model)
+	socialSecurityTaxableIncomeIndividual := c.SocialSecurityTaxableIncomeIndividualCalculation.CalculateTraditionalRetirement(model)
+
+	return adjustedGrossIncome + socialSecurityTaxableIncomeIndividual
 }
 
 func (c TotalTaxableIncome) CalculateRoth(model *Model) float64 {
@@ -33,5 +36,8 @@ func (c TotalTaxableIncome) CalculateRoth(model *Model) float64 {
 }
 
 func (c TotalTaxableIncome) CalculateRothRetirement(model *Model) float64 {
-	return c.CalculateRoth(model)
+	adjustedGrossIncome := c.AdjustedGrossIncomeCalculation.CalculateRothRetirement(model)
+	socialSecurityTaxableIncomeIndividual := c.SocialSecurityTaxableIncomeIndividualCalculation.CalculateRothRetirement(model)
+
+	return adjustedGrossIncome + socialSecurityTaxableIncomeIndividual
 }
