@@ -29,12 +29,12 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditional(model *Model)
 		return totalTaxesOwedAfterStandardDeductionSingle
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
-	case "married-seperate":
+	case "married-separate":
 		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
-		return 0
+		return totalTaxesOwedAfterStandardDeductionSingle
 	}
 }
 
@@ -49,12 +49,12 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateTraditionalRetirement(mod
 		return totalTaxesOwedAfterStandardDeductionSingle
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
-	case "married-seperate":
+	case "married-separate":
 		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
-		return 0
+		return totalTaxesOwedAfterStandardDeductionSingle
 	}
 }
 
@@ -69,12 +69,12 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateRoth(model *Model) float6
 		return totalTaxesOwedAfterStandardDeductionSingle
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
-	case "married-seperate":
+	case "married-separate":
 		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
-		return 0
+		return totalTaxesOwedAfterStandardDeductionSingle
 	}
 }
 
@@ -89,11 +89,11 @@ func (c TotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model *Mod
 		return totalTaxesOwedAfterStandardDeductionSingle
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionMarriedJoint
-	case "married-seperate":
+	case "married-separate":
 		return totalTaxesOwedAfterStandardDeductionMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 	default:
-		return 0
+		return totalTaxesOwedAfterStandardDeductionSingle
 	}
 }

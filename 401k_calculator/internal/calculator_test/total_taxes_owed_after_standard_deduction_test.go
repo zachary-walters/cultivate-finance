@@ -32,78 +32,241 @@ func (m *MockTotalTaxesOwedAfterStandardDeduction) CalculateRothRetirement(model
 	return args.Get(0).(float64)
 }
 
-func TestTotalTaxesOwedAfterStandardDeductionCalculate(t *testing.T) {
-	totalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
-	totalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
-	totalTaxesOwedAfterStandardDeductionMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeparate)
-	totalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+var totalTaxesOwedAfterStandardDeductionTests = []struct {
+	name                                                string
+	model                                               calculator.Model
+	totalTaxesOwedAfterStandardDeductionSingle          float64
+	totalTaxesOwedAfterStandardDeductionMarriedJoint    float64
+	totalTaxesOwedAfterStandardDeductionMarriedSeparate float64
+	totalTaxesOwedAfterStandardDeductionHeadOfHousehold float64
+}{
+	{
+		name: "Test Case Single",
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentFilingStatus:    "single",
+				RetirementFilingStatus: "single",
+			},
+		},
+		totalTaxesOwedAfterStandardDeductionSingle:          43241,
+		totalTaxesOwedAfterStandardDeductionMarriedJoint:    509865,
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate: 23487,
+		totalTaxesOwedAfterStandardDeductionHeadOfHousehold: 123,
+	},
+	{
+		name: "Test Case Married Joint",
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentFilingStatus:    "married-joint",
+				RetirementFilingStatus: "married-joint",
+			},
+		},
+		totalTaxesOwedAfterStandardDeductionSingle:          43241,
+		totalTaxesOwedAfterStandardDeductionMarriedJoint:    509865,
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate: 23487,
+		totalTaxesOwedAfterStandardDeductionHeadOfHousehold: 123,
+	},
+	{
+		name: "Test Case Married Separate",
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentFilingStatus:    "married-separate",
+				RetirementFilingStatus: "married-separate",
+			},
+		},
+		totalTaxesOwedAfterStandardDeductionSingle:          43241,
+		totalTaxesOwedAfterStandardDeductionMarriedJoint:    509865,
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate: 23487,
+		totalTaxesOwedAfterStandardDeductionHeadOfHousehold: 123,
+	},
+	{
+		name: "Test Case Head of Household",
+		model: calculator.Model{
+			Input: calculator.Input{
+				CurrentFilingStatus:    "head-of-household",
+				RetirementFilingStatus: "head-of-household",
+			},
+		},
+		totalTaxesOwedAfterStandardDeductionSingle:          43241,
+		totalTaxesOwedAfterStandardDeductionMarriedJoint:    509865,
+		totalTaxesOwedAfterStandardDeductionMarriedSeparate: 23487,
+		totalTaxesOwedAfterStandardDeductionHeadOfHousehold: 123,
+	},
+	{
+		name: "Test Case default",
+	},
+}
 
-	tests := []struct {
-		name  string
-		model calculator.Model
-	}{
-		{
-			name: "Test Case Single",
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentFilingStatus: "single",
-				},
-			},
-		},
-		{
-			name: "Test Case Married Joint",
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentFilingStatus: "married_joint",
-				},
-			},
-		},
-		{
-			name: "Test Case Married Separate",
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentFilingStatus: "married_seperate",
-				},
-			},
-		},
-		{
-			name: "Test Case Head of Household",
-			model: calculator.Model{
-				Input: calculator.Input{
-					CurrentFilingStatus: "head_of_household",
-				},
-			},
-		},
+func TestNewTotalTaxesOwedAfterStandardDeduction(t *testing.T) {
+	actual := calculator.NewTotalTaxesOwedAfterStandardDeduction()
+	expected := calculator.TotalTaxesOwedAfterStandardDeduction{
+		TotalTaxesOwedAfterStandardDeductionSingleCalculation:          calculator.NewTotalTaxesOwedAfterStandardDeductionSingle(),
+		TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    calculator.NewTotalTaxesOwedAfterStandardDeductionMarriedJoint(),
+		TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: calculator.NewTotalTaxesOwedAfterStandardDeductionMarriedSeparate(),
+		TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: calculator.NewTotalTaxesOwedAfterStandardDeductionHeadOfHousehold(),
 	}
 
-	for _, test := range tests {
-		totalTaxesOwedAfterStandardDeductionSingle.On("CalculateTraditional", &test.model).Return(1337.0)
-		totalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateTraditional", &test.model).Return(90245.7)
-		totalTaxesOwedAfterStandardDeductionMarriedSeparate.On("CalculateTraditional", &test.model).Return(345.89)
-		totalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateTraditional", &test.model).Return(1233214.908)
+	assert.Equal(t, expected, actual)
+}
 
-		totalTaxesOwedAfterStandardDeduction := calculator.TotalTaxesOwedAfterStandardDeduction{
-			TotalTaxesOwedAfterStandardDeductionSingleCalculation:          totalTaxesOwedAfterStandardDeductionSingle,
-			TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    totalTaxesOwedAfterStandardDeductionMarriedJoint,
-			TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: totalTaxesOwedAfterStandardDeductionMarriedSeparate,
-			TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: totalTaxesOwedAfterStandardDeductionHeadOfHousehold,
-		}
+func TestTotalTaxesOwedAfterStandardDeductionCalculateTraditional(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionTests {
 		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			mockTotalTaxesOwedAfterStandardDeductionSingle.On("CalculateTraditional", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateTraditional", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate.On("CalculateTraditional", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateTraditional", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			c := calculator.TotalTaxesOwedAfterStandardDeduction{
+				TotalTaxesOwedAfterStandardDeductionSingleCalculation:          mockTotalTaxesOwedAfterStandardDeductionSingle,
+				TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    mockTotalTaxesOwedAfterStandardDeductionMarriedJoint,
+				TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate,
+				TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold,
+			}
+
 			expected := 0.0
 			switch test.model.Input.CurrentFilingStatus {
 			case "single":
-				expected = 1337.0
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
 			case "married-joint":
-				expected = 90245.7
-			case "married-seperate":
-				expected = 345.89
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedJoint
+			case "married-separate":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedSeparate
 			case "head-of-household":
-				expected = 1233214.908
+				expected = test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold
 			default:
-				expected = 0
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
 			}
 
-			actual := totalTaxesOwedAfterStandardDeduction.CalculateTraditional(&test.model)
+			actual := c.CalculateTraditional(&test.model)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestTotalTaxesOwedAfterStandardDeductionCalculateTraditionalRetirement(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			mockTotalTaxesOwedAfterStandardDeductionSingle.On("CalculateTraditionalRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateTraditionalRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate.On("CalculateTraditionalRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateTraditionalRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			c := calculator.TotalTaxesOwedAfterStandardDeduction{
+				TotalTaxesOwedAfterStandardDeductionSingleCalculation:          mockTotalTaxesOwedAfterStandardDeductionSingle,
+				TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    mockTotalTaxesOwedAfterStandardDeductionMarriedJoint,
+				TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate,
+				TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold,
+			}
+
+			expected := 0.0
+			switch test.model.Input.RetirementFilingStatus {
+			case "single":
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
+			case "married-joint":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedJoint
+			case "married-separate":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedSeparate
+			case "head-of-household":
+				expected = test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold
+			default:
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
+			}
+
+			actual := c.CalculateTraditionalRetirement(&test.model)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestTotalTaxesOwedAfterStandardDeductionCalculateRoth(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			mockTotalTaxesOwedAfterStandardDeductionSingle.On("CalculateRoth", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateRoth", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate.On("CalculateRoth", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateRoth", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			c := calculator.TotalTaxesOwedAfterStandardDeduction{
+				TotalTaxesOwedAfterStandardDeductionSingleCalculation:          mockTotalTaxesOwedAfterStandardDeductionSingle,
+				TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    mockTotalTaxesOwedAfterStandardDeductionMarriedJoint,
+				TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate,
+				TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold,
+			}
+
+			expected := 0.0
+			switch test.model.Input.CurrentFilingStatus {
+			case "single":
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
+			case "married-joint":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedJoint
+			case "married-separate":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedSeparate
+			case "head-of-household":
+				expected = test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold
+			default:
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
+			}
+
+			actual := c.CalculateRoth(&test.model)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestTotalTaxesOwedAfterStandardDeductionCalculateRothRetirement(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalTaxesOwedAfterStandardDeductionSingle := new(MockTotalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint := new(MockTotalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate := new(MockTotalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold := new(MockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			mockTotalTaxesOwedAfterStandardDeductionSingle.On("CalculateRothRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionSingle)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedJoint.On("CalculateRothRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedJoint)
+			mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate.On("CalculateRothRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionMarriedSeparate)
+			mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold.On("CalculateRothRetirement", &test.model).Return(test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold)
+
+			c := calculator.TotalTaxesOwedAfterStandardDeduction{
+				TotalTaxesOwedAfterStandardDeductionSingleCalculation:          mockTotalTaxesOwedAfterStandardDeductionSingle,
+				TotalTaxesOwedAfterStandardDeductionMarriedJointCalculation:    mockTotalTaxesOwedAfterStandardDeductionMarriedJoint,
+				TotalTaxesOwedAfterStandardDeductionMarriedSeparateCalculation: mockTotalTaxesOwedAfterStandardDeductionMarriedSeparate,
+				TotalTaxesOwedAfterStandardDeductionHeadOfHouseholdCalculation: mockTotalTaxesOwedAfterStandardDeductionHeadOfHousehold,
+			}
+
+			expected := 0.0
+			switch test.model.Input.RetirementFilingStatus {
+			case "single":
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
+			case "married-joint":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedJoint
+			case "married-separate":
+				expected = test.totalTaxesOwedAfterStandardDeductionMarriedSeparate
+			case "head-of-household":
+				expected = test.totalTaxesOwedAfterStandardDeductionHeadOfHousehold
+			default:
+				expected = test.totalTaxesOwedAfterStandardDeductionSingle
+			}
+
+			actual := c.CalculateRothRetirement(&test.model)
 
 			assert.Equal(t, expected, actual)
 		})
