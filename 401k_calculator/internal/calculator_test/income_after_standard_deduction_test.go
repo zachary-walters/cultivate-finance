@@ -1,7 +1,6 @@
 package test
 
 import (
-	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -43,21 +42,21 @@ var incomeAfterStandardDeductionTests = []struct {
 		name: "Test Case Basic",
 		model: calculator.Model{
 			Input: calculator.Input{
-				CurrentAnnualIncome: 60000,
+				CurrentAnnualIncome: 600000,
 			},
 		},
 		standardDeduction:  32984.0,
 		totalTaxableIncome: 9503.0,
 	},
 	{
-		name: "Test Case Infinity",
+		name: "Test Case Negative",
 		model: calculator.Model{
 			Input: calculator.Input{
-				CurrentAnnualIncome: math.MaxFloat64,
+				CurrentAnnualIncome: -100000,
 			},
 		},
-		standardDeduction:  320984.0,
-		totalTaxableIncome: 2947.0,
+		standardDeduction:  -320984.0,
+		totalTaxableIncome: -2947.0,
 	},
 }
 
@@ -82,7 +81,12 @@ func TestIncomeAfterStandardDeductionCalculateTraditional(t *testing.T) {
 			}
 
 			result := c.CalculateTraditional(&test.model)
-			expected := test.model.Input.CurrentAnnualIncome - test.standardDeduction
+			expected := func() float64 {
+				if test.model.Input.CurrentAnnualIncome-test.standardDeduction <= 0 {
+					return 0.0
+				}
+				return test.model.Input.CurrentAnnualIncome - test.standardDeduction
+			}()
 			assert.Equal(t, expected, result)
 		})
 	}
@@ -125,7 +129,12 @@ func TestIncomeAfterStandardDeductionCalculateRoth(t *testing.T) {
 			}
 
 			result := c.CalculateRoth(&test.model)
-			expected := test.model.Input.CurrentAnnualIncome - test.standardDeduction
+			expected := func() float64 {
+				if test.model.Input.CurrentAnnualIncome-test.standardDeduction <= 0 {
+					return 0.0
+				}
+				return test.model.Input.CurrentAnnualIncome - test.standardDeduction
+			}()
 			assert.Equal(t, expected, result)
 		})
 	}

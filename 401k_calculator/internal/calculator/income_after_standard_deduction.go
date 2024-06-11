@@ -18,6 +18,10 @@ func (c IncomeAfterStandardDeduction) CalculateTraditional(model *Model) float64
 	standardDeduction := c.StandardDeductionCalculation.CalculateTraditional(model)
 	currentAnnualIncome := model.Input.CurrentAnnualIncome
 
+	if currentAnnualIncome-standardDeduction <= 0 {
+		return 0.0
+	}
+
 	return currentAnnualIncome - standardDeduction
 }
 
@@ -25,12 +29,20 @@ func (c IncomeAfterStandardDeduction) CalculateTraditionalRetirement(model *Mode
 	standardDeduction := c.StandardDeductionCalculation.CalculateTraditionalRetirement(model)
 	combinedRetirementIncome := c.TotalTaxableIncomeCalculation.CalculateTraditionalRetirement(model)
 
-	return coalesce(combinedRetirementIncome - standardDeduction)
+	if combinedRetirementIncome-standardDeduction < 0 {
+		return 0.0
+	}
+
+	return combinedRetirementIncome - standardDeduction
 }
 
 func (c IncomeAfterStandardDeduction) CalculateRoth(model *Model) float64 {
 	standardDeduction := c.StandardDeductionCalculation.CalculateRoth(model)
 	currentAnnualIncome := model.Input.CurrentAnnualIncome
+
+	if currentAnnualIncome-standardDeduction < 0 {
+		return 0.0
+	}
 
 	return currentAnnualIncome - standardDeduction
 }
@@ -39,5 +51,9 @@ func (c IncomeAfterStandardDeduction) CalculateRothRetirement(model *Model) floa
 	standardDeduction := c.StandardDeductionCalculation.CalculateRothRetirement(model)
 	combinedRetirementIncome := c.TotalTaxableIncomeCalculation.CalculateRothRetirement(model)
 
-	return coalesce(combinedRetirementIncome - standardDeduction)
+	if combinedRetirementIncome-standardDeduction < 0 {
+		return 0.0
+	}
+
+	return combinedRetirementIncome - standardDeduction
 }

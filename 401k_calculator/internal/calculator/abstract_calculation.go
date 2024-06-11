@@ -75,6 +75,7 @@ type TaxRate struct {
 
 type Model struct {
 	Input                                Input
+	InflationRate                        float64
 	SingleTaxRates                       []TaxRate `json:"single_tax_rates"`
 	MarriedJointTaxRates                 []TaxRate `json:"married_joint_tax_rates"`
 	MarriedSeparateTaxRates              []TaxRate `json:"married_seperate_tax_rates"`
@@ -90,6 +91,7 @@ type Model struct {
 func NewModel(input Input) *Model {
 	return &Model{
 		Input:                                input,
+		InflationRate:                        Constants.InflationRate,
 		SingleTaxRates:                       Constants.SingleTaxRates,
 		MarriedJointTaxRates:                 Constants.MarriedJointTaxRates,
 		MarriedSeparateTaxRates:              Constants.MarriedSeparateTaxRates,
@@ -101,15 +103,6 @@ func NewModel(input Input) *Model {
 		STANDARD_DEDUCTION_MARRIED_SEPERATE:  Constants.STANDARD_DEDUCTION_MARRIED_SEPERATE,
 		STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: Constants.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD,
 	}
-}
-
-func coalesce[T int | float64](number T) T {
-	// if NaN or negative
-	if number != number || number < 0 {
-		return 0
-	}
-
-	return number
 }
 
 func CalculateSynchronous(model *Model, calculation any, datakey string) CalculationData {

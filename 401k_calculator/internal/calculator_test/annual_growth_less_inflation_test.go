@@ -58,7 +58,7 @@ func TestAnnualGrowthLessInflationCalculateTraditional(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.AnnualGrowthLessInflation{}
 
-			expected := test.model.Input.AnnualInvestmentGrowth - 0.03
+			expected := test.model.Input.AnnualInvestmentGrowth - test.model.InflationRate
 			actual := c.CalculateTraditional(&test.model)
 
 			assert.Equal(t, expected, actual)

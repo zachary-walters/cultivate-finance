@@ -11,7 +11,7 @@ func NewAnnualGrowthLessInflation() AnnualGrowthLessInflation {
 func (c AnnualGrowthLessInflation) CalculateTraditional(model *Model) float64 {
 	annualInvestmentGrowth := model.Input.AnnualInvestmentGrowth
 
-	return annualInvestmentGrowth - 0.03
+	return annualInvestmentGrowth - model.InflationRate
 }
 
 func (c AnnualGrowthLessInflation) CalculateTraditionalRetirement(model *Model) float64 {
