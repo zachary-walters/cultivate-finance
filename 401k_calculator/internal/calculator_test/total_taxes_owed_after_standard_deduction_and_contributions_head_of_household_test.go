@@ -32,27 +32,39 @@ func (m *MockTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 	return args.Get(0).(float64)
 }
 
-func TestTotalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculate(t *testing.T) {
-	tests := []struct {
-		name                                                      string
-		model                                                     calculator.Model
-		taxesOwedPerBracketAfterStandardDeductionAndContributions []float64
-	}{
-		{
-			name:  "Test Case 0",
-			model: calculator.Model{},
-			taxesOwedPerBracketAfterStandardDeductionAndContributions: []float64{
-				1.0,
-				2.0,
-				3.0,
-				4.0,
-				5.0,
-				6.0,
-			},
+var totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdTests = []struct {
+	name                                                      string
+	model                                                     calculator.Model
+	taxesOwedPerBracketAfterStandardDeductionAndContributions []float64
+}{
+	{
+		name:  "Test Case 0",
+		model: calculator.Model{},
+		taxesOwedPerBracketAfterStandardDeductionAndContributions: []float64{
+			1.0,
+			2.0,
+			3.0,
+			4.0,
+			5.0,
+			6.0,
 		},
+	},
+	{
+		name: "Test Case 1",
+	},
+}
+
+func TestNewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold(t *testing.T) {
+	actual := calculator.NewTotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold()
+	expected := calculator.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold{
+		TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: calculator.NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold(),
 	}
 
-	for _, test := range tests {
+	assert.Equal(t, expected, actual)
+}
+
+func TestTotalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculateTraditional(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdTests {
 		mockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := new(MockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold)
 
 		c := &calculator.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold{
@@ -64,13 +76,58 @@ func TestTotalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHou
 		actual := c.CalculateTraditional(&test.model)
 		expected := func() float64 {
 			expected := 0.0
-			taxesOwedPerBracketAfterStandardDudectionAndContributions := mockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold.CalculateTraditional(&test.model)
-			for _, value := range taxesOwedPerBracketAfterStandardDudectionAndContributions {
+			for _, value := range test.taxesOwedPerBracketAfterStandardDeductionAndContributions {
 				expected += value
 			}
 
 			return expected
 		}()
+
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestTotalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculateTraditionalRetirement(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdTests {
+		c := &calculator.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold{}
+
+		actual := c.CalculateTraditionalRetirement(&test.model)
+		expected := 0.0
+
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestTotalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculateRoth(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdTests {
+		mockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold := new(MockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold)
+
+		c := &calculator.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold{
+			TaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculation: mockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold,
+		}
+
+		mockTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold.On("CalculateRoth", &test.model).Return(test.taxesOwedPerBracketAfterStandardDeductionAndContributions)
+
+		actual := c.CalculateRoth(&test.model)
+		expected := func() float64 {
+			expected := 0.0
+			for _, value := range test.taxesOwedPerBracketAfterStandardDeductionAndContributions {
+				expected += value
+			}
+
+			return expected
+		}()
+
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestTotalTaxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHouseholdCalculateRothRetirement(t *testing.T) {
+	for _, test := range totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHouseholdTests {
+		c := &calculator.TotalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold{}
+
+		actual := c.CalculateRothRetirement(&test.model)
+		expected := 0.0
 
 		assert.Equal(t, expected, actual)
 	}

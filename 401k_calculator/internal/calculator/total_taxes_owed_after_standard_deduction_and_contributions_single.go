@@ -4,13 +4,11 @@ type TotalTaxesOwedAfterStandardDeductionAndContributionsSingleCalculation Calcu
 
 type TotalTaxesOwedAfterStandardDeductionAndContributionsSingle struct {
 	TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation
-	TotalTaxesOwedAfterStandardDeductionSingleCalculation
 }
 
 func NewTotalTaxesOwedAfterStandardDeductionAndContributionsSingle() TotalTaxesOwedAfterStandardDeductionAndContributionsSingle {
 	return TotalTaxesOwedAfterStandardDeductionAndContributionsSingle{
 		TaxesOwedPerBracketAfterStandardDeductionAndContributionsSingleCalculation: NewTaxesOwedPerBracketAfterStandardDeductionAndContributionsSingle(),
-		TotalTaxesOwedAfterStandardDeductionSingleCalculation:                      NewTotalTaxesOwedAfterStandardDeductionSingle(),
 	}
 }
 
@@ -26,7 +24,7 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTra
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateTraditionalRetirement(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	return 0.0
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRoth(model *Model) float64 {
@@ -41,5 +39,5 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRot
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributionsSingle) CalculateRothRetirement(model *Model) float64 {
-	return c.CalculateRoth(model)
+	return 0.0
 }

@@ -24,7 +24,7 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate) Cal
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate) CalculateTraditionalRetirement(model *Model) float64 {
-	return c.CalculateTraditional(model)
+	return 0.0
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate) CalculateRoth(model *Model) float64 {
@@ -40,5 +40,5 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate) Cal
 }
 
 func (c TotalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate) CalculateRothRetirement(model *Model) float64 {
-	return c.CalculateRoth(model)
+	return 0.0
 }
