@@ -41,7 +41,8 @@ var standardDeductionTests = []struct {
 		model: calculator.Model{
 			STANDARD_DEDUCTION_SINGLE: 200,
 			Input: calculator.Input{
-				CurrentFilingStatus: "single",
+				CurrentFilingStatus:    "single",
+				RetirementFilingStatus: "single",
 			},
 		},
 	},
@@ -50,7 +51,8 @@ var standardDeductionTests = []struct {
 		model: calculator.Model{
 			STANDARD_DEDUCTION_MARRIED_JOINT: 200,
 			Input: calculator.Input{
-				CurrentFilingStatus: "married-joint",
+				CurrentFilingStatus:    "married-joint",
+				RetirementFilingStatus: "married-joint",
 			},
 		},
 	},
@@ -59,7 +61,8 @@ var standardDeductionTests = []struct {
 		model: calculator.Model{
 			STANDARD_DEDUCTION_MARRIED_SEPERATE: 200,
 			Input: calculator.Input{
-				CurrentFilingStatus: "married-seperate",
+				CurrentFilingStatus:    "married-separate",
+				RetirementFilingStatus: "married-separate",
 			},
 		},
 	},
@@ -68,7 +71,8 @@ var standardDeductionTests = []struct {
 		model: calculator.Model{
 			STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD: 200,
 			Input: calculator.Input{
-				CurrentFilingStatus: "head-of-household",
+				CurrentFilingStatus:    "head-of-household",
+				RetirementFilingStatus: "head-of-household",
 			},
 		},
 	},
@@ -77,7 +81,8 @@ var standardDeductionTests = []struct {
 		model: calculator.Model{
 			STANDARD_DEDUCTION_SINGLE: 200,
 			Input: calculator.Input{
-				CurrentFilingStatus: "unknown",
+				CurrentFilingStatus:    "unknown",
+				RetirementFilingStatus: "unknown",
 			},
 		},
 	},
@@ -103,7 +108,7 @@ func TestStandardDeductionCalculateTraditional(t *testing.T) {
 				expected = test.model.STANDARD_DEDUCTION_SINGLE
 			case "married-joint":
 				expected = test.model.STANDARD_DEDUCTION_MARRIED_JOINT
-			case "married-seperate":
+			case "married-separate":
 				expected = test.model.STANDARD_DEDUCTION_MARRIED_SEPERATE
 			case "head-of-household":
 				expected = test.model.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD
@@ -129,7 +134,7 @@ func TestStandardDeductionCalculateTraditionalRetirement(t *testing.T) {
 				expected = test.model.STANDARD_DEDUCTION_SINGLE
 			case "married-joint":
 				expected = test.model.STANDARD_DEDUCTION_MARRIED_JOINT
-			case "married-seperate":
+			case "married-separate":
 				expected = test.model.STANDARD_DEDUCTION_MARRIED_SEPERATE
 			case "head-of-household":
 				expected = test.model.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD

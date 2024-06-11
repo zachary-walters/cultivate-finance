@@ -14,7 +14,7 @@ func (c StandardDeduction) CalculateTraditional(model *Model) float64 {
 		return model.STANDARD_DEDUCTION_SINGLE
 	case "married-joint":
 		return model.STANDARD_DEDUCTION_MARRIED_JOINT
-	case "married-seperate":
+	case "married-separate":
 		return model.STANDARD_DEDUCTION_MARRIED_SEPERATE
 	case "head-of-household":
 		return model.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD
@@ -29,7 +29,7 @@ func (c StandardDeduction) CalculateTraditionalRetirement(model *Model) float64 
 		return model.STANDARD_DEDUCTION_SINGLE
 	case "married-joint":
 		return model.STANDARD_DEDUCTION_MARRIED_JOINT
-	case "married-seperate":
+	case "married-separate":
 		return model.STANDARD_DEDUCTION_MARRIED_SEPERATE
 	case "head-of-household":
 		return model.STANDARD_DEDUCTION_HEAD_OF_HOUSEHOLD

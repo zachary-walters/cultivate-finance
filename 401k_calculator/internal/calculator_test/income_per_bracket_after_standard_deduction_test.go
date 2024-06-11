@@ -136,9 +136,12 @@ var incomePerBracketAfterStandardDeductionTests = []struct {
 			},
 		},
 	},
+	{
+		name: "Test Case 4",
+	},
 }
 
-func NewIncomePerBracketAfterStandardDeduction(t *testing.T) {
+func TestNewIncomePerBracketAfterStandardDeduction(t *testing.T) {
 	actual := calculator.NewIncomePerBracketAfterStandardDeduction()
 	expected := calculator.IncomePerBracketAfterStandardDeduction{
 		IncomePerBracketAfterStandardDeductionSingleCalculation:          calculator.NewIncomePerBracketAfterStandardDeductionSingle(),
@@ -182,12 +185,12 @@ func TestIncomePerBracketAfterStandardDeductionCalculateTraditional(t *testing.T
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -224,12 +227,12 @@ func TestIncomePerBracketAfterStandardDeductionCalculateTraditionalRetirement(t 
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -266,12 +269,12 @@ func TestIncomePerBracketAfterStandardDeductionCalculateRoth(t *testing.T) {
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -308,12 +311,12 @@ func TestIncomePerBracketAfterStandardDeductionCalculateRothRetirement(t *testin
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }

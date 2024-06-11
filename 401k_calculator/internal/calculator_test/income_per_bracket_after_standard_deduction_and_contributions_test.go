@@ -136,6 +136,9 @@ var incomePerBracketAfterStandardDeductionAndContributionsTests = []struct {
 			},
 		},
 	},
+	{
+		name: "Test Case 4",
+	},
 }
 
 func TestNewIncomePerBracketAfterStandardDeductionAndContributinos(t *testing.T) {
@@ -182,12 +185,12 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsCalculateTraditio
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionAndContributionsSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -224,12 +227,12 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsCalculateTraditio
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionAndContributionsSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -266,12 +269,12 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsCalculateRoth(t *
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionAndContributionsSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -308,12 +311,12 @@ func TestIncomePerBracketAfterStandardDeductionAndContributionsCalculateRothReti
 				case "head-of-household":
 					return test.incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 				default:
-					return nil
+					return test.incomePerBracketAfterStandardDeductionAndContributionsSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }

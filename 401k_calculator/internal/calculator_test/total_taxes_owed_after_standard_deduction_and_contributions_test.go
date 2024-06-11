@@ -44,7 +44,8 @@ var totalTaxesOwedAfterStandardDeductionAndContributionsTests = []struct {
 		name: "Test Case Single",
 		model: calculator.Model{
 			Input: calculator.Input{
-				CurrentFilingStatus: "single",
+				CurrentFilingStatus:    "single",
+				RetirementFilingStatus: "single",
 			},
 		},
 		totalTaxesOwedAfterStandardDeductionAndContributionsSingle: 123456,
@@ -53,7 +54,8 @@ var totalTaxesOwedAfterStandardDeductionAndContributionsTests = []struct {
 		name: "Test Case Married Joint",
 		model: calculator.Model{
 			Input: calculator.Input{
-				CurrentFilingStatus: "married-joint",
+				CurrentFilingStatus:    "married-joint",
+				RetirementFilingStatus: "married-joint",
 			},
 		},
 		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint: 123456,
@@ -62,7 +64,8 @@ var totalTaxesOwedAfterStandardDeductionAndContributionsTests = []struct {
 		name: "Test Case Married Separate",
 		model: calculator.Model{
 			Input: calculator.Input{
-				CurrentFilingStatus: "married-seperate",
+				CurrentFilingStatus:    "married-separate",
+				RetirementFilingStatus: "married-separate",
 			},
 		},
 		totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate: 123456,
@@ -71,10 +74,14 @@ var totalTaxesOwedAfterStandardDeductionAndContributionsTests = []struct {
 		name: "Test Case Head of Household",
 		model: calculator.Model{
 			Input: calculator.Input{
-				CurrentFilingStatus: "head_of_household",
+				CurrentFilingStatus:    "head-of-household",
+				RetirementFilingStatus: "head-of-household",
 			},
 		},
 		totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold: 123456,
+	},
+	{
+		name: "Test Case default",
 	},
 }
 
@@ -117,11 +124,12 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributionsCalculateTraditiona
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 			case "married-joint":
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint
-			case "married-seperate":
+			case "married-separate":
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate
 			case "head-of-household":
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 			default:
+				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 			}
 
 			assert.Equal(t, expected, actual)
@@ -185,11 +193,12 @@ func TestTotalTaxesOwedAfterStandardDeductionAndContributionsCalculateRoth(t *te
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 			case "married-joint":
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint
-			case "married-seperate":
+			case "married-separate":
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate
 			case "head-of-household":
 				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 			default:
+				expected = test.totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 			}
 
 			assert.Equal(t, expected, actual)

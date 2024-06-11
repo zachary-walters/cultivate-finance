@@ -28,7 +28,7 @@ func (c SocialSecurityTaxableIncome) CalculateTraditional(model *Model) float64 
 	case "head-of-household":
 		return socialSecurityTaxableIncomeJointRoth
 	default:
-		return 0
+		return socialSecurityTaxableIncomeIndividualRoth
 	}
 }
 
@@ -46,7 +46,7 @@ func (c SocialSecurityTaxableIncome) CalculateTraditionalRetirement(model *Model
 	case "head-of-household":
 		return socialSecurityTaxableIncomeJointRoth
 	default:
-		return 0
+		return socialSecurityTaxableIncomeIndividualRoth
 	}
 }
 
@@ -64,7 +64,7 @@ func (c SocialSecurityTaxableIncome) CalculateRoth(model *Model) float64 {
 	case "head-of-household":
 		return socialSecurityTaxableIncomeJointRoth
 	default:
-		return 0
+		return socialSecurityTaxableIncomeIndividualRoth
 	}
 }
 
@@ -82,6 +82,6 @@ func (c SocialSecurityTaxableIncome) CalculateRothRetirement(model *Model) float
 	case "head-of-household":
 		return socialSecurityTaxableIncomeJointRoth
 	default:
-		return 0
+		return socialSecurityTaxableIncomeIndividualRoth
 	}
 }

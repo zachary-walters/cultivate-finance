@@ -42,9 +42,10 @@ var effectiveTaxRateOnGrossTests = []struct {
 }{
 	{
 		name: "Test Case 0",
-		totalTaxesOwedAfterStandardDeductionAndContributions: 100,
-		totalTaxesOwedAfterStandardDeduction:                 200,
-		totalAnnualRetirementIncomeBeforeTax:                 23409,
+		totalTaxesOwedAfterStandardDeductionAndContributions:                  100,
+		totalTaxesOwedAfterStandardDeduction:                                  200,
+		totalAnnualRetirementIncomeBeforeTax:                                  23409,
+		totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal: 1435,
 		model: calculator.Model{
 			Input: calculator.Input{
 				CurrentAnnualIncome: 41987,
@@ -53,9 +54,10 @@ var effectiveTaxRateOnGrossTests = []struct {
 	},
 	{
 		name: "Test Case 1",
-		totalTaxesOwedAfterStandardDeductionAndContributions: 0,
-		totalTaxesOwedAfterStandardDeduction:                 0,
-		totalAnnualRetirementIncomeBeforeTax:                 12312,
+		totalTaxesOwedAfterStandardDeductionAndContributions:                  0,
+		totalTaxesOwedAfterStandardDeduction:                                  0,
+		totalAnnualRetirementIncomeBeforeTax:                                  12312,
+		totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal: 98735,
 		model: calculator.Model{
 			Input: calculator.Input{
 				CurrentAnnualIncome: 10000,
@@ -64,9 +66,10 @@ var effectiveTaxRateOnGrossTests = []struct {
 	},
 	{
 		name: "Test Case 2",
-		totalTaxesOwedAfterStandardDeductionAndContributions: 10000,
-		totalTaxesOwedAfterStandardDeduction:                 214500,
-		totalAnnualRetirementIncomeBeforeTax:                 0,
+		totalTaxesOwedAfterStandardDeductionAndContributions:                  10000,
+		totalTaxesOwedAfterStandardDeduction:                                  214500,
+		totalAnnualRetirementIncomeBeforeTax:                                  0,
+		totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal: 0,
 		model: calculator.Model{
 			Input: calculator.Input{
 				CurrentAnnualIncome: 0,
@@ -177,7 +180,7 @@ func TestEffectiveTaxRateOnGrossCalculateRothRetirement(t *testing.T) {
 					return 0
 				}
 
-				return test.totalAnnualRetirementIncomeBeforeTax / test.totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal
+				return test.totalTaxesOwedAfterStandardDeduction / test.totalAnnualRetirementIncomeBeforeTaxLessTaxOnTraditionalIRAWithdrawal
 			}()
 
 			assert.Equal(t, expected, actual)

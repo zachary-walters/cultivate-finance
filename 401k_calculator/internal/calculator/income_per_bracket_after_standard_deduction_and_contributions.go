@@ -34,7 +34,7 @@ func (c IncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditi
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return incomePerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -54,7 +54,7 @@ func (c IncomePerBracketAfterStandardDeductionAndContributions) CalculateTraditi
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return incomePerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -74,7 +74,7 @@ func (c IncomePerBracketAfterStandardDeductionAndContributions) CalculateRoth(mo
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return incomePerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -94,6 +94,6 @@ func (c IncomePerBracketAfterStandardDeductionAndContributions) CalculateRothRet
 	case "head-of-household":
 		return incomePerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return incomePerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }

@@ -70,6 +70,9 @@ var socialSecurityTaxableIncomeTests = []struct {
 			},
 		},
 	},
+	{
+		name: "Test Case 4",
+	},
 }
 
 func TestNewSocialSecurityTaxableIncome(t *testing.T) {
@@ -108,7 +111,7 @@ func TestSocialSecurityTaxableIncomeTraditionalCalculateTraditional(t *testing.T
 				case "head-of-household":
 					return test.socialSecurityTaxableIncomeJoint
 				default:
-					return 0
+					return test.socialSecurityTaxableIncomeIndividual
 				}
 			}()
 
@@ -143,7 +146,7 @@ func TestSocialSecurityTaxableIncomeTraditionalCalculateTraditionalRetirement(t 
 				case "head-of-household":
 					return test.socialSecurityTaxableIncomeJoint
 				default:
-					return 0
+					return test.socialSecurityTaxableIncomeIndividual
 				}
 			}()
 
@@ -178,7 +181,7 @@ func TestSocialSecurityTaxableIncomeTraditionalCalculateRoth(t *testing.T) {
 				case "head-of-household":
 					return test.socialSecurityTaxableIncomeJoint
 				default:
-					return 0
+					return test.socialSecurityTaxableIncomeIndividual
 				}
 			}()
 
@@ -213,7 +216,7 @@ func TestSocialSecurityTaxableIncomeTraditionalCalculateRothRetirement(t *testin
 				case "head-of-household":
 					return test.socialSecurityTaxableIncomeJoint
 				default:
-					return 0
+					return test.socialSecurityTaxableIncomeIndividual
 				}
 			}()
 

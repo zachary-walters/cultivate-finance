@@ -29,12 +29,12 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) CalculateTradition
 		return totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint
-	case "married-seperate":
+	case "married-separate":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return 0.0
+		return totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -53,12 +53,12 @@ func (c TotalTaxesOwedAfterStandardDeductionAndContributions) CalculateRoth(mode
 		return totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 	case "married-joint":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedJoint
-	case "married-seperate":
+	case "married-separate":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsMarriedSeparate
 	case "head-of-household":
 		return totalTaxesOwedAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return 0.0
+		return totalTaxesOwedAfterStandardDeductionAndContributionsSingle
 	}
 }
 

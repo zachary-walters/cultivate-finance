@@ -34,7 +34,7 @@ func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateTraditional(model *M
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionSingle
 	}
 }
 
@@ -54,7 +54,7 @@ func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateTraditionalRetiremen
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionSingle
 	}
 }
 
@@ -74,7 +74,7 @@ func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateRoth(model *Model) [
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionSingle
 	}
 }
 
@@ -94,6 +94,6 @@ func (c TaxesOwedPerBracketAfterStandardDeduction) CalculateRothRetirement(model
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionSingle
 	}
 }

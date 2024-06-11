@@ -34,7 +34,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTrad
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -54,7 +54,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateTrad
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -74,7 +74,7 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRoth
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }
 
@@ -94,6 +94,6 @@ func (c TaxesOwedPerBracketAfterStandardDeductionAndContributions) CalculateRoth
 	case "head-of-household":
 		return taxesOwedPerBracketAfterStandardDeductionAndContributionsHeadOfHousehold
 	default:
-		return nil
+		return taxesOwedPerBracketAfterStandardDeductionAndContributionsSingle
 	}
 }

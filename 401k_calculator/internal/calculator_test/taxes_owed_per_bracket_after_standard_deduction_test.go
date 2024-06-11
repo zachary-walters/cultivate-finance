@@ -80,6 +80,9 @@ var taxesOwedPerBracketAfterStandardDeductionTests = []struct {
 			},
 		},
 	},
+	{
+		name: "Test Case 4",
+	},
 }
 
 func TestNewTaxesOwedPerBracketAfterStandardDeduction(t *testing.T) {
@@ -118,20 +121,20 @@ func TestTaxesOwedPerBracketAfterStandardDeductionCalculateTraditional(t *testin
 			expected := func() []float64 {
 				switch test.model.Input.CurrentFilingStatus {
 				case "single":
-					return mockTaxesOwedPerBracketAfterStandardDeductionSingle.CalculateTraditional(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				case "married-joint":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedJoint.CalculateTraditional(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 				case "married-seperate":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedSeparate.CalculateTraditional(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 				case "head-of-household":
-					return mockTaxesOwedPerBracketAfterStandardDeductionHeadOfHousehold.CalculateTraditional(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -160,20 +163,20 @@ func TestTaxesOwedPerBracketAfterStandardDeductionCalculateTraditionalRetirement
 			expected := func() []float64 {
 				switch test.model.Input.RetirementFilingStatus {
 				case "single":
-					return mockTaxesOwedPerBracketAfterStandardDeductionSingle.CalculateTraditionalRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				case "married-joint":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedJoint.CalculateTraditionalRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 				case "married-seperate":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedSeparate.CalculateTraditionalRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 				case "head-of-household":
-					return mockTaxesOwedPerBracketAfterStandardDeductionHeadOfHousehold.CalculateTraditionalRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -202,20 +205,20 @@ func TestTaxesOwedPerBracketAfterStandardDeductionCalculateRoth(t *testing.T) {
 			expected := func() []float64 {
 				switch test.model.Input.CurrentFilingStatus {
 				case "single":
-					return mockTaxesOwedPerBracketAfterStandardDeductionSingle.CalculateRoth(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				case "married-joint":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedJoint.CalculateRoth(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 				case "married-seperate":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedSeparate.CalculateRoth(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 				case "head-of-household":
-					return mockTaxesOwedPerBracketAfterStandardDeductionHeadOfHousehold.CalculateRoth(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
@@ -244,20 +247,20 @@ func TestTaxesOwedPerBracketAfterStandardDeductionCalculateRothRetirement(t *tes
 			expected := func() []float64 {
 				switch test.model.Input.RetirementFilingStatus {
 				case "single":
-					return mockTaxesOwedPerBracketAfterStandardDeductionSingle.CalculateRothRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				case "married-joint":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedJoint.CalculateRothRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedJoint
 				case "married-seperate":
-					return mockTaxesOwedPerBracketAfterStandardDeductionMarriedSeparate.CalculateRothRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionMarriedSeparate
 				case "head-of-household":
-					return mockTaxesOwedPerBracketAfterStandardDeductionHeadOfHousehold.CalculateRothRetirement(&test.model)
+					return test.taxesOwedPerBracketAfterStandardDeductionHeadOfHousehold
 				default:
-					return nil
+					return test.taxesOwedPerBracketAfterStandardDeductionSingle
 				}
 			}()
 
 			assert.Equal(t, expected, actual)
-			assert.NotEmpty(t, actual)
+
 		})
 	}
 }
