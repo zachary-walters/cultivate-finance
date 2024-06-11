@@ -59,6 +59,8 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 		modelMapRothRetired[calculationData.Datakey] = calculationData.RothRetirementValue
 	}
 
+	close(ch)
+
 	return js.ValueOf(map[string]interface{}{
 		"traditional":            modelMapTraditional,
 		"traditional_retirement": modelMapTraditionalRetired,

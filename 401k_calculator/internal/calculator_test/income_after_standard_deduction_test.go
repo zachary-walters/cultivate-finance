@@ -46,7 +46,7 @@ var incomeAfterStandardDeductionTests = []struct {
 			},
 		},
 		standardDeduction:  32984.0,
-		totalTaxableIncome: 9503.0,
+		totalTaxableIncome: 100000.0,
 	},
 	{
 		name: "Test Case Negative",
@@ -55,8 +55,8 @@ var incomeAfterStandardDeductionTests = []struct {
 				CurrentAnnualIncome: -100000,
 			},
 		},
-		standardDeduction:  -320984.0,
-		totalTaxableIncome: -2947.0,
+		standardDeduction:  5600.0,
+		totalTaxableIncome: -1.0,
 	},
 }
 
@@ -74,7 +74,7 @@ func TestIncomeAfterStandardDeductionCalculateTraditional(t *testing.T) {
 	for _, test := range incomeAfterStandardDeductionTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockStandardDeduction := new(MockStandardDeduction)
-			mockStandardDeduction.On("CalculateTraditional", mock.Anything).Return(test.standardDeduction)
+			mockStandardDeduction.On("CalculateTraditional", &test.model).Return(test.standardDeduction)
 
 			c := &calculator.IncomeAfterStandardDeduction{
 				StandardDeductionCalculation: mockStandardDeduction,
@@ -96,10 +96,10 @@ func TestIncomeAfterStandardDeductionCalculateTraditionalRetirement(t *testing.T
 	for _, test := range incomeAfterStandardDeductionTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockStandardDeduction := new(MockStandardDeduction)
-			mockStandardDeduction.On("CalculateTraditionalRetirement", mock.Anything).Return(test.standardDeduction)
+			mockStandardDeduction.On("CalculateTraditionalRetirement", &test.model).Return(test.standardDeduction)
 
 			mockTotalTaxableIncome := new(MockStandardDeduction)
-			mockTotalTaxableIncome.On("CalculateTraditionalRetirement", mock.Anything).Return(test.totalTaxableIncome)
+			mockTotalTaxableIncome.On("CalculateTraditionalRetirement", &test.model).Return(test.totalTaxableIncome)
 
 			c := &calculator.IncomeAfterStandardDeduction{
 				StandardDeductionCalculation:  mockStandardDeduction,
@@ -122,7 +122,7 @@ func TestIncomeAfterStandardDeductionCalculateRoth(t *testing.T) {
 	for _, test := range incomeAfterStandardDeductionTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockStandardDeduction := new(MockStandardDeduction)
-			mockStandardDeduction.On("CalculateRoth", mock.Anything).Return(test.standardDeduction)
+			mockStandardDeduction.On("CalculateRoth", &test.model).Return(test.standardDeduction)
 
 			c := &calculator.IncomeAfterStandardDeduction{
 				StandardDeductionCalculation: mockStandardDeduction,
@@ -144,10 +144,10 @@ func TestIncomeAfterStandardDeductionCalculateRothRetirement(t *testing.T) {
 	for _, test := range incomeAfterStandardDeductionTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockStandardDeduction := new(MockStandardDeduction)
-			mockStandardDeduction.On("CalculateRothRetirement", mock.Anything).Return(test.standardDeduction)
+			mockStandardDeduction.On("CalculateRothRetirement", &test.model).Return(test.standardDeduction)
 
 			mockTotalTaxableIncome := new(MockStandardDeduction)
-			mockTotalTaxableIncome.On("CalculateRothRetirement", mock.Anything).Return(test.totalTaxableIncome)
+			mockTotalTaxableIncome.On("CalculateRothRetirement", &test.model).Return(test.totalTaxableIncome)
 
 			c := &calculator.IncomeAfterStandardDeduction{
 				StandardDeductionCalculation:  mockStandardDeduction,

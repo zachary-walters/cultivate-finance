@@ -163,12 +163,12 @@ func CalculateSynchronousWasm(model *Model, calculation any, datakey string) Cal
 		calculationData.RothValue = nil
 		calculationData.RothRetirementValue = nil
 	} else if isSequenceCalculation {
-		calculationData.TraditionalValue = translateFloatSlice(seq.CalculateTraditional(model))
-		calculationData.TraditionalRetirementValue = translateFloatSlice(seq.CalculateTraditionalRetirement(model))
-		calculationData.RothValue = translateFloatSlice(seq.CalculateRoth(model))
-		calculationData.RothRetirementValue = translateFloatSlice(seq.CalculateRothRetirement(model))
+		calculationData.TraditionalValue = TranslateFloatSlice(seq.CalculateTraditional(model))
+		calculationData.TraditionalRetirementValue = TranslateFloatSlice(seq.CalculateTraditionalRetirement(model))
+		calculationData.RothValue = TranslateFloatSlice(seq.CalculateRoth(model))
+		calculationData.RothRetirementValue = TranslateFloatSlice(seq.CalculateRothRetirement(model))
 	} else if isChartCalculation {
-		calculationData.TraditionalValue = translateChartData(chart.Calculate(model))
+		calculationData.TraditionalValue = TranslateChartData(chart.Calculate(model))
 		calculationData.TraditionalRetirementValue = nil
 		calculationData.RothValue = nil
 		calculationData.RothRetirementValue = nil
@@ -189,7 +189,7 @@ func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey str
 	ch <- calculationData
 }
 
-func translateFloatSlice(s []float64) []interface{} {
+func TranslateFloatSlice(s []float64) []interface{} {
 	x := make([]interface{}, len(s))
 
 	for i := range s {
@@ -199,7 +199,7 @@ func translateFloatSlice(s []float64) []interface{} {
 	return x
 }
 
-func translateChartMap(m map[int32]float64) map[string]interface{} {
+func TranslateChartMap(m map[int32]float64) map[string]interface{} {
 	n := map[string]interface{}{}
 
 	for k, v := range m {
@@ -209,15 +209,15 @@ func translateChartMap(m map[int32]float64) map[string]interface{} {
 	return n
 }
 
-func translateChartData(c ChartData) map[string]interface{} {
+func TranslateChartData(c ChartData) map[string]interface{} {
 	chartData := map[string]interface{}{}
 
-	chartData["beginning_balance"] = translateChartMap(c.BeginningBalance)
-	chartData["contribution"] = translateChartMap(c.Contribution)
-	chartData["withdrawal"] = translateChartMap(c.Withdrawal)
-	chartData["interest_earned"] = translateChartMap(c.InterestEarned)
-	chartData["ending_balance"] = translateChartMap(c.EndingBalance)
-	chartData["after_tax_income"] = translateChartMap(c.AfterTaxIncome)
+	chartData["beginning_balance"] = TranslateChartMap(c.BeginningBalance)
+	chartData["contribution"] = TranslateChartMap(c.Contribution)
+	chartData["withdrawal"] = TranslateChartMap(c.Withdrawal)
+	chartData["interest_earned"] = TranslateChartMap(c.InterestEarned)
+	chartData["ending_balance"] = TranslateChartMap(c.EndingBalance)
+	chartData["after_tax_income"] = TranslateChartMap(c.AfterTaxIncome)
 
 	return chartData
 }
