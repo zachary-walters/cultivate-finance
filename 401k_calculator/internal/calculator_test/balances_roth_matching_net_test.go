@@ -87,7 +87,7 @@ func TestCalculate(t *testing.T) {
 					} else {
 						chartData.BeginningBalance[i] = chartData.EndingBalance[i-1]
 					}
-			
+
 					if i < test.model.Input.RetirementAge {
 						chartData.Contribution[i] = float64(test.equivalentRothContributions)
 						chartData.Withdrawal[i] = float64(0)
@@ -97,17 +97,17 @@ func TestCalculate(t *testing.T) {
 						chartData.Withdrawal[i] = float64(test.annualRetirementAccountDisbursementTraditional)
 						chartData.AfterTaxIncome[i] = test.annualRetirementAccountDisbursementRoth
 					}
-			
+
 					chartData.InterestEarned[i] = (chartData.BeginningBalance[i] +
 						chartData.Contribution[i] -
 						chartData.Withdrawal[i]) *
 						test.annualGrowthLessInflation
-			
+
 					chartData.EndingBalance[i] = chartData.BeginningBalance[i] +
 						chartData.Contribution[i] -
 						chartData.Withdrawal[i] +
 						chartData.InterestEarned[i]
-			
+
 					if chartData.EndingBalance[i] <= 0 {
 						chartData.EndingBalance[i] = 0.0
 						chartData.InterestEarned[i] = 0.0
@@ -122,30 +122,4 @@ func TestCalculate(t *testing.T) {
 			assert.Equal(t, expected, actual)
 		})
 	}
-
-	// Test BeginningBalance
-	// assert.Equal(t, float64(0), actual.BeginningBalance[model.Input.CurrentAge])
-
-	// // Test Contribution
-	// assert.Equal(t, float64(c.EquivalentRothContributionsCalculation.CalculateRothRetirement(model)), chartData.Contribution[model.Input.CurrentAge])
-
-	// // Test Withdrawal
-	// assert.Equal(t, float64(0), chartData.Withdrawal[model.Input.CurrentAge])
-
-	// // Test InterestEarned
-	// expectedInterest := (chartData.BeginningBalance[model.Input.CurrentAge] +
-	// 	chartData.Contribution[model.Input.CurrentAge] -
-	// 	chartData.Withdrawal[model.Input.CurrentAge]) *
-	// 	c.AnnualGrowthLessInflationCalculation.CalculateRothRetirement(model)
-	// assert.Equal(t, expectedInterest, chartData.InterestEarned[model.Input.CurrentAge])
-
-	// // Test EndingBalance
-	// expectedEndingBalance := chartData.BeginningBalance[model.Input.CurrentAge] +
-	// 	chartData.Contribution[model.Input.CurrentAge] -
-	// 	chartData.Withdrawal[model.Input.CurrentAge] +
-	// 	chartData.InterestEarned[model.Input.CurrentAge]
-	// assert.Equal(t, expectedEndingBalance, chartData.EndingBalance[model.Input.CurrentAge])
-
-	// // Test AfterTaxIncome
-	// assert.Equal(t, float64(0), chartData.AfterTaxIncome[model.Input.CurrentAge])
 }

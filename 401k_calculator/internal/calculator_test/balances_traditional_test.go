@@ -18,12 +18,12 @@ func (m *MockBalancesTraditional) Calculate(model *calculator.Model) calculator.
 }
 
 var balancesTraditionalTests = []struct {
-	name                                           string
-	model                                          calculator.Model
-	annualGrowthLessInflation                      float64
+	name                                string
+	model                               calculator.Model
+	annualGrowthLessInflation           float64
 	annualRetirementAccountDisbursement float64
-	topTierTaxRate        float64
-} {
+	topTierTaxRate                      float64
+}{
 	{
 		name: "Test Case 0",
 		model: calculator.Model{
@@ -62,7 +62,7 @@ func TestBalancesTraditionalCalculate(t *testing.T) {
 			c := calculator.BalancesTraditional{
 				AnnualGrowthLessInflationCalculation:           mockAnnualGrowthLessInflation,
 				AnnualRetirementAccountDisbursementCalculation: mockAnnualRetirementDisbursement,
-				TopTierTaxRateCalculation:         mockTopTierTaxRate,
+				TopTierTaxRateCalculation:                      mockTopTierTaxRate,
 
 				Limit: 133,
 			}
@@ -84,7 +84,7 @@ func TestBalancesTraditionalCalculate(t *testing.T) {
 					} else {
 						chartData.BeginningBalance[i] = chartData.EndingBalance[i-1]
 					}
-			
+
 					if i < test.model.Input.RetirementAge {
 						chartData.Contribution[i] = float64(test.model.Input.AnnualContributionsPreTax)
 						chartData.Withdrawal[i] = float64(0)
@@ -94,17 +94,17 @@ func TestBalancesTraditionalCalculate(t *testing.T) {
 						chartData.Withdrawal[i] = float64(test.model.Input.YearlyWithdrawal)
 						chartData.AfterTaxIncome[i] = test.annualRetirementAccountDisbursement
 					}
-			
+
 					chartData.InterestEarned[i] = (chartData.BeginningBalance[i] +
 						chartData.Contribution[i] -
 						chartData.Withdrawal[i]) *
 						test.annualGrowthLessInflation
-			
+
 					chartData.EndingBalance[i] = chartData.BeginningBalance[i] +
 						chartData.Contribution[i] -
 						chartData.Withdrawal[i] +
 						chartData.InterestEarned[i]
-			
+
 					if chartData.EndingBalance[i] <= 0 {
 						chartData.EndingBalance[i] = 0.0
 						chartData.InterestEarned[i] = 0.0

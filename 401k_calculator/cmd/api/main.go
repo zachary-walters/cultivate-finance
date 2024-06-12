@@ -89,12 +89,11 @@ func main() {
 		}
 
 		nc.Publish(msg.Reply, d)
-
 	})
 
 	log.Println("Server listening on port: ", os.Getenv("PORT"))
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), r); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 }
 
@@ -142,7 +141,6 @@ func calculateDatakey(d []byte) (any, error) {
 		return nil, err
 	}
 
-	log.Println("ARST", input, "ZXCV", input.Datakey)
 	calculation, exists := calculations[input.Datakey]
 	if !exists {
 		// send no exists message reply to nats
