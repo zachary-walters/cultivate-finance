@@ -52,14 +52,14 @@ func TestMain(t *testing.T) {
 	defer s.Shutdown()
 
 	go main()
-	
+
 	// Test connection
 	var nc *nats.Conn
 	var err error
 	for {
 		nc, err = nats.Connect(os.Getenv("NATS_URI"))
 		if err == nil {
-						break
+			break
 		}
 
 		log.Println("Waiting before connecting to NATS at:", os.Getenv("NATS_URI"))
