@@ -63,8 +63,10 @@ func TestMain(t *testing.T) {
 		}
 
 		log.Println("Waiting before connecting to NATS at:", os.Getenv("NATS_URI"))
-		time.Sleep(5 * time.Second)
+		time.Sleep(2 * time.Second)
 	}
+
+	time.Sleep(2 * time.Second)
 
 	assert.NoError(t, err)
 
