@@ -43,6 +43,9 @@ services:
     deploy:
       mode: replicated
       replicas: 1  
+    environment:
+      PORT: 8662
+      BUILD_ENV: DEV
 
   401k-calculator-api:
     container_name: rest-api-server
@@ -61,19 +64,19 @@ services:
     depends_on:
       - nats
 
-  wiki: 
-    container_name: wiki
-    build: 
-      context: ./../wiki
-      dockerfile: ./../wiki/wiki.dockerfile
-    restart: always
-    ports: 
-      - "8080:8080"
-      - "8443:8443"
-      - "8181:8181"
-      - "8143:8143"
+  # wiki: 
+  #   container_name: wiki
+  #   build: 
+  #     context: ./../wiki
+  #     dockerfile: ./../wiki/wiki.dockerfile
+  #   restart: always
+  #   ports: 
+  #     - "8080:8080"
+  #     - "8443:8443"
+  #     - "8181:8181"
+  #     - "8143:8143"
 
-  wiki_arm: 
+  wiki: 
     container_name: wiki
     build: 
       context: ./../wiki

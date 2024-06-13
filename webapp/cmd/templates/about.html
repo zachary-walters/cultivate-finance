@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>About</title>
+  <link rel="stylesheet" href="/assets/css/_main.css" />
+</head>
+
+<body>
+  <div class="nav-bar-container">
+    {{template "nav-bar" .}}
+  </div>
+
+  <div class="about-statement-container">
+    <p>Welcome to Cultivate Finance. We believe that everyone, regardless of their financial background, should have access to the tools and knowledge they need to cultivate their financial well-being.
+    Our mission is to simplify the complex world of finance for the everyday person. We provide a comprehensive toolkit that includes resources for 401k investing, debt calculators, and more. These tools are designed to be user-friendly and easy to understand, making financial planning accessible for all.
+    Whether you are just starting your financial journey or looking to enhance your financial literacy, Cultivate Finance is here to guide you every step of the way. Together, we can help you grow your financial future.</p>
+  </div>
+
+  <div class="toolbox-container">
+    <div class="tool traditional-vs-roth-tool">
+      <a href="/401k_calculator">
+        <img src="/assets/img/site-images/401k_calculator.png" alt="i1" class="toolbox-image">
+      </a>
+      <span class="traditional-vs-roth-tooltip">arstarst</span>
+    </div>
+  </div>
+</body>
+
+<style>
+  body {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+
+  .about-statement-container {
+    margin-left: 4rem;
+    margin-right: 4rem;
+    text-align: center;
+    font-size: 20px;
+  }
+
+  .toolbox-container {
+    display: flex;
+    margin-top: 2rem;
+  }
+
+  .toolbox-image {
+    max-width: 20rem;
+    max-height: 20rem;
+  }
+
+  .tool {
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+
+  .traditional-vs-roth-tool .traditional-vs-roth-tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: var(--cf-blue);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+
+  .traditional-vs-roth-tool:hover .traditional-vs-roth-tooltip {
+    visibility: visible;
+  }
+</style>
+
+</html>

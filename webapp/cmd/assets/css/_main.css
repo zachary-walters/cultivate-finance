@@ -2,3 +2,14 @@
   --cf-blue: #8091F3;
   --cf-green: #9DD4BC;
 }
+
+*
+{
+    margin:0px;
+    padding:0px;
+}
+
+.nav-bar-container {
+  width: 100%;
+  margin-bottom: 2rem;
+}

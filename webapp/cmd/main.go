@@ -4,6 +4,7 @@ import (
 	"embed"
 	"log"
 	"net/http"
+	"os"
 	"text/template"
 )
 
@@ -30,36 +31,59 @@ type Input struct {
 }
 
 func main() {
-	templates, err := template.New("").
-		ParseFS(res,
-			"templates/401k_calculator.html",
-			"templates/401k_calculator_input_form.html",
-			"templates/401k_calculator_decision.html",
-			"templates/401k_calculator_contributions_interest_charts.html",
-			"templates/401k_calculator_area_chart.html",
-			"templates/401k_calculator_calculations.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	home := func(w http.ResponseWriter, r *http.Request) {
-		templates.ExecuteTemplate(w, "401k_calculator.html", map[string]interface{}{
-			"input": Input{
-				CurrentAge:                35,
-				CurrentFilingStatus:       "single",
-				CurrentAnnualIncome:       60000,
-				AnnualContributionsPreTax: 10000,
-				AnnualInvestmentGrowth:    0.08,
-				RetirementAge:             70,
-				RetirementFilingStatus:    "single",
-				YearlyWithdrawal:          60000,
-			},
-		})
-	}
-
 	http.HandleFunc("/", home)
+	http.HandleFunc("/about", about)
+	http.HandleFunc("/wiki", wiki)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
 
 	log.Fatal(http.ListenAndServe(":8662", nil))
+}
+
+func home(w http.ResponseWriter, r *http.Request) {
+	templates, err := template.New("").
+		ParseFS(res,
+			"templates/401k_calculator/401k_calculator.html",
+			"templates/401k_calculator/401k_calculator_input_form.html",
+			"templates/401k_calculator/401k_calculator_decision.html",
+			"templates/401k_calculator/401k_calculator_contributions_interest_charts.html",
+			"templates/401k_calculator/401k_calculator_area_chart.html",
+			"templates/401k_calculator/401k_calculator_calculations.html",
+			"templates/navigation_bar.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templates.ExecuteTemplate(w, "401k_calculator.html", map[string]interface{}{
+		"input": Input{
+			CurrentAge:                35,
+			CurrentFilingStatus:       "single",
+			CurrentAnnualIncome:       60000,
+			AnnualContributionsPreTax: 10000,
+			AnnualInvestmentGrowth:    0.08,
+			RetirementAge:             70,
+			RetirementFilingStatus:    "single",
+			YearlyWithdrawal:          60000,
+		},
+		"build_env": os.Getenv("BUILD_ENV"),
+	})
+}
+
+func about(w http.ResponseWriter, r *http.Request) {
+	templates, err := template.New("").
+		ParseFS(res,
+			"templates/about.html",
+			"templates/navigation_bar.html",
+		)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templates.ExecuteTemplate(w, "about.html", map[string]interface{}{
+		"build_env": os.Getenv("BUILD_ENV"),
+	})
+}
+
+func wiki(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "http://localhost:8181", http.StatusSeeOther)
 }

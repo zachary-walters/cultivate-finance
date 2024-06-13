@@ -9,6 +9,9 @@
 </head>
 
 <body>
+    <div class="nav-bar-container">
+      {{template "nav-bar" .}}
+    </div>
     <div class="inputform-container">
       {{template "inputform" .}}
     </div>
@@ -40,6 +43,8 @@ recalculate();
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
+    margin-left: 2rem;
+    margin-right: 2rem;
   }
 
   .break {

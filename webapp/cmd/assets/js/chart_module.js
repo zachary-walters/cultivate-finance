@@ -15,7 +15,7 @@ export const generateCharts = (calculations) => {
           "rgba(0, 40, 255, 0.5)",
           "rgba(85, 167, 131, 0.5)",
         ],
-        data: [calculations.traditional_retirement.TOTAL_CONTRIBUTIONS, calculations.traditional_retirement.TOTAL_INTEREST]
+        data: [calculations.traditional.TOTAL_CONTRIBUTIONS, calculations.traditional_retirement.TOTAL_INTEREST]
       }]
     },
     options: {
@@ -42,7 +42,7 @@ export const generateCharts = (calculations) => {
           "rgba(0, 40, 255, 0.5)",
           "rgba(85, 167, 131, 0.5)",
         ],
-        data: [calculations.roth_retirement.TOTAL_CONTRIBUTIONS, calculations.roth_retirement.TOTAL_INTEREST]
+        data: [calculations.roth.TOTAL_CONTRIBUTIONS, calculations.roth_retirement.TOTAL_INTEREST]
       }]
     },
     options: {

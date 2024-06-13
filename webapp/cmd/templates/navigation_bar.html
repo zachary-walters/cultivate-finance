@@ -1,0 +1,104 @@
+{{define "nav-bar"}}
+<div class="nav-bar">
+  <div class="logo-area">
+    <a href="/">
+      <img src="/assets/img/logo1_bw.png" alt="logo" class="logo">
+    </a>
+  </div>
+  <div class="navigation">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/wiki">Wiki</a>
+    <div class="dropdown">
+      <button class="dropbtn">Tools
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="#">401k Roth vs Traditional</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .nav-bar {
+    display: flex;
+    height: 4rem;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    padding: 1rem;
+    justify-content: space-between;
+  }
+
+  .logo-area {
+    height: 4rem;
+  } 
+
+  .logo {
+    max-height: 4rem;
+  }
+
+  /* Links inside the navigation */
+  .navigation a {
+    float: left;
+    font-size: 24px;
+    color: var(--cf-blue);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  /* The dropdown container */
+  .dropdown {
+    font-size: 24px;
+    float: left;
+    overflow: hidden;
+  }
+
+  /* Dropdown button */
+  .dropdown .dropbtn {
+    font-size: 24px;
+    border: none;
+    outline: none;
+    color: var(--cf-green);
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit; /* Important for vertical align on mobile phones */
+    margin: 0; /* Important for vertical align on mobile phones */
+  }
+
+  /* Add a red background color to navigation links on hover */
+  .navigation a:hover, .dropdown:hover .dropbtn {
+    background-color: rgb(255, 255, 255);
+  }
+
+  /* Dropdown content (hidden by default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    float: none;
+    color: var(--cf-blue);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+
+  /* Add a grey background color to dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+</style>
+{{end}}
