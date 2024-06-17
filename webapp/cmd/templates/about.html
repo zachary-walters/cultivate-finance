@@ -4,6 +4,7 @@
 <head>
   <title>About</title>
   <link rel="stylesheet" href="/assets/css/_main.css" />
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 </head>
 
 <body>
@@ -17,12 +18,16 @@
     Whether you are just starting your financial journey or looking to enhance your financial literacy, Cultivate Finance is here to guide you every step of the way. Together, we can help you grow your financial future.</p>
   </div>
 
+  <h1 class="tools-header">Our Tools</h1>
   <div class="toolbox-container">
-    <div class="tool traditional-vs-roth-tool">
-      <a href="/401k_calculator">
-        <img src="/assets/img/site-images/401k_calculator.png" alt="i1" class="toolbox-image">
-      </a>
-      <span class="traditional-vs-roth-tooltip">arstarst</span>
+    <div class="tool-container">
+      <label for="traditional-vs-roth-tool">Traditional vs Roth</label> 
+      <div id="traditional-vs-roth-tool" class="tool traditional-vs-roth-tool">
+        <a href="/401k_calculator">
+          <img src="/assets/img/site-images/401k_calculator.png" alt="i1" class="toolbox-image">
+        </a>
+        <div class="traditional-vs-roth-tooltip">This tool can be used to determine how to optimize your 401k investing strategy when offered the choice between a Roth 401k and a Traditional 401k</div>
+      </div>
     </div>
   </div>
 </body>
@@ -40,13 +45,25 @@
   .about-statement-container {
     margin-left: 4rem;
     margin-right: 4rem;
+    margin-bottom: 4rem;
     text-align: center;
     font-size: 20px;
+  }
+
+  .tools-header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
   }
 
   .toolbox-container {
     display: flex;
     margin-top: 2rem;
+    justify-content: center;
+  }
+
+  .tool-container {
+    text-align: center;
   }
 
   .toolbox-image {
@@ -60,10 +77,10 @@
 
   .traditional-vs-roth-tool .traditional-vs-roth-tooltip {
     visibility: hidden;
-    width: 120px;
+    width: 20rem;
     background-color: var(--cf-blue);
     color: #fff;
-    text-align: center;
+    /* text-align: center; */
     border-radius: 6px;
     padding: 5px 0;
 
