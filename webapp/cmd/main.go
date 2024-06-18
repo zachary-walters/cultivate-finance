@@ -85,5 +85,5 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func wiki(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "http://localhost:8181", http.StatusSeeOther)
+	http.Redirect(w, r, "https://wiki.cultivatefinance.org", http.StatusSeeOther)
 }
