@@ -32,15 +32,15 @@ type Input struct {
 
 func main() {
 	http.HandleFunc("/", home)
-	http.HandleFunc("/about", about)
 	http.HandleFunc("/wiki", wiki)
+	http.HandleFunc("/roth_vs_traditional", rothVsTraditional)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
 
 	log.Fatal(http.ListenAndServe(":8662", nil))
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func rothVsTraditional(w http.ResponseWriter, r *http.Request) {
 	templates, err := template.New("").
 		ParseFS(res,
 			"templates/401k_calculator/401k_calculator.html",
@@ -69,7 +69,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func about(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
 	templates, err := template.New("").
 		ParseFS(res,
 			"templates/about.html",
