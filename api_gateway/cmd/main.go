@@ -11,21 +11,6 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-type data401k struct {
-	TraditionalValue           any `json:"traditional_value,omitempty"`
-	TraditionalRetirementValue any `json:"traditional_retirement_value,omitempty"`
-	RothValue                  any `json:"roth_value,omitempty"`
-	RothRetirementValue        any `json:"roth_retirement_value,omitempty"`
-}
-
-type data401kDatakey struct {
-	Datakey                    string `json:"datakey"`
-	TraditionalValue           any    `json:"traditional_value,omitempty"`
-	TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
-	RothValue                  any    `json:"roth_value,omitempty"`
-	RothRetirementValue        any    `json:"roth_retirement_value,omitempty"`
-}
-
 func main() {
 	var ns server
 	var err error
@@ -44,7 +29,9 @@ func main() {
 	log.Println("Connected to NATS at:", ns.nc.ConnectedUrl())
 
 	r.Post("/calculate_all_401k", ns.calculateAll401k)
-	r.Post("/calculate_401k/{datakey}", ns.calculateDatakey)
+	r.Post("/calculate_401k/{datakey}", ns.calculate401kDatakey)
+	// r.Post("/calculate_debt_snowball", ns.calculateDebtSnowball)
+	r.Post("/calculate_debt_snowball/{datakey}", ns.calculateDebtSnowballDatakey)
 
 	log.Println("Server listening on port: ", os.Getenv("PORT"))
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), r); err != nil {

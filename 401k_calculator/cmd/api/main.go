@@ -150,7 +150,7 @@ func calculateDatakey(d []byte) (any, error) {
 	model := calculator.NewModel(input)
 	calculationData := calculator.CalculateSynchronous(model, calculation, input.Datakey)
 
-	data := struct {
+	return struct {
 		Datakey                    string `json:"datakey"`
 		TraditionalValue           any    `json:"traditional_value,omitempty"`
 		TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
@@ -162,9 +162,7 @@ func calculateDatakey(d []byte) (any, error) {
 		TraditionalRetirementValue: calculationData.TraditionalRetirementValue,
 		RothValue:                  calculationData.RothValue,
 		RothRetirementValue:        calculationData.RothRetirementValue,
-	}
-
-	return data, nil
+	}, nil
 }
 
 var calculations = map[string]any{

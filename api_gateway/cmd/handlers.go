@@ -16,15 +16,27 @@ type server struct {
 	nc *nats.Conn
 }
 
-type RequestError struct {
-	Err error `json:"error"`
+type data401k struct {
+	TraditionalValue           any `json:"traditional_value,omitempty"`
+	TraditionalRetirementValue any `json:"traditional_retirement_value,omitempty"`
+	RothValue                  any `json:"roth_value,omitempty"`
+	RothRetirementValue        any `json:"roth_retirement_value,omitempty"`
 }
 
-func (r *RequestError) Error() string {
-	return r.Err.Error()
+type data401kDatakey struct {
+	Datakey                    string `json:"datakey"`
+	TraditionalValue           any    `json:"traditional_value,omitempty"`
+	TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
+	RothValue                  any    `json:"roth_value,omitempty"`
+	RothRetirementValue        any    `json:"roth_retirement_value,omitempty"`
 }
 
-func (s server) calculateDatakey(w http.ResponseWriter, r *http.Request) {
+type dataDebtSnowballDatakey struct {
+	Datakey string  `json:"datakey,omitempty"`
+	Value   float64 `json:"value,omitempty"`
+}
+
+func (s server) calculate401kDatakey(w http.ResponseWriter, r *http.Request) {
 	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
 
 	body, err := io.ReadAll(r.Body)
@@ -79,13 +91,6 @@ func (s server) calculateDatakey(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(duration)
 
-	err = s.checkRequestError(response.Data)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
 	data := new(data401kDatakey)
 	err = json.Unmarshal(response.Data, data)
 	if err != nil {
@@ -115,13 +120,6 @@ func (s server) calculateAll401k(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(duration)
 
-	err = s.checkRequestError(response.Data)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
 	modelMap := map[string]data401k{}
 	err = json.Unmarshal(response.Data, &modelMap)
 	if err != nil {
@@ -136,12 +134,80 @@ func (s server) calculateAll401k(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s server) checkRequestError(d []byte) error {
-	reqError := RequestError{}
-	err := json.Unmarshal(d, &reqError)
+// func (s server) calculateDebtSnowball(w http.ResponseWriter, r *http.Request) {
+// 	body, err := io.ReadAll(r.Body)
+// 	if err != nil {
+// 		log.Println("Error parsing request body: ", err)
+// 		return
+// 	}
+// 	requestAt := time.Now()
+// 	response, err := s.nc.Request("calculate_debt_snowball", body, 5*time.Second)
+// 	if err != nil {
+// 		log.Println("Error making NATS request:", err)
+// 	}
+// 	duration := time.Since(requestAt)
+
+// 	log.Println(duration)
+
+// }
+
+func (s server) calculateDebtSnowballDatakey(w http.ResponseWriter, r *http.Request) {
+	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error parsing request body: ", err)
+		return
+	}
+
+	input := struct {
+		Debts []struct {
+			Name           string  `json:"name"`
+			Balance        float64 `json:"balance"`
+			Amount         float64 `json:"amount"`
+			AnnualInterest float64 `json:"annual_interest"`
+			MimimumPayment float64 `json:"minimum_payment"`
+		} `json:"debts"`
+		ExtraMonthlyPayment     float64 `json:"extra_monthly_payment"`
+		OneTimeImmediatePayment float64 `json:"one_time_immediate_payment"`
+		Datakey                 string  `json:"datakey"`
+	}{
+		Datakey: datakey,
+	}
+
+	err = json.Unmarshal(body, &input)
+	if err != nil {
+		log.Println("Error unmarshalling body into inputs: ", err)
+		return
+	}
+
+	reqData, err := json.Marshal(input)
+	if err != nil {
+		log.Println("Error marshalling inputs into bytes: ", err)
+		return
+	}
+
+	requestAt := time.Now()
+	response, err := s.nc.Request("calculate_debt_snowball_by_datakey", reqData, 5*time.Second)
+	if err != nil {
+		log.Println("Error making NATS request:", err)
+	}
+	duration := time.Since(requestAt)
+
+	log.Println(duration)
+
+	data := new(dataDebtSnowballDatakey)
+	err = json.Unmarshal(response.Data, data)
 	if err != nil {
 		panic(err)
 	}
 
-	return reqError.Err
+	data.Datakey = datakey
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(data)
+	if err != nil {
+		panic(err)
+	}
 }

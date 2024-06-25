@@ -1,7 +1,16 @@
 include $(PWD)/.env
 
-test: fmt
+#### Testing
+test_401k: fmt
 	(cd $(401K_CALCULATOR_DIR); go test ./... -v -coverpkg=./...)
+
+test_debt_snowball: fmt
+	(cd $(DEBT_SNOWBALL_CALCULATOR_DIR); go test ./... -v -coverpkg=./...)
+
+test: fmt test_401k test_debt_snowball
+	
+coverage_debt_snowball: fmt 
+		(cd $(DEBT_SNOWBALL_CALCULATOR_DIR); go test -v -coverprofile bin/cover.out ./... -coverpkg=./...; go tool cover -html bin/cover.out -o bin/cover.html; open bin/cover.html)
 
 coverage:
 	(cd $(401K_CALCULATOR_DIR); go test -v -coverprofile bin/cover.out ./... -coverpkg=./...; go tool cover -html bin/cover.out -o bin/cover.html; open bin/cover.html)
@@ -13,7 +22,7 @@ up:
 	@echo "Docker images started!"
 
 #### up: starts all containers in after building
-up_build: fmt build_401k_api build_webapp build_api_gateway 
+up_build: fmt build_401k_api build_webapp build_api_gateway build_debt_snowball_api
 	@echo "Stopping docker images (if running...)"
 	docker-compose down
 	@echo "Building (when required) and starting docker images..."
@@ -28,6 +37,10 @@ down:
 serve_api:
 	cd $(401K_CALCULATOR_DIR)/cmd/api && fresh -c runner.conf
 
+nats:
+	@echo "recreating nats service"
+	docker-compose up -d --build nats
+
 webapp: fmt build_401k_tinygo build_webapp 
 	@echo "rebuilding and starting webapp"
 	cp ${TINYGOROOT}/targets/wasm_exec.js $(WEBAPP_DIR)/cmd/assets
@@ -36,8 +49,16 @@ webapp: fmt build_401k_tinygo build_webapp
 	docker-compose up -d --build webapp
 
 401k_api: fmt build_401k_api
-	@echo "rebuilding and starting api"
+	@echo "rebuilding and starting 401k api"
 	docker-compose up -d --build  401k-calculator-api 
+
+debt_snowball_api: fmt build_debt_snowball_api
+	@echo "rebuilding and starting debt_snowball api"
+	docker-compose up -d --build debt-snowball-api
+
+api_gateway: build_api_gateway
+	@echo "rebuilding and starting api_gateway"
+	docker-compose up -d --build api-gateway	
 
 build_401k_api: 
 	@echo "Building api 401k_calculator binary..."
@@ -60,6 +81,12 @@ build_webapp: build_401k_tinygo
 	cd $(WEBAPP_DIR) && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
 	du -sh $(WEBAPP_DIR)/bin/${WEBAPP_BINARY}
 	@echo "Done building webapp binary"
+
+build_debt_snowball_api: 
+	@echo "Building api debt_snowball binary..."
+	cd ${DEBT_SNOWBALL_CALCULATOR_DIR} && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${DEBT_SNOWBALL_CALCULATOR_BINARY} ./cmd/api
+	du -sh $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${DEBT_SNOWBALL_CALCULATOR_BINARY}
+	@echo "Done building debt_snowball binary!"
 
 build_api_gateway: 
 	@echo "Building the api gateway..."

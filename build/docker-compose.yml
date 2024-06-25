@@ -47,8 +47,10 @@ services:
       PORT: 8662
       BUILD_ENV: DEV
 
+  ### APIs
+  # roth vs traditional 401k api
   401k-calculator-api:
-    container_name: rest-api-server
+    container_name: api-server-401k
     build:
       context: ./../401k_calculator
       dockerfile: ./../401k_calculator/401k_calculator.dockerfile
@@ -60,6 +62,24 @@ services:
       replicas: 1
     environment:
       PORT: 8660
+      NATS_URI: nats://nats:4222
+    depends_on:
+      - nats
+
+  # debt snowball api
+  debt-snowball-api:
+    container_name: api-server-debt-snowball
+    build: 
+      context: ./../debt_snowball_calculator
+      dockerfile: ./../debt_snowball_calculator/debt_snowball_calculator.dockerfile
+    restart: always
+    ports: 
+      - "8663:8663"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment: 
+      PORT: 8663
       NATS_URI: nats://nats:4222
     depends_on:
       - nats
