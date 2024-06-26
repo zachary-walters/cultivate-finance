@@ -1,11 +1,12 @@
 package calculator
 
 import (
-	"fmt"
 	"sort"
 )
 
-type SnowballCalculation interface{}
+type SnowballCalculation interface {
+	Calculate(model *Model) DebtSequences
+}
 
 type Snowball struct {
 	AbstractCalculation
@@ -15,7 +16,7 @@ func NewSnowball() *Snowball {
 	return &Snowball{}
 }
 
-func (c *Snowball) Calculate(model *Model) {
+func (c *Snowball) Calculate(model *Model) DebtSequences {
 	debts := model.Input.Debts
 	extraMonthlyPayment := model.Input.ExtraMonthlyPayment
 	rolloverPayment := 0.0
@@ -31,17 +32,17 @@ func (c *Snowball) Calculate(model *Model) {
 
 	for _, debt := range debts {
 		debtBalance := debt.Amount
-		
+
 		debtSequence := DebtSequence{
-			Debt: debt,
-			Months: []int{},
+			Debt:     debt,
+			Months:   []int{},
 			Payments: []float64{},
 			Balances: []float64{},
 		}
 
 		monthIter := 1
 		for {
-			basePayment := debt.MinimumPayment 
+			basePayment := debt.MinimumPayment
 
 			if monthIter == maxMonth {
 				basePayment = debt.MinimumPayment + rolloverPayment
@@ -54,30 +55,28 @@ func (c *Snowball) Calculate(model *Model) {
 
 			// use oneTimeImmediatePayment
 			debtBalance = debtBalance - oneTimeImmediatePayment
+			leftover := (debtBalance - basePayment) * -1
 			if debtBalance <= 0 && monthIter == 1 {
 				debtSequence.Balances = append(debtSequence.Balances, 0)
 				debtSequence.Payments = append(debtSequence.Payments, debt.Amount)
-
+				rolloverPayment = leftover
 				oneTimeImmediatePayment = debtBalance * -1
 				compoundMinimumPayments += debt.MinimumPayment
 				maxMonth = debtSequence.Months[len(debtSequence.Months)-1]
 				break
-			} 
+			}
 
 			// use other payments
-			leftover := (debtBalance - basePayment) * -1
 			debtBalance = debtBalance - basePayment
 			if debtBalance <= 0 {
 				debtSequence.Balances = append(debtSequence.Balances, 0)
-				debtSequence.Payments = append(debtSequence.Payments, basePayment - (debtBalance * -1))
-
+				debtSequence.Payments = append(debtSequence.Payments, basePayment-(debtBalance*-1))
 				rolloverPayment = leftover
-
 				compoundMinimumPayments += debt.MinimumPayment
 				maxMonth = debtSequence.Months[len(debtSequence.Months)-1]
 				break
 			}
-			debtSequence.Payments = append(debtSequence.Payments, basePayment + oneTimeImmediatePayment)
+			debtSequence.Payments = append(debtSequence.Payments, basePayment+oneTimeImmediatePayment)
 
 			oneTimeImmediatePayment = 0
 
@@ -85,13 +84,13 @@ func (c *Snowball) Calculate(model *Model) {
 			if monthIter != 1 {
 				debtBalance = debtBalance + (debtBalance * (debt.AnnualInterest / 100 / 12))
 			}
-			
+
 			debtSequence.Balances = append(debtSequence.Balances, debtBalance)
-			monthIter+=1
+			monthIter += 1
 		}
 
 		debtSequences = append(debtSequences, debtSequence)
 	}
 
-	fmt.Println(debtSequences)
+	return debtSequences
 }

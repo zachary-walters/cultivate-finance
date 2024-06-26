@@ -48,8 +48,8 @@ func NewModel(input Input) *Model {
 }
 
 type DebtSequence struct {
-	Debt Debt
-	Months []int
+	Debt     Debt
+	Months   []int
 	Payments []float64
 	Balances []float64
 }
