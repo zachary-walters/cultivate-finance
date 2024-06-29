@@ -56,7 +56,7 @@ func TestSnowballCalculate(t *testing.T) {
 				rolloverPayment := 0.0
 				oneTimeImmediatePayment := test.model.Input.OneTimeImmediatePayment
 				compoundMinimumPayments := 0.0
-				maxMonth := 0
+				maxMonth := 0.0
 
 				sort.Slice(debts, func(i, j int) bool {
 					return debts[i].Amount < debts[j].Amount
@@ -67,12 +67,12 @@ func TestSnowballCalculate(t *testing.T) {
 
 					debtSequence := calculator.DebtSequence{
 						Debt:     debt,
-						Months:   []int{},
+						Months:   []float64{},
 						Payments: []float64{},
 						Balances: []float64{},
 					}
 
-					monthIter := 1
+					monthIter := 1.0
 					for {
 						basePayment := debt.MinimumPayment
 

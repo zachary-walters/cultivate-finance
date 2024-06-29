@@ -4,6 +4,10 @@ type Calculation interface {
 	Calculate(*Model) float64
 }
 
+type SequenceCalculation interface {
+	Calculate(*Model) []float64
+}
+
 type AbstractCalculation struct{}
 
 func (c *AbstractCalculation) SanitizeToZero(i interface{}) float64 {
@@ -49,7 +53,7 @@ func NewModel(input Input) *Model {
 
 type DebtSequence struct {
 	Debt     Debt
-	Months   []int
+	Months   []float64
 	Payments []float64
 	Balances []float64
 }
