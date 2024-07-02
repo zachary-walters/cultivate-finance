@@ -144,7 +144,8 @@ func calculateDatakey(d []byte) (any, error) {
 	calculation, exists := calculations[input.Datakey]
 	if !exists {
 		// send no exists message reply to nats
-		log.Println("calculation doesn't exist")
+		log.Println("calculation does not exist for datakey: ", input.Datakey)
+		return nil, nil
 	}
 
 	model := calculator.NewModel(input)

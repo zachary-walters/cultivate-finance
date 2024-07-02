@@ -30,7 +30,7 @@ func main() {
 
 	r.Post("/calculate_all_401k", ns.calculateAll401k)
 	r.Post("/calculate_401k/{datakey}", ns.calculate401kDatakey)
-	// r.Post("/calculate_debt_snowball", ns.calculateDebtSnowball)
+	r.Post("/calculate_all_debt_snowball", ns.calculateDebtSnowball)
 	r.Post("/calculate_debt_snowball/{datakey}", ns.calculateDebtSnowballDatakey)
 
 	log.Println("Server listening on port: ", os.Getenv("PORT"))

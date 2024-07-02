@@ -32,8 +32,8 @@ type data401kDatakey struct {
 }
 
 type dataDebtSnowballDatakey struct {
-	Datakey string  `json:"datakey,omitempty"`
-	Value   float64 `json:"value,omitempty"`
+	Datakey string `json:"datakey,omitempty"`
+	Value   any    `json:"value,omitempty"`
 }
 
 func (s server) calculate401kDatakey(w http.ResponseWriter, r *http.Request) {
@@ -82,14 +82,10 @@ func (s server) calculate401kDatakey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	requestAt := time.Now()
 	response, err := s.nc.Request("calculate_401k_by_datakey", reqData, 5*time.Second)
 	if err != nil {
 		log.Println("Error making NATS request:", err)
 	}
-	duration := time.Since(requestAt)
-
-	log.Println(duration)
 
 	data := new(data401kDatakey)
 	err = json.Unmarshal(response.Data, data)
@@ -111,14 +107,10 @@ func (s server) calculateAll401k(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error parsing request body: ", err)
 		return
 	}
-	requestAt := time.Now()
 	response, err := s.nc.Request("calculate_all_401k", body, 5*time.Second)
 	if err != nil {
 		log.Println("Error making NATS request:", err)
 	}
-	duration := time.Since(requestAt)
-
-	log.Println(duration)
 
 	modelMap := map[string]data401k{}
 	err = json.Unmarshal(response.Data, &modelMap)
@@ -134,22 +126,31 @@ func (s server) calculateAll401k(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func (s server) calculateDebtSnowball(w http.ResponseWriter, r *http.Request) {
-// 	body, err := io.ReadAll(r.Body)
-// 	if err != nil {
-// 		log.Println("Error parsing request body: ", err)
-// 		return
-// 	}
-// 	requestAt := time.Now()
-// 	response, err := s.nc.Request("calculate_debt_snowball", body, 5*time.Second)
-// 	if err != nil {
-// 		log.Println("Error making NATS request:", err)
-// 	}
-// 	duration := time.Since(requestAt)
+func (s server) calculateDebtSnowball(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error parsing request body: ", err)
+		return
+	}
 
-// 	log.Println(duration)
+	response, err := s.nc.Request("calculate_all_debt_snowball", body, 5*time.Second)
+	if err != nil {
+		log.Println("Error making NATS request:", err)
+	}
 
-// }
+	modelMap := map[string]dataDebtSnowballDatakey{}
+	err = json.Unmarshal(response.Data, &modelMap)
+	if err != nil {
+		panic(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(modelMap)
+	if err != nil {
+		panic(err)
+	}
+}
 
 func (s server) calculateDebtSnowballDatakey(w http.ResponseWriter, r *http.Request) {
 	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
@@ -187,14 +188,10 @@ func (s server) calculateDebtSnowballDatakey(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	requestAt := time.Now()
 	response, err := s.nc.Request("calculate_debt_snowball_by_datakey", reqData, 5*time.Second)
 	if err != nil {
 		log.Println("Error making NATS request:", err)
 	}
-	duration := time.Since(requestAt)
-
-	log.Println(duration)
 
 	data := new(dataDebtSnowballDatakey)
 	err = json.Unmarshal(response.Data, data)

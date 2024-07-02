@@ -1,5 +1,7 @@
 package calculator
 
+import "sync"
+
 type Calculation interface {
 	Calculate(*Model) float64
 }
@@ -59,3 +61,35 @@ type DebtSequence struct {
 }
 
 type DebtSequences []DebtSequence
+
+type CalculationData struct {
+	Datakey string `json:"datakey,omitempty"`
+	Value   any    `json:"value,omitempty"`
+}
+
+func CalculateSynchronous(model *Model, calculation any, datakey string) CalculationData {
+	calc, isCalculation := calculation.(Calculation)
+	seq, isSequenceCalculation := calculation.(SequenceCalculation)
+	snowball, isSnowballCalculation := calculation.(SnowballCalculation)
+
+	calculationData := CalculationData{
+		Datakey: datakey,
+	}
+
+	if isSequenceCalculation {
+		calculationData.Value = seq.Calculate(model)
+	} else if isCalculation {
+		calculationData.Value = calc.Calculate(model)
+	} else if isSnowballCalculation {
+		calculationData.Value = snowball.Calculate(model)
+	}
+
+	return calculationData
+}
+
+func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model *Model) {
+	defer wg.Done()
+	calculationData := CalculateSynchronous(model, calculation, datakey)
+
+	ch <- calculationData
+}

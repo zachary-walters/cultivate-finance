@@ -7,28 +7,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/nats-io/nats.go"
 	"github.com/zachary-walters/cultivate-finance/debt_snowball_calculator/internal/calculator"
 )
-
-type RequestError struct {
-	Err error `json:"error"`
-}
-
-func (r *RequestError) Error() string {
-	return r.Err.Error()
-}
-
-func reqError(err error) []byte {
-	data, _ := json.Marshal(RequestError{
-		Err: err,
-	})
-
-	return data
-}
 
 func main() {
 	var nc *nats.Conn
@@ -47,10 +32,14 @@ func main() {
 	}
 	log.Println("Connected to NATS at:", nc.ConnectedUrl())
 
-	nc.Subscribe("calculate_debt_snowball", func(msg *nats.Msg) {
+	nc.Subscribe("calculate_all_debt_snowball", func(msg *nats.Msg) {
 		log.Println("Got task request on:", msg.Subject)
 
-		model := calculator.Model{}
+		model, err := calculateModel(msg.Data)
+		if err != nil {
+			nc.Publish(msg.Reply, reqError(err))
+			return
+		}
 
 		d, err := json.Marshal(model)
 		if err != nil {
@@ -85,11 +74,41 @@ func main() {
 	}
 }
 
+func calculateModel(d []byte) (map[string]calculator.CalculationData, error) {
+	decoder := json.NewDecoder(bytes.NewReader(d))
+	var input calculator.Input
+
+	err := decoder.Decode(&input)
+	if err != nil {
+		return nil, err
+	}
+
+	model := calculator.NewModel(input)
+
+	wg := &sync.WaitGroup{}
+	ch := make(chan calculator.CalculationData, len(calculations))
+	for datakey, calculation := range calculations {
+		wg.Add(1)
+		go calculator.CalculateAsync(wg, ch, datakey, calculation, model)
+	}
+	wg.Wait()
+
+	close(ch)
+
+	modelMap := map[string]calculator.CalculationData{}
+	for len(ch) > 0 {
+		calculationData := <-ch
+		modelMap[calculationData.Datakey] = calculator.CalculationData{
+			Datakey: calculationData.Datakey,
+			Value:   calculationData.Value,
+		}
+	}
+
+	return modelMap, nil
+}
+
 func calculateDatakey(d []byte) (any, error) {
-	data := struct {
-		Datakey string  `json:"datakey"`
-		Value   float64 `json:"value"`
-	}{}
+	data := calculator.CalculationData{}
 
 	decoder := json.NewDecoder(bytes.NewReader(d))
 	var input calculator.Input
@@ -100,8 +119,6 @@ func calculateDatakey(d []byte) (any, error) {
 		return nil, err
 	}
 
-	log.Println(input)
-
 	if len(input.Debts) <= 0 {
 		return data, nil
 	}
@@ -109,19 +126,24 @@ func calculateDatakey(d []byte) (any, error) {
 	calculation, exists := calculations[input.Datakey]
 	if !exists {
 		// send no exists message reply to nats
-		log.Println("calculation doesn't exist")
+		log.Println("calculation does not exist for datakey: ", input.Datakey)
+		return nil, NewError(fmt.Sprint("calculation does not exists for datakey: ", input.Datakey))
 	}
 
 	model := calculator.NewModel(input)
 
-	calculationData := calculation.Calculate(model)
-
-	data.Value = calculationData
+	data = calculator.CalculateSynchronous(model, calculation, input.Datakey)
 
 	return data, nil
 }
 
-var calculations = map[string]calculator.Calculation{
-	"TOTAL_BEGINNING_DEBT":  calculator.NewTotalBeginningDebt(),
-	"TOTAL_MINIMUM_PAYMENT": calculator.NewTotalMinimumPayment(),
+var calculations = map[string]any{
+	"DEBT_PAYOFF_MONTH":         calculator.NewDebtPayoffMonth(),
+	"MONTHLY_SEQUENCE_BALANCES": calculator.NewMonthlySequenceBalances(),
+	"MONTHLY_SEQUENCE_PAYMENTS": calculator.NewMonthlySequencePayments(),
+	"SNOWBALL":                  calculator.NewSnowball(),
+	"TOTAL_BEGINNING_DEBT":      calculator.NewTotalBeginningDebt(),
+	"TOTAL_INTEREST":            calculator.NewTotalInterest(),
+	"TOTAL_MINIMUM_PAYMENT":     calculator.NewTotalMinimumPayment(),
+	"TOTAL_PAYMENTS":            calculator.NewTotalPayments(),
 }
