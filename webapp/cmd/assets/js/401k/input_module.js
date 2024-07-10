@@ -1,5 +1,5 @@
-import { calculateAll, isPercentValue, isDollarValue } from "/assets/js/401k_calculations_module.js";
-import { generateCharts } from "/assets/js/chart_module.js";
+import { calculateAll, isPercentValue, isDollarValue } from "/assets/js/401k/401k_calculations_module.js";
+import { generateCharts } from "/assets/js/401k/chart_module.js";
 
 export const get401kCalculatorInput = (datakey) => {
   return {

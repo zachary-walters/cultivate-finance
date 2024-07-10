@@ -1,0 +1,124 @@
+{{define "inputform"}}
+  <div class="form-content">
+    <div class="other-inputs">
+      <label for="one-time-payment">One Time Payment</label>
+      <input class="debt-snowball-input other-input" id="one-time-payment" type="number" value="500"></input>
+      <label for="extra-monthly-payment">Extra Monthly Payment</label>
+      <input class="debt-snowball-input other-input" id="extra-monthly-payment" type="number" value="1000"></input>
+    </div>
+    <div class="debt-inputs">
+      <button class="new-debt-button" onclick="newDebt()">New Debt</button>
+      <div class="header-content">
+        <span class="header">Name</span>
+        <span class="header">Amount</span>
+        <span class="header">Min Payment</span>
+        <span class="header">Annual Interest</span>
+      </div>
+      <div class="debts" id="debts"></div>
+    </div>
+  </div>
+
+
+<script type="module">
+import { recalculate } from "/assets/js/debt_snowball/input_module.js";
+
+var allInputs = document.getElementsByClassName("debt-snowball-input");
+var debtInputs = document.getElementsByClassName("debt-input"); 
+var otherInputs = document.getElementsByClassName("other-input");
+
+export const newDebt = (amount=0, minPayment=0, interest=0) => {
+  let uuid = crypto.randomUUID(); 
+  let debtsDiv = document.getElementById("debts");
+  let debtCount = document.getElementsByClassName("debt-input").length / 4 + 1;
+
+  debtsDiv.innerHTML = debtsDiv.innerHTML + `<div class="debt" id=${uuid}>
+    <div class="form-input">
+      <input class="debt-snowball-input debt-input debt-name" type="text" id="name-${uuid}" name="name-${uuid}" value="debt #${debtCount}"/>
+      <input class="debt-snowball-input debt-input debt-amount" type="number" id="amount-${uuid}" name="amount-${uuid}" value="${amount}"/>
+      <input class="debt-snowball-input debt-input debt-min-payment" type="number" id="min-payment-${uuid}" name="min-payment-${uuid}" value="${minPayment}"/>
+      <input class="debt-snowball-input debt-input debt-interest" type="number" id="interest-${uuid}" name="interest-${uuid}" value="${interest}"/>
+      <button class="remove-debt-btn" onclick="deleteDebt('${uuid}')">Remove</button>
+    </div>
+  </div>`
+
+  allInputs = document.getElementsByClassName("debt-snowball-input");
+  debtInputs = document.getElementsByClassName("debt-input"); 
+  otherInputs = document.getElementsByClassName("other-input");
+  for (var i = 0; i < allInputs.length; i++) {
+    allInputs[i].oninput = () => {
+      setTimeout(() => {
+        recalculate(debtInputs, otherInputs);
+      }, 10);
+    }
+  }
+};
+window.newDebt = newDebt;
+
+export const deleteDebt = (uuid) => {
+  document.getElementById(uuid).outerHTML = "";
+};
+window.deleteDebt = deleteDebt;
+
+newDebt(1000, 50, 19.49);
+newDebt(2000, 100, 24.49);
+newDebt(3000, 150, 26.99);
+newDebt(4000, 200, 24.29);
+newDebt(5000, 200, 29.99);
+newDebt(6000, 200, 15.00);
+newDebt(7000, 200, 18.00);
+newDebt(10000, 350, 16.00);
+
+debtInputs = document.getElementsByClassName("debt-input"); 
+otherInputs = document.getElementsByClassName("other-input");
+recalculate(debtInputs, otherInputs);
+</script>
+
+<style scoped>
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  .other-inputs {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    max-width: 10rem;
+  }
+
+  .other-input {
+    margin-bottom: 1rem;
+  }
+
+  .debts {
+    overflow-y: scroll;
+    max-height: 16rem;
+  }
+
+  .debt-input {
+    margin-bottom: 0.5rem;
+    width: 6rem;
+  }
+
+  .new-debt-button {
+    margin-bottom: 0.5rem;
+  }
+
+  .header-content {
+    display: flex;
+  }
+
+  .header {
+    width: 6rem;
+    font-size: 14px;
+    margin-right: 0.5rem;
+  }
+</style>
+{{end}}

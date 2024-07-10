@@ -4,7 +4,7 @@ const go = new Go();
 const importObject = go.importObject;
 
 export const calculate = async (input) => {
-  const wasmModule = await wasmBrowserInstantiate("/assets/tinygoBin.wasm", importObject);
+  const wasmModule = await wasmBrowserInstantiate("/assets/401k.wasm", importObject);
   go.run(wasmModule.instance);
 
   return window.calculate({
@@ -22,7 +22,7 @@ export const calculate = async (input) => {
 };
 
 export const calculateAll = async (input) => {
-  const wasmModule = await wasmBrowserInstantiate("/assets/tinygoBin.wasm", importObject);
+  const wasmModule = await wasmBrowserInstantiate("/assets/401k.wasm", importObject);
   go.run(wasmModule.instance); 
 
   return window.calculateAll({

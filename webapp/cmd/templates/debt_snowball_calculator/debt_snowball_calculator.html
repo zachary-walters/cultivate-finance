@@ -10,30 +10,15 @@
 </head>
 
 <body>
-    <div class="nav-bar-container">
-      {{template "nav-bar" .}}
-    </div>
-    <div class="inputform-container">
-      {{template "inputform" .}}
-    </div>
-    <div class="decision-container">
-      {{template "decision" .}}
-    </div>
-    <div class="calculations-container">
-      {{template "calculations" .}}
-    </div>
-    <div class="contributions-interest-container">
-      {{template "contributions-interest-charts" .}}
-    </div>
-    <div class="area-chart-container">
-      {{template "area-chart" .}}
-    </div> 
+  <div class="nav-bar-container">
+    {{template "nav-bar" .}}
+  </div>
+  <div class="inputform-container">
+    {{template "inputform" .}}
+  </div>
 </body>
 
 <script type="module"> 
-import { recalculate } from "/assets/js/401k/input_module.js";
-
-recalculate();
 </script>
 
 <style>

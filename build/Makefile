@@ -41,10 +41,11 @@ nats:
 	@echo "recreating nats service"
 	docker-compose up -d --build nats
 
-webapp: fmt build_401k_tinygo build_webapp 
+webapp: fmt build_webapp 
 	@echo "rebuilding and starting webapp"
 	cp ${TINYGOROOT}/targets/wasm_exec.js $(WEBAPP_DIR)/cmd/assets
-	cp $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY} $(WEBAPP_DIR)/cmd/assets
+	cp $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY} $(WEBAPP_DIR)/cmd/assets
+	cp $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} $(WEBAPP_DIR)/cmd/assets
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' $(WEBAPP_DIR)/cmd/assets/wasm_exec.js
 	docker-compose up -d --build webapp
 
@@ -67,16 +68,17 @@ build_401k_api:
 	@echo "Done building 401k_calculator binary!"
 
 build_401k_tinygo:
-	@echo "Building tinygo wasm binary..."
-	cd $(401K_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify -panic=trap ./cmd/wasm 
-	wasm-opt -s -Oz $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY} -o $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY} && chmod +x $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY}
-	du -sh $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY}
+	@echo "Building 401k tinygo wasm binary..."
+	cd $(401K_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_401K_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify -panic=trap ./cmd/wasm 
+	wasm-opt -s -Oz $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY} -o $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY} && chmod +x $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY}
+	du -sh $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY}
 	@echo "Done building tinygo binary"
 
-build_webapp: build_401k_tinygo
+build_webapp: build_401k_tinygo build_debt_snowball_tinygo
 	@echo "Building the webapp..."
 	cp ${TINYGOROOT}/targets/wasm_exec.js $(WEBAPP_DIR)/cmd/assets
-	cp $(401K_CALCULATOR_DIR)/bin/${TINYGO_BINARY} $(WEBAPP_DIR)/cmd/assets
+	cp $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY} $(WEBAPP_DIR)/cmd/assets
+	cp $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} $(WEBAPP_DIR)/cmd/assets
 	sed -e '/finalizeRef not implemented/ s/^/\/\//' -i '' $(WEBAPP_DIR)/cmd/assets/wasm_exec.js
 	cd $(WEBAPP_DIR) && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${WEBAPP_BINARY} ./cmd/main.go
 	du -sh $(WEBAPP_DIR)/bin/${WEBAPP_BINARY}
@@ -87,6 +89,13 @@ build_debt_snowball_api:
 	cd ${DEBT_SNOWBALL_CALCULATOR_DIR} && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${DEBT_SNOWBALL_CALCULATOR_BINARY} ./cmd/api
 	du -sh $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${DEBT_SNOWBALL_CALCULATOR_BINARY}
 	@echo "Done building debt_snowball binary!"
+
+build_debt_snowball_tinygo:
+	@echo "Building Debt Snowball tinygo wasm binary..."
+	cd $(DEBT_SNOWBALL_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_DEBT_SNOWBALL_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify -panic=trap ./cmd/wasm 
+	wasm-opt -s -Oz $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} -o $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} && chmod +x $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
+	du -sh $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
+	@echo "Done building tinygo binary"
 
 build_api_gateway: 
 	@echo "Building the api gateway..."

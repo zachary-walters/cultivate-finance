@@ -34,6 +34,7 @@ func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/wiki", wiki)
 	http.HandleFunc("/roth_vs_traditional", rothVsTraditional)
+	http.HandleFunc("/debt_snowball", debtSnowball)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("/assets"))))
 
@@ -67,6 +68,20 @@ func rothVsTraditional(w http.ResponseWriter, r *http.Request) {
 		},
 		"build_env": os.Getenv("BUILD_ENV"),
 	})
+}
+
+func debtSnowball(w http.ResponseWriter, r *http.Request) {
+	templates, err := template.New("").
+		ParseFS(res,
+			"templates/debt_snowball_calculator/debt_snowball_calculator.html",
+			"templates/debt_snowball_calculator/debt_snowball_input_form.html",
+			"templates/navigation_bar.html",
+		)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	templates.ExecuteTemplate(w, "debt_snowball_calculator.html", map[string]interface{}{})
 }
 
 func home(w http.ResponseWriter, r *http.Request) {

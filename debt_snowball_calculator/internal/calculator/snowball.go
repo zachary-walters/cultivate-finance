@@ -1,9 +1,5 @@
 package calculator
 
-import (
-	"sort"
-)
-
 type SnowballCalculation interface {
 	Calculate(model *Model) DebtSequences
 }
@@ -17,16 +13,22 @@ func NewSnowball() *Snowball {
 }
 
 func (c *Snowball) Calculate(model *Model) DebtSequences {
-	debts := model.Input.Debts
 	extraMonthlyPayment := model.Input.ExtraMonthlyPayment
 	rolloverPayment := 0.0
 	oneTimeImmediatePayment := model.Input.OneTimeImmediatePayment
 	compoundMinimumPayments := 0.0
 	maxMonth := 0.0
 
-	sort.Slice(debts, func(i, j int) bool {
-		return debts[i].Amount < debts[j].Amount
-	})
+	// custom insertion sort to avoid importing the sort library
+	// handrolling our own saves 8kb in the binary file
+	debts := func(arr []Debt) []Debt {
+		for i := 0; i < len(arr); i++ {
+			for j := i; j > 0 && arr[j-1].Amount > arr[j].Amount; j-- {
+				arr[j], arr[j-1] = arr[j-1], arr[j]
+			}
+		}
+		return arr
+	}(model.Input.Debts)
 
 	debtSequences := DebtSequences{}
 

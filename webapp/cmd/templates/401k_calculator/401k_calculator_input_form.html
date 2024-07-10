@@ -84,9 +84,7 @@
   </div>
 
 <script type="module">
-import { calculate, calculateAll, isDollarValue, isPercentValue } from "/assets/js/401k_calculations_module.js";
-import { get401kCalculatorInput, recalculate } from "/assets/js/input_module.js";
-import { generateCharts } from "/assets/js/chart_module.js";
+import { recalculate } from "/assets/js/401k/input_module.js";
 
 let inputs = document.getElementsByClassName("401k-calculator-input");
 for (var i = 0; i < inputs.length; i++) {

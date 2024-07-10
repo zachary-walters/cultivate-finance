@@ -99,10 +99,12 @@ func TestCalculateModel(t *testing.T) {
 }
 
 func TestCalculateDatakey(t *testing.T) {
-	input := calculator.Input{}
+	input := calculator.Input{
+		Datakey: "TOTAL_INTEREST",
+	}
 	inputBytes, _ := json.Marshal(input)
 
-	data, err := calculateDatakey(inputBytes)
+	found, err := calculateDatakey(inputBytes)
 	assert.NoError(t, err)
 
 	expectedData := struct {
@@ -111,8 +113,14 @@ func TestCalculateDatakey(t *testing.T) {
 		TraditionalRetirementValue any    `json:"traditional_retirement_value,omitempty"`
 		RothValue                  any    `json:"roth_value,omitempty"`
 		RothRetirementValue        any    `json:"roth_retirement_value,omitempty"`
-	}{}
-	assert.Equal(t, expectedData, data)
+	}{
+		Datakey:                    input.Datakey,
+		TraditionalValue:           0.0,
+		TraditionalRetirementValue: 0.0,
+		RothValue:                  0.0,
+		RothRetirementValue:        0.0,
+	}
+	assert.Equal(t, expectedData, found)
 
 	// test json unmarshal error
 	badInput := make([]byte, 4)
@@ -121,4 +129,15 @@ func TestCalculateDatakey(t *testing.T) {
 	badData, err := calculateDatakey(badInput)
 	assert.Error(t, err)
 	assert.Nil(t, badData)
+
+	// test bad datakey
+	input = calculator.Input{
+		Datakey: "BAD_DK_DOESNT_EXIST",
+	}
+	inputBytes, _ = json.Marshal(input)
+	found, err = calculateDatakey(inputBytes)
+	assert.NoError(t, err)
+
+	assert.Nil(t, found)
+	assert.Nil(t, err)
 }

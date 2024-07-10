@@ -1,4 +1,4 @@
-import { isDollarValue } from "/assets/js/401k_calculations_module.js";
+import { isDollarValue } from "/assets/js/401k/401k_calculations_module.js";
 
 export const generateCharts = (calculations) => {
   let chartStatus = Chart.getChart("traditional-chart"); 

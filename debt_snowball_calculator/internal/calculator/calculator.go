@@ -1,6 +1,8 @@
 package calculator
 
-import "sync"
+import (
+	"sync"
+)
 
 type Calculation interface {
 	Calculate(*Model) float64
@@ -54,10 +56,10 @@ func NewModel(input Input) *Model {
 }
 
 type DebtSequence struct {
-	Debt     Debt
-	Months   []float64
-	Payments []float64
-	Balances []float64
+	Debt     Debt      `json:"debt,omitempty"`
+	Months   []float64 `json:"months,omitempty"`
+	Payments []float64 `json:"payments,omitempty"`
+	Balances []float64 `json:"balances,omitempty"`
 }
 
 type DebtSequences []DebtSequence
@@ -92,4 +94,63 @@ func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string,
 	calculationData := CalculateSynchronous(model, calculation, datakey)
 
 	ch <- calculationData
+}
+
+func CalculateSynchronousWasm(model *Model, calculation any, datakey string) CalculationData {
+	calc, isCalculation := calculation.(Calculation)
+	seq, isSequenceCalculation := calculation.(SequenceCalculation)
+	snowball, isSnowballCalculation := calculation.(SnowballCalculation)
+
+	calculationData := CalculationData{
+		Datakey: datakey,
+	}
+
+	if isSequenceCalculation {
+		calculationData.Value = TranslateFloatSlice(seq.Calculate(model))
+	} else if isCalculation {
+		calculationData.Value = calc.Calculate(model)
+	} else if isSnowballCalculation {
+		calculationData.Value = TranslateSnowball(snowball.Calculate(model))
+	}
+
+	return calculationData
+}
+
+func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model *Model) {
+	defer wg.Done()
+	calculationData := CalculateSynchronousWasm(model, calculation, datakey)
+
+	ch <- calculationData
+}
+
+func TranslateFloatSlice(s []float64) []interface{} {
+	x := make([]interface{}, len(s))
+
+	for i := range s {
+		x[i] = s[i]
+	}
+
+	return x
+}
+
+func TranslateSnowball(s DebtSequences) map[string]interface{} {
+	m := map[string]interface{}{}
+
+	for _, debtSequence := range s {
+		m[debtSequence.Debt.Name] = map[string]interface{}{
+			"balances": TranslateFloatSlice(debtSequence.Balances),
+			"payments": TranslateFloatSlice(debtSequence.Payments),
+			"months":   TranslateFloatSlice(debtSequence.Months),
+			"debt": map[string]interface{}{
+				debtSequence.Debt.Name: map[string]interface{}{
+					"name":            debtSequence.Debt.Name,
+					"amount":          debtSequence.Debt.Amount,
+					"minimum_payment": debtSequence.Debt.MinimumPayment,
+					"annual_interest": debtSequence.Debt.AnnualInterest,
+				},
+			},
+		}
+	}
+
+	return m
 }
