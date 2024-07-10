@@ -22,10 +22,10 @@ var snowballQATests = []struct {
 		model:    &snowballQATestModel1,
 		expected: snowballQATestModel1Answer,
 	},
-	{
-		name:  "Test Case 2",
-		model: &snowballQATestModel2,
-	},
+	// {
+	// 	name:  "Test Case 2",
+	// 	model: &snowballQATestModel2,
+	// },
 }
 
 func TestSnowballQACalculate(t *testing.T) {

@@ -48,15 +48,15 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 
 			if monthIter == maxMonth {
 				basePayment = debt.MinimumPayment + rolloverPayment
+				rolloverPayment = 0
 			} else if monthIter > maxMonth {
-				basePayment = debt.MinimumPayment + extraMonthlyPayment + compoundMinimumPayments
+				basePayment = debt.MinimumPayment + extraMonthlyPayment + compoundMinimumPayments + rolloverPayment + oneTimeImmediatePayment
 				rolloverPayment = 0
 			}
 
 			debtSequence.Months = append(debtSequence.Months, monthIter)
 
 			// use oneTimeImmediatePayment
-			debtBalance = debtBalance - oneTimeImmediatePayment
 			leftover := (debtBalance - basePayment) * -1
 			if debtBalance <= 0 && monthIter == 1 {
 				debtSequence.Balances = append(debtSequence.Balances, 0)
@@ -66,6 +66,8 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 				compoundMinimumPayments += debt.MinimumPayment
 				maxMonth = debtSequence.Months[len(debtSequence.Months)-1]
 				break
+			} else {
+				oneTimeImmediatePayment = 0
 			}
 
 			// use other payments

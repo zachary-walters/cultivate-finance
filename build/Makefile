@@ -69,6 +69,7 @@ build_401k_api:
 
 build_401k_tinygo:
 	@echo "Building 401k tinygo wasm binary..."
+	mkdir -p $(401K_CALCULATOR_DIR)/bin
 	cd $(401K_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_401K_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify -panic=trap ./cmd/wasm 
 	wasm-opt -s -Oz $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY} -o $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY} && chmod +x $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY}
 	du -sh $(401K_CALCULATOR_DIR)/bin/${TINYGO_401K_BINARY}
@@ -92,6 +93,7 @@ build_debt_snowball_api:
 
 build_debt_snowball_tinygo:
 	@echo "Building Debt Snowball tinygo wasm binary..."
+	mkdir -p $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin
 	cd $(DEBT_SNOWBALL_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_DEBT_SNOWBALL_BINARY} -target wasm -opt=z -no-debug -size full -scheduler=asyncify -panic=trap ./cmd/wasm 
 	wasm-opt -s -Oz $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} -o $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} && chmod +x $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
 	du -sh $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
