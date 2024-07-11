@@ -33,11 +33,34 @@ var snowballTests = []struct {
 			},
 		},
 	},
+	{
+		name: "Test Case 1 - break out early",
+		model: &calculator.Model{
+			Input: calculator.Input{
+				Debts: []calculator.Debt{
+					{
+						Name:           "debt0",
+						Amount:         10000000000000000,
+						MinimumPayment: 1,
+						AnnualInterest: 10,
+					},
+					{
+						Name:           "debt1",
+						Amount:         10,
+						MinimumPayment: 1,
+						AnnualInterest: 1,
+					},
+				},
+			},
+		},
+	},
 }
 
 func TestNewSnowball(t *testing.T) {
 	actual := calculator.NewSnowball()
-	expected := &calculator.Snowball{}
+	expected := &calculator.Snowball{
+		MaxYear: 1000,
+	}
 
 	assert.Equal(t, expected, actual)
 }
@@ -45,7 +68,9 @@ func TestNewSnowball(t *testing.T) {
 func TestSnowballCalculate(t *testing.T) {
 	for _, test := range snowballTests {
 		t.Run(test.name, func(t *testing.T) {
-			c := &calculator.Snowball{}
+			c := &calculator.Snowball{
+				MaxYear: 1000,
+			}
 
 			actual := c.Calculate(test.model)
 			expected := func() calculator.DebtSequences {
@@ -57,6 +82,7 @@ func TestSnowballCalculate(t *testing.T) {
 				oneTimeImmediatePayment := test.model.Input.OneTimeImmediatePayment
 				compoundMinimumPayments := 0.0
 				maxMonth := 0.0
+				invalid := false
 
 				sort.Slice(debts, func(i, j int) bool {
 					return debts[i].Amount < debts[j].Amount
@@ -74,6 +100,15 @@ func TestSnowballCalculate(t *testing.T) {
 
 					monthIter := 1.0
 					for {
+						if monthIter/12 >= c.MaxYear || invalid {
+							debtSequence.Invalid = true
+							debtSequence.MaxYear = c.MaxYear
+							invalid = true
+
+							debtSequences = append(debtSequences, debtSequence)
+							break
+						}
+
 						basePayment := debt.MinimumPayment
 
 						if monthIter == maxMonth {

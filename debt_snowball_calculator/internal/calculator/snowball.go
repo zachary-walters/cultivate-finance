@@ -6,10 +6,14 @@ type SnowballCalculation interface {
 
 type Snowball struct {
 	AbstractCalculation
+
+	MaxYear float64
 }
 
 func NewSnowball() *Snowball {
-	return &Snowball{}
+	return &Snowball{
+		MaxYear: 1000,
+	}
 }
 
 func (c *Snowball) Calculate(model *Model) DebtSequences {
@@ -18,6 +22,7 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 	oneTimeImmediatePayment := model.Input.OneTimeImmediatePayment
 	compoundMinimumPayments := 0.0
 	maxMonth := 0.0
+	invalid := false
 
 	// custom insertion sort to avoid importing the sort library
 	// handrolling our own saves 8kb in the binary file
@@ -44,6 +49,20 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 
 		monthIter := 1.0
 		for {
+			/*
+				This triggers when an arbitrarily high debt payoff happens.
+				Without this, the calculator will hang trying to calculate millions of months.
+				Example: amount == 100000000 and min payoff == 10
+			*/
+			if monthIter/12 >= c.MaxYear || invalid {
+				debtSequence.Invalid = true
+				debtSequence.MaxYear = c.MaxYear
+				invalid = true
+
+				debtSequences = append(debtSequences, debtSequence)
+				break
+			}
+
 			basePayment := debt.MinimumPayment
 
 			if monthIter == maxMonth {
@@ -56,21 +75,9 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 
 			debtSequence.Months = append(debtSequence.Months, monthIter)
 
-			// use oneTimeImmediatePayment
 			leftover := (debtBalance - basePayment) * -1
-			if debtBalance <= 0 && monthIter == 1 {
-				debtSequence.Balances = append(debtSequence.Balances, 0)
-				debtSequence.Payments = append(debtSequence.Payments, debt.Amount)
-				rolloverPayment = leftover
-				oneTimeImmediatePayment = debtBalance * -1
-				compoundMinimumPayments += debt.MinimumPayment
-				maxMonth = debtSequence.Months[len(debtSequence.Months)-1]
-				break
-			} else {
-				oneTimeImmediatePayment = 0
-			}
+			oneTimeImmediatePayment = 0
 
-			// use other payments
 			debtBalance = debtBalance - basePayment
 			if debtBalance <= 0 {
 				debtSequence.Balances = append(debtSequence.Balances, 0)

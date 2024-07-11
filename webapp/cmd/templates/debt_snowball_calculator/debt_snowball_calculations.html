@@ -1,0 +1,44 @@
+{{define "calculations"}}
+<div class="calculations-content">
+  <div class="calculation">
+    <label for="debt-payoff-month" class="calculation-label">Debt Payoff Month</label>
+    <div class="debt-payoff-month" id="debt-payoff-month" name="debt-payoff-month"></div>
+  </div>
+  <div class="calculation">
+    <label for="total-beginning-debt" class="calculation-label">Total Beginning Debt</label>
+    <div class="total-beginning-debt" id="total-beginning-debt" name="total-beginning-debt"></div>
+  </div>
+  <div class="calculation">
+    <label for="total-payments" class="calculation-label">Total Payments</label>
+    <div class="total-payments" id="total-payments" name="total-payments"></div>
+  </div>
+  <div class="calculation">
+    <label for="total-interest" class="calculation-label">Total Interest</label>
+    <div class="total-interest" id="total-interest" name="total-interest"></div>
+  </div>
+  <div class="calculation">
+    <label for="total-minimum-payment" class="calculation-label">Total Minimum Payment</label>
+    <div class="total-minimum-payment" id="total-minimum-payment" name="total-minimum-payment"></div>
+  </div>
+</div>
+
+<style>
+  .calculations-content {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+  }
+
+  .calculation {
+    display: flex;
+  }
+
+  .calculation-label {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    margin-right: 1rem;
+  }
+</style>
+{{end}}

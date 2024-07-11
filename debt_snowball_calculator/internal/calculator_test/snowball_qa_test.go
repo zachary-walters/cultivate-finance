@@ -1,6 +1,7 @@
 package test
 
 import (
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,21 +23,48 @@ var snowballQATests = []struct {
 		model:    &snowballQATestModel1,
 		expected: snowballQATestModel1Answer,
 	},
-	// {
-	// 	name:  "Test Case 2",
-	// 	model: &snowballQATestModel2,
-	// },
+	{
+		name:     "Test Case 2",
+		model:    &snowballQATestModel2,
+		expected: snowballQATestModel2Answer,
+	},
 }
 
 func TestSnowballQACalculate(t *testing.T) {
+	const float64EqualityThreshold = 1e-9
 	for _, test := range snowballQATests {
 		t.Run(test.name, func(t *testing.T) {
-			c := calculator.Snowball{}
+			c := calculator.Snowball{
+				MaxYear: 1000,
+			}
 
 			actual := c.Calculate(test.model)
 
-			assert.Equal(t, actual[0], test.expected[0])
-			assert.Equal(t, actual[len(actual)-1], test.expected[len(test.expected)-1])
+			firstActual := actual[0]
+			lastActual := actual[len(actual)-1]
+
+			firstExpected := test.expected[0]
+			lastExpected := test.expected[len(test.expected)-1]
+
+			assert.Equal(t, firstActual.Months, firstExpected.Months)
+			assert.Equal(t, lastActual.Months, lastExpected.Months)
+
+			for idx := range firstActual.Balances {
+				assert.True(t, math.Abs(firstActual.Balances[idx]-firstExpected.Balances[idx]) <= float64EqualityThreshold)
+			}
+
+			for idx := range lastActual.Balances {
+				assert.True(t, math.Abs(lastActual.Balances[idx]-lastExpected.Balances[idx]) <= float64EqualityThreshold)
+			}
+
+			for idx := range firstActual.Payments {
+				assert.True(t, math.Abs(firstActual.Payments[idx]-firstExpected.Payments[idx]) <= float64EqualityThreshold)
+			}
+
+			for idx := range lastActual.Payments {
+				assert.True(t, math.Abs(lastActual.Payments[idx]-lastExpected.Payments[idx]) <= float64EqualityThreshold)
+			}
+
 		})
 	}
 }
@@ -259,5 +287,30 @@ var snowballQATestModel2 = calculator.Model{
 				AnnualInterest: 16.00,
 			},
 		},
+	},
+}
+
+var snowballQATestModel2Answer = calculator.DebtSequences{
+	{
+		Debt: calculator.Debt{
+			Name:           "debt0",
+			Amount:         1000,
+			AnnualInterest: 19.49,
+			MinimumPayment: 50,
+		},
+		Months:   []float64{1},
+		Payments: []float64{1000},
+		Balances: []float64{0},
+	},
+	{
+		Debt: calculator.Debt{
+			Name:           "debt7",
+			Amount:         10000,
+			AnnualInterest: 16,
+			MinimumPayment: 350,
+		},
+		Months:   []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18},
+		Payments: []float64{350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 350, 1652.6910388331376, 2450, 2450, 9.02361678711440},
+		Balances: []float64{9650, 9424, 9194.986666666668, 8962.919822222224, 8727.758753185188, 8489.462203227657, 8247.988365937359, 8003.29487748319, 7755.3388091829665, 7504.076659972073, 7249.4643487717, 6991.457206755323, 6730.009969512061, 6465.076769105555, 4876.550873342716, 2458.9048849872856, 9.023616787116117, 0},
 	},
 }

@@ -46,7 +46,7 @@ export const calculateAll = async (input) => {
 }
 
 export const isDollarValue = (s) => {
-  return "$" + s.toLocaleString();
+  return "$" + s.toLocaleString(undefined, {maximumFractionDigits: 2});
 }
 
 export const isPercentValue = (s, convert) => {

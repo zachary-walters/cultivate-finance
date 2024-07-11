@@ -75,6 +75,10 @@ func debtSnowball(w http.ResponseWriter, r *http.Request) {
 		ParseFS(res,
 			"templates/debt_snowball_calculator/debt_snowball_calculator.html",
 			"templates/debt_snowball_calculator/debt_snowball_input_form.html",
+			"templates/debt_snowball_calculator/debt_snowball_calculations.html",
+			"templates/debt_snowball_calculator/debt_snowball_months_payoff_chart.html",
+			"templates/debt_snowball_calculator/debt_snowball_payoff_over_time_chart.html",
+			"templates/debt_snowball_calculator/debt_snowball_donut_chart.html",
 			"templates/navigation_bar.html",
 		)
 	if err != nil {

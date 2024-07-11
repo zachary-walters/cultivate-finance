@@ -60,6 +60,8 @@ type DebtSequence struct {
 	Months   []float64 `json:"months,omitempty"`
 	Payments []float64 `json:"payments,omitempty"`
 	Balances []float64 `json:"balances,omitempty"`
+	Invalid  bool      `json:"valid,omitempty"`
+	MaxYear  float64   `json:"max_year,omitempty"`
 }
 
 type DebtSequences []DebtSequence
@@ -133,24 +135,46 @@ func TranslateFloatSlice(s []float64) []interface{} {
 	return x
 }
 
-func TranslateSnowball(s DebtSequences) map[string]interface{} {
-	m := map[string]interface{}{}
+func TranslateSnowball(s DebtSequences) []interface{} {
+	// m := map[string]interface{}{}
 
-	for _, debtSequence := range s {
-		m[debtSequence.Debt.Name] = map[string]interface{}{
+	// for idx, debtSequence := range s {
+	// 	m[debtSequence.Debt.Name] = map[string]interface{}{
+	// 		"max_year": debtSequence.MaxYear,
+	// 		"invalid":  debtSequence.Invalid,
+	// 		"sequence": idx,
+	// 		"balances": TranslateFloatSlice(debtSequence.Balances),
+	// 		"payments": TranslateFloatSlice(debtSequence.Payments),
+	// 		"months":   TranslateFloatSlice(debtSequence.Months),
+	// 		"debt": map[string]interface{}{
+	// 			"name":            debtSequence.Debt.Name,
+	// 			"amount":          debtSequence.Debt.Amount,
+	// 			"minimum_payment": debtSequence.Debt.MinimumPayment,
+	// 			"annual_interest": debtSequence.Debt.AnnualInterest,
+	// 		},
+	// 	}
+	// }
+
+	// return m
+
+	x := []interface{}{}
+
+	for idx, debtSequence := range s {
+		x = append(x, map[string]interface{}{
+			"max_year": debtSequence.MaxYear,
+			"invalid":  debtSequence.Invalid,
+			"sequence": idx,
 			"balances": TranslateFloatSlice(debtSequence.Balances),
 			"payments": TranslateFloatSlice(debtSequence.Payments),
 			"months":   TranslateFloatSlice(debtSequence.Months),
 			"debt": map[string]interface{}{
-				debtSequence.Debt.Name: map[string]interface{}{
-					"name":            debtSequence.Debt.Name,
-					"amount":          debtSequence.Debt.Amount,
-					"minimum_payment": debtSequence.Debt.MinimumPayment,
-					"annual_interest": debtSequence.Debt.AnnualInterest,
-				},
+				"name":            debtSequence.Debt.Name,
+				"amount":          debtSequence.Debt.Amount,
+				"minimum_payment": debtSequence.Debt.MinimumPayment,
+				"annual_interest": debtSequence.Debt.AnnualInterest,
 			},
-		}
+		})
 	}
 
-	return m
+	return x
 }

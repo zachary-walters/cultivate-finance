@@ -1,4 +1,5 @@
 {{define "inputform"}}
+<div class="input-form-content">
   <div class="form-content">
     <div class="other-inputs">
       <label for="extra-monthly-payment">Extra Monthly Payment</label>
@@ -17,7 +18,7 @@
       <div class="debts" id="debts"></div>
     </div>
   </div>
-
+</div>
 
 <script type="module">
 import { recalculate } from "/assets/js/debt_snowball/input_module.js";
@@ -26,17 +27,24 @@ var allInputs = document.getElementsByClassName("debt-snowball-input");
 var debtInputs = document.getElementsByClassName("debt-input"); 
 var otherInputs = document.getElementsByClassName("other-input");
 
+const update = () => {
+
+}
+
 export const newDebt = (amount=0, minPayment=0, interest=0) => {
   let uuid = crypto.randomUUID(); 
   let debtsDiv = document.getElementById("debts");
   let debtCount = document.getElementsByClassName("debt-input").length / 4 + 1;
 
+  const message = "This debt is considered invalid since <br> it will not be payed off for centuries. <br> It will not be included in the dataset."
+
   debtsDiv.innerHTML = debtsDiv.innerHTML + `<div class="debt" id=${uuid}>
     <div class="form-input">
-      <input class="debt-snowball-input debt-input debt-name" type="text" id="name-${uuid}" name="name-${uuid}" value="debt #${debtCount}"/>
-      <input class="debt-snowball-input debt-input debt-amount" type="number" id="amount-${uuid}" name="amount-${uuid}" value="${amount}"/>
-      <input class="debt-snowball-input debt-input debt-min-payment" type="number" id="min-payment-${uuid}" name="min-payment-${uuid}" value="${minPayment}"/>
-      <input class="debt-snowball-input debt-input debt-interest" type="number" id="interest-${uuid}" name="interest-${uuid}" value="${interest}"/>
+      <span class="input-validation-alert" id="input-validation-alert-${uuid}">!<span class="validation-tooltip">${message}</span></span>
+      <input class="debt-snowball-input debt-input debt-name" type="text" id="name-${uuid}" name="name-${uuid}" value="debt #${debtCount}" uuid="${uuid}"/>
+      <input class="debt-snowball-input debt-input debt-amount" type="number" id="amount-${uuid}" name="amount-${uuid}" value="${amount}" uuid="${uuid}"/>
+      <input class="debt-snowball-input debt-input debt-min-payment" type="number" id="min-payment-${uuid}" name="min-payment-${uuid}" value="${minPayment}" uuid="${uuid}"/>
+      <input class="debt-snowball-input debt-input debt-interest" type="number" id="interest-${uuid}" name="interest-${uuid}" value="${interest}" uuid="${uuid}"/>
       <button class="remove-debt-btn" onclick="deleteDebt('${uuid}')">Remove</button>
     </div>
   </div>`
@@ -47,7 +55,7 @@ export const newDebt = (amount=0, minPayment=0, interest=0) => {
   for (var i = 0; i < allInputs.length; i++) {
     allInputs[i].oninput = () => {
       setTimeout(() => {
-        recalculate(debtInputs, otherInputs);
+        recalculate(debtInputs, otherInputs, uuid);
       }, 10);
     }
   }
@@ -56,6 +64,12 @@ window.newDebt = newDebt;
 
 export const deleteDebt = (uuid) => {
   document.getElementById(uuid).outerHTML = "";
+  allInputs = document.getElementsByClassName("debt-snowball-input");
+  debtInputs = document.getElementsByClassName("debt-input"); 
+  otherInputs = document.getElementsByClassName("other-input");
+  setTimeout(() => {
+    recalculate(debtInputs, otherInputs, null);
+  }, 10);
 };
 window.deleteDebt = deleteDebt;
 
@@ -70,7 +84,7 @@ newDebt(10000, 350, 16.00);
 
 debtInputs = document.getElementsByClassName("debt-input"); 
 otherInputs = document.getElementsByClassName("other-input");
-recalculate(debtInputs, otherInputs);
+recalculate(debtInputs, otherInputs, null);
 </script>
 
 <style scoped>
@@ -90,6 +104,7 @@ recalculate(debtInputs, otherInputs);
     display: flex;
     flex-direction: column;
     margin-bottom: 2rem;
+    margin-left: 0.6rem;
     max-width: 10rem;
   }
 
@@ -109,6 +124,7 @@ recalculate(debtInputs, otherInputs);
 
   .new-debt-button {
     margin-bottom: 0.5rem;
+    margin-left: 0.6rem;
   }
 
   .header-content {
@@ -118,7 +134,31 @@ recalculate(debtInputs, otherInputs);
   .header {
     width: 6rem;
     font-size: 14px;
-    margin-right: 0.5rem;
+    margin-left: 0.6rem;
+  }
+
+  .input-validation-alert {
+    color: red;
+    font-weight: bold;
+    visibility: hidden;
+    cursor: help;
+  }
+
+  .input-validation-alert .validation-tooltip {
+    visibility: hidden;
+    position: absolute;
+    cursor: help;
+  }
+
+  .input-validation-alert:hover .validation-tooltip{
+    visibility: visible;
+    transition-delay: 0.3s;
+  }
+
+  .validation-tooltip {
+    background-color: rgba(255, 110, 110, 0.9);
+    color: white;
+    padding: 1.5rem;
   }
 </style>
 {{end}}

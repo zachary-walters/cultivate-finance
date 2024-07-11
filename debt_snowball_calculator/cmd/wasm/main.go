@@ -20,11 +20,21 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 	debts := []calculator.Debt{}
 
 	for i := range args[1].Int() {
+		debtAmount := args[0].Index(i).Get("amount").Float()
+		debtInterest := args[0].Index(i).Get("interest").Float()
+
+		// filter:
+		// 0 amount debts from user input
+		// interest at 100% or more
+		if debtAmount <= 0 || debtInterest > 99 {
+			continue
+		}
+
 		debts = append(debts, calculator.Debt{
 			Name:           args[0].Index(i).Get("name").String(),
-			Amount:         args[0].Index(i).Get("amount").Float(),
+			Amount:         debtAmount,
 			MinimumPayment: args[0].Index(i).Get("minimum_payment").Float(),
-			AnnualInterest: args[0].Index(i).Get("interest").Float(),
+			AnnualInterest: debtInterest,
 		})
 	}
 
@@ -56,6 +66,7 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 
 var calculations = map[string]any{
 	"DEBT_PAYOFF_MONTH":         calculator.NewDebtPayoffMonth(),
+	"MONTH_SEQUENCE":            calculator.NewMonthSequence(),
 	"MONTHLY_SEQUENCE_BALANCES": calculator.NewMonthlySequenceBalances(),
 	"MONTHLY_SEQUENCE_PAYMENTS": calculator.NewMonthlySequencePayments(),
 	"SNOWBALL":                  calculator.NewSnowball(),
