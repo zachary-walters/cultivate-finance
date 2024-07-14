@@ -18,17 +18,41 @@ type MockSequenceCalculation struct {
 	mock.Mock
 }
 
-func (m *MockCalculation) Calculate(model *calculator.Model) float64 {
+type MockValidDebtsCalculation struct {
+	mock.Mock
+}
+
+func (m *MockCalculation) CalculateSnowball(model *calculator.Model) float64 {
 	args := m.Called(model)
 	return args.Get(0).(float64)
 }
 
-func (m *MockSnowballCalculation) Calculate(model *calculator.Model) calculator.DebtSequences {
+func (m *MockCalculation) CalculateAvalanche(model *calculator.Model) float64 {
+	args := m.Called(model)
+	return args.Get(0).(float64)
+}
+
+func (m *MockSnowballCalculation) CalculateSnowball(model *calculator.Model) calculator.DebtSequences {
 	args := m.Called(model)
 	return args.Get(0).(calculator.DebtSequences)
 }
 
-func (m *MockSequenceCalculation) Calculate(model *calculator.Model) []float64 {
+func (m *MockSnowballCalculation) CalculateAvalanche(model *calculator.Model) calculator.DebtSequences {
+	args := m.Called(model)
+	return args.Get(0).(calculator.DebtSequences)
+}
+
+func (m *MockSequenceCalculation) CalculateSnowball(model *calculator.Model) []float64 {
 	args := m.Called(model)
 	return args.Get(0).([]float64)
+}
+
+func (m *MockSequenceCalculation) CalculateAvalanche(model *calculator.Model) []float64 {
+	args := m.Called(model)
+	return args.Get(0).([]float64)
+}
+
+func (m *MockValidDebtsCalculation) Calculate(model *calculator.Model) []calculator.Debt {
+	args := m.Called(model)
+	return args.Get(0).([]calculator.Debt)
 }

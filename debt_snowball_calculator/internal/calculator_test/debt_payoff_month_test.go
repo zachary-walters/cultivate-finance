@@ -60,17 +60,17 @@ func TestNewDebtPayoffMonth(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestDebtPayoffMonthCalculate(t *testing.T) {
+func TestDebtPayoffMonthCalculateSnowball(t *testing.T) {
 	for _, test := range debtPayoffMonthTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockSnowballCalculation := new(MockSnowballCalculation)
-			mockSnowballCalculation.On("Calculate", test.model).Return(test.snowball)
+			mockSnowballCalculation.On("CalculateSnowball", test.model).Return(test.snowball)
 
 			c := &calculator.DebtPayoffMonth{
 				SnowballCalculation: mockSnowballCalculation,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := func() float64 {
 				if len(test.snowball) <= 0 {
 					return 0.0

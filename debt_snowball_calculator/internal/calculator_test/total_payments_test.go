@@ -34,17 +34,17 @@ func TestNewTotalPayments(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestTotalPaymentsCalculate(t *testing.T) {
+func TestTotalPaymentsCalculateSnowball(t *testing.T) {
 	for _, test := range totalPaymentsTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockMonthlySequencePayments := new(MockSequenceCalculation)
-			mockMonthlySequencePayments.On("Calculate", test.model).Return(test.monthlySequencePayments)
+			mockMonthlySequencePayments.On("CalculateSnowball", test.model).Return(test.monthlySequencePayments)
 
 			c := &calculator.TotalPayments{
 				MonthlySequencePaymentsCalculation: mockMonthlySequencePayments,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 
 			expected := 0.0
 			for _, p := range test.monthlySequencePayments {

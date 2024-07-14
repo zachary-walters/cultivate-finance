@@ -30,7 +30,7 @@ var snowballQATests = []struct {
 	},
 }
 
-func TestSnowballQACalculate(t *testing.T) {
+func TestSnowballQACalculateSnowball(t *testing.T) {
 	const float64EqualityThreshold = 1e-9
 	for _, test := range snowballQATests {
 		t.Run(test.name, func(t *testing.T) {
@@ -38,7 +38,7 @@ func TestSnowballQACalculate(t *testing.T) {
 				MaxYear: 1000,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 
 			firstActual := actual[0]
 			lastActual := actual[len(actual)-1]

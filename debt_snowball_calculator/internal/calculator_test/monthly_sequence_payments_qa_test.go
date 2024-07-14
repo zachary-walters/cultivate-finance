@@ -29,15 +29,15 @@ func TestMonthlySequencePaymentsCalculateQA(t *testing.T) {
 			mockDebtPayoff := new(MockCalculation)
 			mockSnowball := new(MockSnowballCalculation)
 
-			mockDebtPayoff.On("Calculate", test.model).Return(test.debtPayoff)
-			mockSnowball.On("Calculate", test.model).Return(test.snowball)
+			mockDebtPayoff.On("CalculateSnowball", test.model).Return(test.debtPayoff)
+			mockSnowball.On("CalculateSnowball", test.model).Return(test.snowball)
 
 			c := &calculator.MonthlySequencePayments{
 				DebtPayoffMonthCalculation: mockDebtPayoff,
 				SnowballCalculation:        mockSnowball,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 
 			assert.Equal(t, test.expected, actual)
 		})

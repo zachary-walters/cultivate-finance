@@ -66,12 +66,12 @@ func TestNewMinimumPayment(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestTotalMinimumPaymentCalculate(t *testing.T) {
+func TestTotalMinimumPaymentCalculateSnowball(t *testing.T) {
 	for _, test := range testTotalMinimumPayment {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.TotalMinimumPayment{}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := func() float64 {
 				total := 0.0
 				for _, debt := range test.model.Input.Debts {

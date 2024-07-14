@@ -25,8 +25,7 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 
 		// filter:
 		// 0 amount debts from user input
-		// interest at 100% or more
-		if debtAmount <= 0 || debtInterest > 99 {
+		if debtAmount <= 0 {
 			continue
 		}
 

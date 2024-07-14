@@ -61,17 +61,24 @@ var totalBeginningDebtTests = []struct {
 
 func TestNewTotalBeginningDebt(t *testing.T) {
 	actual := calculator.NewTotalBeginningDebt()
-	expected := &calculator.TotalBeginningDebt{}
+	expected := &calculator.TotalBeginningDebt{
+		ValidDebtsCalculation: calculator.NewValidDebts(),
+	}
 
 	assert.Equal(t, expected, actual)
 }
 
-func TestTotalBeginningDebtCalculate(t *testing.T) {
+func TestTotalBeginningDebtCalculateSnowball(t *testing.T) {
 	for _, test := range totalBeginningDebtTests {
 		t.Run(test.name, func(t *testing.T) {
-			c := &calculator.TotalBeginningDebt{}
+			mockValidDebts := new(MockValidDebtsCalculation)
+			mockValidDebts.On("Calculate", test.model).Return(test.model.Input.Debts)
 
-			actual := c.Calculate(test.model)
+			c := &calculator.TotalBeginningDebt{
+				ValidDebtsCalculation: mockValidDebts,
+			}
+
+			actual := c.CalculateSnowball(test.model)
 			expected := func() float64 {
 				total := 0.0
 				for _, debt := range test.model.Input.Debts {

@@ -10,7 +10,7 @@ func NewTotalMinimumPayment() *TotalMinimumPayment {
 	return &TotalMinimumPayment{}
 }
 
-func (c TotalMinimumPayment) Calculate(model *Model) float64 {
+func (c TotalMinimumPayment) CalculateSnowball(model *Model) float64 {
 	total := 0.0
 
 	for _, debt := range model.Input.Debts {
@@ -18,4 +18,8 @@ func (c TotalMinimumPayment) Calculate(model *Model) float64 {
 	}
 
 	return c.SanitizeToZero(total)
+}
+
+func (c TotalMinimumPayment) CalculateAvalanche(model *Model) float64 {
+	return c.CalculateSnowball(model)
 }

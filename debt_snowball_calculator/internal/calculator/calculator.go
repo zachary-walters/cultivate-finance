@@ -5,11 +5,13 @@ import (
 )
 
 type Calculation interface {
-	Calculate(*Model) float64
+	CalculateSnowball(*Model) float64
+	CalculateAvalanche(*Model) float64
 }
 
 type SequenceCalculation interface {
-	Calculate(*Model) []float64
+	CalculateSnowball(*Model) []float64
+	CalculateAvalanche(*Model) []float64
 }
 
 type AbstractCalculation struct{}
@@ -61,7 +63,10 @@ type DebtSequence struct {
 	Payments []float64 `json:"payments,omitempty"`
 	Balances []float64 `json:"balances,omitempty"`
 	Invalid  bool      `json:"valid,omitempty"`
-	MaxYear  float64   `json:"max_year,omitempty"`
+}
+
+func (d *DebtSequence) IsValid() bool {
+	return !d.Invalid
 }
 
 type DebtSequences []DebtSequence
@@ -81,11 +86,11 @@ func CalculateSynchronous(model *Model, calculation any, datakey string) Calcula
 	}
 
 	if isSequenceCalculation {
-		calculationData.Value = seq.Calculate(model)
+		calculationData.Value = seq.CalculateSnowball(model)
 	} else if isCalculation {
-		calculationData.Value = calc.Calculate(model)
+		calculationData.Value = calc.CalculateSnowball(model)
 	} else if isSnowballCalculation {
-		calculationData.Value = snowball.Calculate(model)
+		calculationData.Value = snowball.CalculateSnowball(model)
 	}
 
 	return calculationData
@@ -108,11 +113,11 @@ func CalculateSynchronousWasm(model *Model, calculation any, datakey string) Cal
 	}
 
 	if isSequenceCalculation {
-		calculationData.Value = TranslateFloatSlice(seq.Calculate(model))
+		calculationData.Value = TranslateFloatSlice(seq.CalculateSnowball(model))
 	} else if isCalculation {
-		calculationData.Value = calc.Calculate(model)
+		calculationData.Value = calc.CalculateSnowball(model)
 	} else if isSnowballCalculation {
-		calculationData.Value = TranslateSnowball(snowball.Calculate(model))
+		calculationData.Value = TranslateSnowball(snowball.CalculateSnowball(model))
 	}
 
 	return calculationData
@@ -136,32 +141,10 @@ func TranslateFloatSlice(s []float64) []interface{} {
 }
 
 func TranslateSnowball(s DebtSequences) []interface{} {
-	// m := map[string]interface{}{}
-
-	// for idx, debtSequence := range s {
-	// 	m[debtSequence.Debt.Name] = map[string]interface{}{
-	// 		"max_year": debtSequence.MaxYear,
-	// 		"invalid":  debtSequence.Invalid,
-	// 		"sequence": idx,
-	// 		"balances": TranslateFloatSlice(debtSequence.Balances),
-	// 		"payments": TranslateFloatSlice(debtSequence.Payments),
-	// 		"months":   TranslateFloatSlice(debtSequence.Months),
-	// 		"debt": map[string]interface{}{
-	// 			"name":            debtSequence.Debt.Name,
-	// 			"amount":          debtSequence.Debt.Amount,
-	// 			"minimum_payment": debtSequence.Debt.MinimumPayment,
-	// 			"annual_interest": debtSequence.Debt.AnnualInterest,
-	// 		},
-	// 	}
-	// }
-
-	// return m
-
 	x := []interface{}{}
 
 	for idx, debtSequence := range s {
 		x = append(x, map[string]interface{}{
-			"max_year": debtSequence.MaxYear,
 			"invalid":  debtSequence.Invalid,
 			"sequence": idx,
 			"balances": TranslateFloatSlice(debtSequence.Balances),

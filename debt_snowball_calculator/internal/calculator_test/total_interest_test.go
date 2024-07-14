@@ -53,15 +53,15 @@ func TestTotalInterest(t *testing.T) {
 			mockTotalBeginningDebt := new(MockCalculation)
 			mockTotalPayments := new(MockCalculation)
 
-			mockTotalBeginningDebt.On("Calculate", test.model).Return(test.totalBeginningDebt)
-			mockTotalPayments.On("Calculate", test.model).Return(test.totalPayments)
+			mockTotalBeginningDebt.On("CalculateSnowball", test.model).Return(test.totalBeginningDebt)
+			mockTotalPayments.On("CalculateSnowball", test.model).Return(test.totalPayments)
 
 			c := &calculator.TotalInterest{
 				TotalBeginningDebtCalculation: mockTotalBeginningDebt,
 				TotalPaymentsCalculation:      mockTotalPayments,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := c.SanitizeToZero(test.totalPayments - test.totalBeginningDebt)
 
 			if test.totalPayments-test.totalBeginningDebt < 0 {

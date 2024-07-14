@@ -32,9 +32,9 @@ func TestMonthlySequenceBalancesQA(t *testing.T) {
 			mockSnowball := new(MockSnowballCalculation)
 			mockTotalBeginningDebt := new(MockCalculation)
 
-			mockDebtPayoff.On("Calculate", test.model).Return(test.debtPayoff)
-			mockSnowball.On("Calculate", test.model).Return(test.snowball)
-			mockTotalBeginningDebt.On("Calculate", test.model).Return(test.totalBeginningDebt)
+			mockDebtPayoff.On("CalculateSnowball", test.model).Return(test.debtPayoff)
+			mockSnowball.On("CalculateSnowball", test.model).Return(test.snowball)
+			mockTotalBeginningDebt.On("CalculateSnowball", test.model).Return(test.totalBeginningDebt)
 
 			c := &calculator.MonthlySequenceBalances{
 				DebtPayoffMonthCalculation:    mockDebtPayoff,
@@ -42,7 +42,7 @@ func TestMonthlySequenceBalancesQA(t *testing.T) {
 				TotalBeginningDebtCalculation: mockTotalBeginningDebt,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 
 			assert.Equal(t, test.expected, actual)
 		})

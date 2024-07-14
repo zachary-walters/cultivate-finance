@@ -5,6 +5,7 @@ type TotalPaymentsCalculation Calculation
 type TotalPayments struct {
 	AbstractCalculation
 	MonthlySequencePaymentsCalculation
+	ValidDebtsCalculation
 }
 
 func NewTotalPayments() *TotalPayments {
@@ -13,8 +14,19 @@ func NewTotalPayments() *TotalPayments {
 	}
 }
 
-func (c *TotalPayments) Calculate(model *Model) float64 {
-	monthlySequencePayments := c.MonthlySequencePaymentsCalculation.Calculate(model)
+func (c *TotalPayments) CalculateSnowball(model *Model) float64 {
+	monthlySequencePayments := c.MonthlySequencePaymentsCalculation.CalculateSnowball(model)
+
+	total := 0.0
+	for _, payment := range monthlySequencePayments {
+		total += payment
+	}
+
+	return c.SanitizeToZero(total)
+}
+
+func (c *TotalPayments) CalculateAvalanche(model *Model) float64 {
+	monthlySequencePayments := c.MonthlySequencePaymentsCalculation.CalculateAvalanche(model)
 
 	total := 0.0
 	for _, payment := range monthlySequencePayments {

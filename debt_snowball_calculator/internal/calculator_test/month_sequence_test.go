@@ -38,17 +38,17 @@ func TestNewMonthSequence(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestNewMonthlySequenceCalculate(t *testing.T) {
+func TestNewMonthlySequenceCalculateSnowball(t *testing.T) {
 	for _, test := range monthSequenceTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockDebtPayoffMonth := new(MockCalculation)
-			mockDebtPayoffMonth.On("Calculate", test.model).Return(test.debtPayoffMonth)
+			mockDebtPayoffMonth.On("CalculateSnowball", test.model).Return(test.debtPayoffMonth)
 
 			c := &calculator.MonthSequence{
 				DebtPayoffMonthCalculation: mockDebtPayoffMonth,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := func() []float64 {
 				sequence := []float64{}
 

@@ -1,7 +1,8 @@
 package calculator
 
 type SnowballCalculation interface {
-	Calculate(model *Model) DebtSequences
+	CalculateSnowball(model *Model) DebtSequences
+	CalculateAvalanche(model *Model) DebtSequences
 }
 
 type Snowball struct {
@@ -16,7 +17,7 @@ func NewSnowball() *Snowball {
 	}
 }
 
-func (c *Snowball) Calculate(model *Model) DebtSequences {
+func (c *Snowball) CalculateSnowball(model *Model) DebtSequences {
 	extraMonthlyPayment := model.Input.ExtraMonthlyPayment
 	rolloverPayment := 0.0
 	oneTimeImmediatePayment := model.Input.OneTimeImmediatePayment
@@ -56,9 +57,7 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 			*/
 			if monthIter/12 >= c.MaxYear || invalid {
 				debtSequence.Invalid = true
-				debtSequence.MaxYear = c.MaxYear
 				invalid = true
-
 				debtSequences = append(debtSequences, debtSequence)
 				break
 			}
@@ -104,4 +103,8 @@ func (c *Snowball) Calculate(model *Model) DebtSequences {
 	}
 
 	return debtSequences
+}
+
+func (c Snowball) CalculateAvalanche(model *Model) DebtSequences {
+	return c.CalculateSnowball(model)
 }

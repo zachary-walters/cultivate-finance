@@ -65,14 +65,14 @@ func TestNewSnowball(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestSnowballCalculate(t *testing.T) {
+func TestSnowballCalculateSnowball(t *testing.T) {
 	for _, test := range snowballTests {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.Snowball{
 				MaxYear: 1000,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := func() calculator.DebtSequences {
 				debtSequences := calculator.DebtSequences{}
 
@@ -102,7 +102,6 @@ func TestSnowballCalculate(t *testing.T) {
 					for {
 						if monthIter/12 >= c.MaxYear || invalid {
 							debtSequence.Invalid = true
-							debtSequence.MaxYear = c.MaxYear
 							invalid = true
 
 							debtSequences = append(debtSequences, debtSequence)

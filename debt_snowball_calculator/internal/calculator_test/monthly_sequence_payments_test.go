@@ -33,7 +33,7 @@ var monthlySequencePaymentsTests = []struct {
 	},
 }
 
-func TestNewMonthlySequencePaymentsCalculate(t *testing.T) {
+func TestNewMonthlySequencePaymentsCalculateSnowball(t *testing.T) {
 	actual := calculator.NewMonthlySequencePayments()
 	expected := &calculator.MonthlySequencePayments{
 		DebtPayoffMonthCalculation: calculator.NewDebtPayoffMonth(),
@@ -43,23 +43,23 @@ func TestNewMonthlySequencePaymentsCalculate(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestMonthlySequencePaymentsCalculate(t *testing.T) {
+func TestMonthlySequencePaymentsCalculateSnowball(t *testing.T) {
 	for _, test := range monthlySequencePaymentsTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockDebtPayoff := new(MockCalculation)
 			mockSnowball := new(MockSnowballCalculation)
 			mockTotalBeginningDebt := new(MockCalculation)
 
-			mockDebtPayoff.On("Calculate", test.model).Return(test.debtPayoffMonth)
-			mockSnowball.On("Calculate", test.model).Return(test.snowball)
-			mockTotalBeginningDebt.On("Calculate", test.model).Return(test.totalBeginningDebt)
+			mockDebtPayoff.On("CalculateSnowball", test.model).Return(test.debtPayoffMonth)
+			mockSnowball.On("CalculateSnowball", test.model).Return(test.snowball)
+			mockTotalBeginningDebt.On("CalculateSnowball", test.model).Return(test.totalBeginningDebt)
 
 			c := &calculator.MonthlySequencePayments{
 				DebtPayoffMonthCalculation: mockDebtPayoff,
 				SnowballCalculation:        mockSnowball,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := func() []float64 {
 				balances := []float64{}
 
