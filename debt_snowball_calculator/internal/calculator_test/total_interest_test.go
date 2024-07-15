@@ -47,7 +47,7 @@ func TestNewTotalInterest(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestTotalInterest(t *testing.T) {
+func TestTotalInterestCalculateSnowball(t *testing.T) {
 	for _, test := range totalInterestTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockTotalBeginningDebt := new(MockCalculation)
@@ -62,6 +62,32 @@ func TestTotalInterest(t *testing.T) {
 			}
 
 			actual := c.CalculateSnowball(test.model)
+			expected := c.SanitizeToZero(test.totalPayments - test.totalBeginningDebt)
+
+			if test.totalPayments-test.totalBeginningDebt < 0 {
+				assert.Zero(t, actual)
+			}
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestTotalInterestCalculateAvalanche(t *testing.T) {
+	for _, test := range totalInterestTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockTotalBeginningDebt := new(MockCalculation)
+			mockTotalPayments := new(MockCalculation)
+
+			mockTotalBeginningDebt.On("CalculateAvalanche", test.model).Return(test.totalBeginningDebt)
+			mockTotalPayments.On("CalculateAvalanche", test.model).Return(test.totalPayments)
+
+			c := &calculator.TotalInterest{
+				TotalBeginningDebtCalculation: mockTotalBeginningDebt,
+				TotalPaymentsCalculation:      mockTotalPayments,
+			}
+
+			actual := c.CalculateAvalanche(test.model)
 			expected := c.SanitizeToZero(test.totalPayments - test.totalBeginningDebt)
 
 			if test.totalPayments-test.totalBeginningDebt < 0 {

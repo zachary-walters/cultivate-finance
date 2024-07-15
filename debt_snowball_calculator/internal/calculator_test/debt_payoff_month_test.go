@@ -91,3 +91,35 @@ func TestDebtPayoffMonthCalculateSnowball(t *testing.T) {
 		})
 	}
 }
+
+func TestDebtPayoffMonthCalculateAvalanche(t *testing.T) {
+	for _, test := range debtPayoffMonthTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockSnowballCalculation := new(MockSnowballCalculation)
+			mockSnowballCalculation.On("CalculateAvalanche", test.model).Return(test.snowball)
+
+			c := &calculator.DebtPayoffMonth{
+				SnowballCalculation: mockSnowballCalculation,
+			}
+
+			actual := c.CalculateAvalanche(test.model)
+			expected := func() float64 {
+				if len(test.snowball) <= 0 {
+					return 0.0
+				}
+
+				lastDebtSequence := test.snowball[len(test.snowball)-1]
+
+				if len(lastDebtSequence.Months) <= 0 {
+					return 0
+				}
+
+				lastMonth := lastDebtSequence.Months[len(lastDebtSequence.Months)-1]
+
+				return lastMonth
+			}()
+
+			assert.Equal(t, actual, expected)
+		})
+	}
+}

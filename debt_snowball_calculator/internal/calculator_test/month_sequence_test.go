@@ -61,6 +61,31 @@ func TestNewMonthlySequenceCalculateSnowball(t *testing.T) {
 
 			assert.Equal(t, expected, actual)
 		})
+	}
+}
 
+func TestNewMonthlySequenceCalculateAvalanche(t *testing.T) {
+	for _, test := range monthSequenceTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockDebtPayoffMonth := new(MockCalculation)
+			mockDebtPayoffMonth.On("CalculateAvalanche", test.model).Return(test.debtPayoffMonth)
+
+			c := &calculator.MonthSequence{
+				DebtPayoffMonthCalculation: mockDebtPayoffMonth,
+			}
+
+			actual := c.CalculateAvalanche(test.model)
+			expected := func() []float64 {
+				sequence := []float64{}
+
+				for i := 1; i <= int(test.debtPayoffMonth)+2; i++ {
+					sequence = append(sequence, float64(i))
+				}
+
+				return sequence
+			}()
+
+			assert.Equal(t, expected, actual)
+		})
 	}
 }

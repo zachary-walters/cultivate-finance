@@ -81,3 +81,42 @@ func TestMonthlySequencePaymentsCalculateSnowball(t *testing.T) {
 		})
 	}
 }
+
+func TestMonthlySequencePaymentsCalculateAvalanche(t *testing.T) {
+	for _, test := range monthlySequencePaymentsTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockDebtPayoff := new(MockCalculation)
+			mockSnowball := new(MockSnowballCalculation)
+			mockTotalBeginningDebt := new(MockCalculation)
+
+			mockDebtPayoff.On("CalculateAvalanche", test.model).Return(test.debtPayoffMonth)
+			mockSnowball.On("CalculateAvalanche", test.model).Return(test.snowball)
+			mockTotalBeginningDebt.On("CalculateAvalanche", test.model).Return(test.totalBeginningDebt)
+
+			c := &calculator.MonthlySequencePayments{
+				DebtPayoffMonthCalculation: mockDebtPayoff,
+				SnowballCalculation:        mockSnowball,
+			}
+
+			actual := c.CalculateAvalanche(test.model)
+			expected := func() []float64 {
+				balances := []float64{}
+
+				for i := 0; i < int(test.debtPayoffMonth); i++ {
+					balance := 0.0
+					for _, debtSequence := range test.snowball {
+						if len(debtSequence.Payments) > i {
+							balance += debtSequence.Payments[i]
+						}
+					}
+
+					balances = append(balances, balance)
+				}
+
+				return balances
+			}()
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}

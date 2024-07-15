@@ -85,3 +85,16 @@ func TestTotalMinimumPaymentCalculateSnowball(t *testing.T) {
 		})
 	}
 }
+
+func TestTotalMinimumPaymentCalculateAvalanche(t *testing.T) {
+	for _, test := range testTotalMinimumPayment {
+		t.Run(test.name, func(t *testing.T) {
+			c := &calculator.TotalMinimumPayment{}
+
+			actual := c.CalculateAvalanche(test.model)
+			expected := c.CalculateSnowball(test.model)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}

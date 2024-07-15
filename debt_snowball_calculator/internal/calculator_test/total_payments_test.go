@@ -57,3 +57,27 @@ func TestTotalPaymentsCalculateSnowball(t *testing.T) {
 		})
 	}
 }
+
+func TestTotalPaymentsCalculateAvalanche(t *testing.T) {
+	for _, test := range totalPaymentsTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockMonthlySequencePayments := new(MockSequenceCalculation)
+			mockMonthlySequencePayments.On("CalculateAvalanche", test.model).Return(test.monthlySequencePayments)
+
+			c := &calculator.TotalPayments{
+				MonthlySequencePaymentsCalculation: mockMonthlySequencePayments,
+			}
+
+			actual := c.CalculateAvalanche(test.model)
+
+			expected := 0.0
+			for _, p := range test.monthlySequencePayments {
+				expected += p
+			}
+
+			expected = c.SanitizeToZero(expected)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}

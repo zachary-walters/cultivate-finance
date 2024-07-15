@@ -92,3 +92,21 @@ func TestTotalBeginningDebtCalculateSnowball(t *testing.T) {
 		})
 	}
 }
+
+func TestTotalBeginningDebtCalculateAvalanche(t *testing.T) {
+	for _, test := range totalBeginningDebtTests {
+		t.Run(test.name, func(t *testing.T) {
+			mockValidDebts := new(MockValidDebtsCalculation)
+			mockValidDebts.On("Calculate", test.model).Return(test.model.Input.Debts)
+
+			c := &calculator.TotalBeginningDebt{
+				ValidDebtsCalculation: mockValidDebts,
+			}
+
+			actual := c.CalculateAvalanche(test.model)
+			expected := c.CalculateSnowball(test.model)
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
