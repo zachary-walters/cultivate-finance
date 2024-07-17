@@ -38,7 +38,7 @@ func TestMonthlySequenceBalancesQA(t *testing.T) {
 
 			c := &calculator.MonthlySequenceBalances{
 				DebtPayoffMonthCalculation:    mockDebtPayoff,
-				SnowballCalculation:           mockSnowball,
+				SnowballAvalancheCalculation:  mockSnowball,
 				TotalBeginningDebtCalculation: mockTotalBeginningDebt,
 			}
 

@@ -67,10 +67,10 @@ func TestValidDebtsCalculateQA(t *testing.T) {
 			mockSnowball.On("CalculateAvalanche", test.model).Return(test.avalanche)
 
 			c := calculator.ValidDebts{
-				SnowballCalculation: mockSnowball,
+				SnowballAvalancheCalculation: mockSnowball,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := validDebtQAAnswer0
 
 			assert.Equal(t, expected, actual)

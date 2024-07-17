@@ -14,7 +14,7 @@ func NewTotalBeginningDebt() *TotalBeginningDebt {
 }
 
 func (c *TotalBeginningDebt) CalculateSnowball(model *Model) float64 {
-	validDebts := c.ValidDebtsCalculation.Calculate(model)
+	validDebts := c.ValidDebtsCalculation.CalculateSnowball(model)
 
 	total := 0.0
 

@@ -3,17 +3,17 @@ package calculator
 type DebtPayoffMonthCalculation Calculation
 
 type DebtPayoffMonth struct {
-	SnowballCalculation
+	SnowballAvalancheCalculation
 }
 
 func NewDebtPayoffMonth() *DebtPayoffMonth {
 	return &DebtPayoffMonth{
-		SnowballCalculation: NewSnowball(),
+		SnowballAvalancheCalculation: NewSnowballAvalanche(),
 	}
 }
 
 func (c *DebtPayoffMonth) CalculateSnowball(model *Model) float64 {
-	snowball := c.SnowballCalculation.CalculateSnowball(model)
+	snowball := c.SnowballAvalancheCalculation.CalculateSnowball(model)
 
 	if len(snowball) <= 0 {
 		return 0
@@ -38,7 +38,7 @@ func (c *DebtPayoffMonth) CalculateSnowball(model *Model) float64 {
 }
 
 func (c *DebtPayoffMonth) CalculateAvalanche(model *Model) float64 {
-	snowball := c.SnowballCalculation.CalculateAvalanche(model)
+	snowball := c.SnowballAvalancheCalculation.CalculateAvalanche(model)
 
 	if len(snowball) <= 0 {
 		return 0

@@ -1,5 +1,16 @@
 {{define "snowball-donut-chart"}}
 <div class="snowball-donut-chart-content">
-  <canvas id="snowball-donut-chart"></canvas>
+  <div>
+    <canvas id="snowball-donut-chart" width="300px" height="300px"></canvas>
+  </div>
+  <div>
+    <canvas id="avalanche-donut-chart" width="300px" height="300px"></canvas>
+  </div>
 </div>
+
+<style scoped>
+  .snowball-donut-chart-content {
+    display: flex;
+  }
+</style>
 {{end}}

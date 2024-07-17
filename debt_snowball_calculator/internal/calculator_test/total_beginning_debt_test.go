@@ -72,7 +72,7 @@ func TestTotalBeginningDebtCalculateSnowball(t *testing.T) {
 	for _, test := range totalBeginningDebtTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockValidDebts := new(MockValidDebtsCalculation)
-			mockValidDebts.On("Calculate", test.model).Return(test.model.Input.Debts)
+			mockValidDebts.On("CalculateSnowball", test.model).Return(test.model.Input.Debts)
 
 			c := &calculator.TotalBeginningDebt{
 				ValidDebtsCalculation: mockValidDebts,
@@ -97,7 +97,7 @@ func TestTotalBeginningDebtCalculateAvalanche(t *testing.T) {
 	for _, test := range totalBeginningDebtTests {
 		t.Run(test.name, func(t *testing.T) {
 			mockValidDebts := new(MockValidDebtsCalculation)
-			mockValidDebts.On("Calculate", test.model).Return(test.model.Input.Debts)
+			mockValidDebts.On("CalculateSnowball", test.model).Return(test.model.Input.Debts)
 
 			c := &calculator.TotalBeginningDebt{
 				ValidDebtsCalculation: mockValidDebts,

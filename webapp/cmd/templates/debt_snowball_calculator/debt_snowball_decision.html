@@ -1,13 +1,17 @@
 {{define "decision"}}
-<div class="decision">
+<div class="decision-content">
   <p>
-    Given your following inputs, you should invest in a 
+    Given your inputs, your optimal payoff strategy is
   </p>
   <h1 id="decision" name="decision"></h1>
-  <h2>401k</h2>
 </div>
 
-<style>
+<style scoped>
+  .decision-content {
+    text-align: center;
+    margin: 0.5rem;
+  }
+
   .decision {
     display: flex;
     flex-direction: column;
@@ -18,11 +22,11 @@
     font-size: 4rem;
   }
 
-  #decision.traditional {
+  #decision.avalanche {
     color: var(--cf-green);
   }
 
-  #decision.roth {
+  #decision.snowball {
     color: var(--cf-blue);
   }
 </style>

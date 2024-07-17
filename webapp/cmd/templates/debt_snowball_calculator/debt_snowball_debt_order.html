@@ -1,0 +1,63 @@
+{{define "debt-order"}}
+<div class="debt-order-content">
+  <h3 class="debt-order-header">Payoff Order</h3>
+  <div class="debt-table" id="debt-table"></div>
+</div>
+
+<style scoped>
+.debt-order-header {
+  text-align: center;
+}
+
+.debt-order-content {
+  overflow: scroll;
+  max-height: 26rem;
+}
+
+.fixed_headers {
+  width: 30rem;
+  table-layout: fixed;
+  border-collapse: collapse;
+  
+  th { text-decoration: underline; }
+  th, td {
+    padding: 5px;
+    text-align: left;
+  }
+  
+  td:nth-child(1), th:nth-child(1) { min-width: 200px; }
+  td:nth-child(2), th:nth-child(2) { min-width: 200px; }
+
+  thead {
+    color: #FDFDFD;
+    tr {
+      position: relative;
+    }
+  }
+  tbody {
+    overflow: auto;
+    width: 100%;
+    height:  300px;
+    tr:nth-child(even) {
+      background-color: #DDD;
+    }
+  }
+
+  .snowball-header {
+    background-color: var(--cf-blue);
+  }
+
+  .avalanche-header {
+    background-color: var(--cf-green);
+  }
+}
+
+.old_ie_wrapper {
+  height:  300px;
+  width: 750px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  tbody { height: auto; }
+}
+</style>
+{{end}}

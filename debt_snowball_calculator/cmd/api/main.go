@@ -141,7 +141,7 @@ var calculations = map[string]any{
 	"DEBT_PAYOFF_MONTH":         calculator.NewDebtPayoffMonth(),
 	"MONTHLY_SEQUENCE_BALANCES": calculator.NewMonthlySequenceBalances(),
 	"MONTHLY_SEQUENCE_PAYMENTS": calculator.NewMonthlySequencePayments(),
-	"SNOWBALL":                  calculator.NewSnowball(),
+	"SNOWBALL":                  calculator.NewSnowballAvalanche(),
 	"TOTAL_BEGINNING_DEBT":      calculator.NewTotalBeginningDebt(),
 	"TOTAL_INTEREST":            calculator.NewTotalInterest(),
 	"TOTAL_MINIMUM_PAYMENT":     calculator.NewTotalMinimumPayment(),

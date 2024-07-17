@@ -52,7 +52,12 @@ func (m *MockSequenceCalculation) CalculateAvalanche(model *calculator.Model) []
 	return args.Get(0).([]float64)
 }
 
-func (m *MockValidDebtsCalculation) Calculate(model *calculator.Model) []calculator.Debt {
+func (m *MockValidDebtsCalculation) CalculateSnowball(model *calculator.Model) []calculator.Debt {
+	args := m.Called(model)
+	return args.Get(0).([]calculator.Debt)
+}
+
+func (m *MockValidDebtsCalculation) CalculateAvalanche(model *calculator.Model) []calculator.Debt {
 	args := m.Called(model)
 	return args.Get(0).([]calculator.Debt)
 }

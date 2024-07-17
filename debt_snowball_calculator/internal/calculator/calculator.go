@@ -14,6 +14,11 @@ type SequenceCalculation interface {
 	CalculateAvalanche(*Model) []float64
 }
 
+type SnowballCalculation interface {
+	CalculateSnowball(model *Model) DebtSequences
+	CalculateAvalanche(model *Model) DebtSequences
+}
+
 type AbstractCalculation struct{}
 
 func (c *AbstractCalculation) SanitizeToZero(i interface{}) float64 {
@@ -71,9 +76,16 @@ func (d *DebtSequence) IsValid() bool {
 
 type DebtSequences []DebtSequence
 
+type FinalDecision struct {
+	Choice                  string  `json:"choice"`
+	MonthDifference         float64 `json:"month_difference"`
+	TotalPaymentsDifference float64 `json:"payments_difference"`
+}
+
 type CalculationData struct {
-	Datakey string `json:"datakey,omitempty"`
-	Value   any    `json:"value,omitempty"`
+	Datakey   string `json:"datakey,omitempty"`
+	Value     any    `json:"value,omitempty"`
+	Avalanche any    `json:"avalanche,omitempty"`
 }
 
 func CalculateSynchronous(model *Model, calculation any, datakey string) CalculationData {
@@ -87,10 +99,13 @@ func CalculateSynchronous(model *Model, calculation any, datakey string) Calcula
 
 	if isSequenceCalculation {
 		calculationData.Value = seq.CalculateSnowball(model)
+		calculationData.Avalanche = seq.CalculateAvalanche(model)
 	} else if isCalculation {
 		calculationData.Value = calc.CalculateSnowball(model)
+		calculationData.Avalanche = calc.CalculateAvalanche(model)
 	} else if isSnowballCalculation {
 		calculationData.Value = snowball.CalculateSnowball(model)
+		calculationData.Avalanche = snowball.CalculateAvalanche(model)
 	}
 
 	return calculationData
@@ -107,6 +122,7 @@ func CalculateSynchronousWasm(model *Model, calculation any, datakey string) Cal
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	snowball, isSnowballCalculation := calculation.(SnowballCalculation)
+	decisionCalculation, isDecisionCalculation := calculation.(DecisionCalculation)
 
 	calculationData := CalculationData{
 		Datakey: datakey,
@@ -114,10 +130,16 @@ func CalculateSynchronousWasm(model *Model, calculation any, datakey string) Cal
 
 	if isSequenceCalculation {
 		calculationData.Value = TranslateFloatSlice(seq.CalculateSnowball(model))
+		calculationData.Avalanche = TranslateFloatSlice(seq.CalculateAvalanche(model))
 	} else if isCalculation {
 		calculationData.Value = calc.CalculateSnowball(model)
+		calculationData.Avalanche = calc.CalculateAvalanche(model)
 	} else if isSnowballCalculation {
 		calculationData.Value = TranslateSnowball(snowball.CalculateSnowball(model))
+		calculationData.Avalanche = TranslateSnowball(snowball.CalculateAvalanche(model))
+	} else if isDecisionCalculation {
+		calculationData.Value = TranslateDecision(decisionCalculation.CalculateSnowball(model))
+		calculationData.Avalanche = nil
 	}
 
 	return calculationData
@@ -160,4 +182,27 @@ func TranslateSnowball(s DebtSequences) []interface{} {
 	}
 
 	return x
+}
+
+func TranslateDebts(debts []Debt) []interface{} {
+	x := []interface{}{}
+
+	for _, debt := range debts {
+		x = append(x, map[string]interface{}{
+			"name":            debt.Name,
+			"amount":          debt.Amount,
+			"minimum_payment": debt.MinimumPayment,
+			"annual_interest": debt.AnnualInterest,
+		})
+	}
+
+	return x
+}
+
+func TranslateDecision(decision FinalDecision) map[string]interface{} {
+	return map[string]interface{}{
+		"choice":                    decision.Choice,
+		"month_difference":          decision.MonthDifference,
+		"total_payments_difference": decision.TotalPaymentsDifference,
+	}
 }

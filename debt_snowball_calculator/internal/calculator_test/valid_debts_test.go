@@ -140,7 +140,7 @@ var validDebtsTests = []struct {
 func TestNewValidDebts(t *testing.T) {
 	actual := calculator.NewValidDebts()
 	expected := &calculator.ValidDebts{
-		SnowballCalculation: calculator.NewSnowball(),
+		SnowballAvalancheCalculation: calculator.NewSnowballAvalanche(),
 	}
 
 	assert.Equal(t, expected, actual)
@@ -154,10 +154,10 @@ func TestValidDebtsCalculate(t *testing.T) {
 			mockSnowball.On("CalculateAvalanche", test.model).Return(test.avalanche)
 
 			c := &calculator.ValidDebts{
-				SnowballCalculation: mockSnowball,
+				SnowballAvalancheCalculation: mockSnowball,
 			}
 
-			actual := c.Calculate(test.model)
+			actual := c.CalculateSnowball(test.model)
 			expected := func() []calculator.Debt {
 				validDebts := []calculator.Debt{}
 				invalidDebts := []calculator.Debt{}
@@ -191,6 +191,19 @@ func TestValidDebtsCalculate(t *testing.T) {
 
 				return validDebts
 			}()
+
+			assert.Equal(t, expected, actual)
+		})
+	}
+}
+
+func TestValidDebtsCalculateAvalanche(t *testing.T) {
+	for _, test := range validDebtsTests {
+		t.Run(test.name, func(t *testing.T) {
+			c := calculator.NewValidDebts()
+
+			actual := c.CalculateAvalanche(test.model)
+			expected := c.CalculateSnowball(test.model)
 
 			assert.Equal(t, expected, actual)
 		})

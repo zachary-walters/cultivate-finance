@@ -10,23 +10,27 @@
 </head>
 
 <body>
-  <div class="nav-bar-container">
+  <div class="nav-bar-container container">
     {{template "nav-bar" .}}
   </div>
-  <div class="inputform-container">
+  <div class="inputform-container container">
     {{template "inputform" .}}
   </div>
-  <div class="calculations-container">
+  <div class="calculations-container container">
+    {{template "decision" .}}
     {{template "calculations" .}}
   </div>
-  <div class="month-payoff-chart-container">
+  <div class="debt-order container">
+    {{template "debt-order" .}}
+  </div>
+  <div class="snowball-donut-chart-container container">
+    {{template "snowball-donut-chart" .}}
+  </div>
+  <div class="month-payoff-chart-container container">
     {{template "months-payoff-chart" .}}
   </div>
-  <div class="payoff-over-time-chart-container">
+  <div class="payoff-over-time-chart-container container">
     {{template "payoff-over-time-chart" .}}
-  </div>
-  <div class="snowball-donut-chart-container">
-    {{template "snowball-donut-chart" .}}
   </div>
 </body>
 
@@ -46,6 +50,10 @@
   .break {
     flex-basis: 100%;
     height: 0;
+  }
+
+  .container{
+    margin: 0.5rem;
   }
 </style>
 

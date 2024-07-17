@@ -36,8 +36,8 @@ var monthlySequencePaymentsTests = []struct {
 func TestNewMonthlySequencePaymentsCalculateSnowball(t *testing.T) {
 	actual := calculator.NewMonthlySequencePayments()
 	expected := &calculator.MonthlySequencePayments{
-		DebtPayoffMonthCalculation: calculator.NewDebtPayoffMonth(),
-		SnowballCalculation:        calculator.NewSnowball(),
+		DebtPayoffMonthCalculation:   calculator.NewDebtPayoffMonth(),
+		SnowballAvalancheCalculation: calculator.NewSnowballAvalanche(),
 	}
 
 	assert.Equal(t, expected, actual)
@@ -55,8 +55,8 @@ func TestMonthlySequencePaymentsCalculateSnowball(t *testing.T) {
 			mockTotalBeginningDebt.On("CalculateSnowball", test.model).Return(test.totalBeginningDebt)
 
 			c := &calculator.MonthlySequencePayments{
-				DebtPayoffMonthCalculation: mockDebtPayoff,
-				SnowballCalculation:        mockSnowball,
+				DebtPayoffMonthCalculation:   mockDebtPayoff,
+				SnowballAvalancheCalculation: mockSnowball,
 			}
 
 			actual := c.CalculateSnowball(test.model)
@@ -94,8 +94,8 @@ func TestMonthlySequencePaymentsCalculateAvalanche(t *testing.T) {
 			mockTotalBeginningDebt.On("CalculateAvalanche", test.model).Return(test.totalBeginningDebt)
 
 			c := &calculator.MonthlySequencePayments{
-				DebtPayoffMonthCalculation: mockDebtPayoff,
-				SnowballCalculation:        mockSnowball,
+				DebtPayoffMonthCalculation:   mockDebtPayoff,
+				SnowballAvalancheCalculation: mockSnowball,
 			}
 
 			actual := c.CalculateAvalanche(test.model)

@@ -32,8 +32,9 @@ type data401kDatakey struct {
 }
 
 type dataDebtSnowballDatakey struct {
-	Datakey string `json:"datakey,omitempty"`
-	Value   any    `json:"value,omitempty"`
+	Datakey   string `json:"datakey,omitempty"`
+	Value     any    `json:"value,omitempty"`
+	Avalanche any    `json:"avalanche,omitempty"`
 }
 
 func (s server) calculate401kDatakey(w http.ResponseWriter, r *http.Request) {

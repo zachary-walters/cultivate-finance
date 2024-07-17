@@ -4,19 +4,19 @@ type MonthlySequencePaymentsCalculation SequenceCalculation
 
 type MonthlySequencePayments struct {
 	DebtPayoffMonthCalculation
-	SnowballCalculation
+	SnowballAvalancheCalculation
 }
 
 func NewMonthlySequencePayments() *MonthlySequencePayments {
 	return &MonthlySequencePayments{
-		DebtPayoffMonthCalculation: NewDebtPayoffMonth(),
-		SnowballCalculation:        NewSnowball(),
+		DebtPayoffMonthCalculation:   NewDebtPayoffMonth(),
+		SnowballAvalancheCalculation: NewSnowballAvalanche(),
 	}
 }
 
 func (c MonthlySequencePayments) CalculateSnowball(model *Model) []float64 {
 	debtPayoffMonth := c.DebtPayoffMonthCalculation.CalculateSnowball(model)
-	snowball := c.SnowballCalculation.CalculateSnowball(model)
+	snowball := c.SnowballAvalancheCalculation.CalculateSnowball(model)
 
 	payments := []float64{}
 
@@ -36,7 +36,7 @@ func (c MonthlySequencePayments) CalculateSnowball(model *Model) []float64 {
 
 func (c MonthlySequencePayments) CalculateAvalanche(model *Model) []float64 {
 	debtPayoffMonth := c.DebtPayoffMonthCalculation.CalculateAvalanche(model)
-	snowball := c.SnowballCalculation.CalculateAvalanche(model)
+	snowball := c.SnowballAvalancheCalculation.CalculateAvalanche(model)
 
 	payments := []float64{}
 

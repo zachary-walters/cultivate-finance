@@ -1,22 +1,23 @@
 package calculator
 
 type ValidDebtsCalculation interface {
-	Calculate(*Model) []Debt
+	CalculateSnowball(*Model) []Debt
+	CalculateAvalanche(*Model) []Debt
 }
 
 type ValidDebts struct {
-	SnowballCalculation
+	SnowballAvalancheCalculation
 }
 
 func NewValidDebts() *ValidDebts {
 	return &ValidDebts{
-		SnowballCalculation: NewSnowball(),
+		SnowballAvalancheCalculation: NewSnowballAvalanche(),
 	}
 }
 
-func (c ValidDebts) Calculate(model *Model) []Debt {
-	snowball := c.SnowballCalculation.CalculateSnowball(model)
-	avalanche := c.SnowballCalculation.CalculateAvalanche(model)
+func (c *ValidDebts) CalculateSnowball(model *Model) []Debt {
+	snowball := c.SnowballAvalancheCalculation.CalculateSnowball(model)
+	avalanche := c.SnowballAvalancheCalculation.CalculateAvalanche(model)
 
 	validDebts := []Debt{}
 	invalidDebts := []Debt{}
@@ -49,4 +50,8 @@ func (c ValidDebts) Calculate(model *Model) []Debt {
 	}
 
 	return validDebts
+}
+
+func (c *ValidDebts) CalculateAvalanche(model *Model) []Debt {
+	return c.CalculateSnowball(model)
 }

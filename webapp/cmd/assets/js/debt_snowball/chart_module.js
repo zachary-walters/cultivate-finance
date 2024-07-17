@@ -3,18 +3,24 @@ export const generateCharts = (calculations) => {
   if (chartStatus != undefined) {
     chartStatus.destroy();
   }
-
-  var snowball = calculations.SNOWBALL.filter(debt => !debt.invalid);
-
   new Chart("months-payoff-chart", {
     type: "bar",
     data: {
-      labels: getLabels(snowball),
-      datasets: [{
-        data: getMonthPayoffData(snowball),
-        borderWidth: 2,
-        backgroundColor: "#8091F3",
-      }],
+      labels: getLabels(calculations.VALID_SNOWBALL.snowball),
+      datasets: [
+        {
+          label: "Snowball",
+          data: getMonthPayoffData(calculations.VALID_SNOWBALL.snowball),
+          borderWidth: 2,
+          backgroundColor: "#8091F3",
+        },
+        {
+          label: "Avalanche",
+          data: getMonthPayoffData(calculations.VALID_SNOWBALL.avalanche),
+          borderWidth: 2,
+          backgroundColor: "#9DD4BC",
+        }, 
+      ],
     },
     options: {
       indexAxis: 'y',
@@ -25,7 +31,7 @@ export const generateCharts = (calculations) => {
       responsive: true,
       plugins: {
         legend: {
-          display: false,
+          
         },
         title: {
           display: true,
@@ -42,15 +48,23 @@ export const generateCharts = (calculations) => {
   new Chart('payoff-over-time-chart', { 
     type: 'line', 
     data: { 
-      labels: calculations.MONTH_SEQUENCE, 
+      labels: calculations.MONTH_SEQUENCE.snowball, 
       datasets: [ 
         {  
-          data: calculations.MONTHLY_SEQUENCE_BALANCES, 
+          label: "Snowball",
+          data: calculations.MONTHLY_SEQUENCE_BALANCES.snowball, 
           backgroundColor: 'rgba(0, 40, 255, 0.5)', 
           borderColor: 'rgba(0, 0, 255, 0)', 
           borderWidth: 1, 
           fill: true, 
-          pointStyle: false,
+        }, 
+        {  
+          label: "Avalanche",
+          data: calculations.MONTHLY_SEQUENCE_BALANCES.avalanche, 
+          backgroundColor: 'rgba(85, 167, 131, 0.5)', 
+          borderColor: 'rgba(0, 0, 255, 0)', 
+          borderWidth: 1, 
+          fill: true, 
         }, 
       ] 
     }, 
@@ -83,7 +97,7 @@ export const generateCharts = (calculations) => {
       }, 
       plugins: { 
         legend: {
-          display: false,
+          // display: false,
         },
         title: {
           display: true,
@@ -107,7 +121,7 @@ export const generateCharts = (calculations) => {
           "rgba(0, 40, 255, 0.5)",
           "rgba(85, 167, 131, 0.5)",
         ],
-        data: [calculations.TOTAL_INTEREST,calculations.TOTAL_BEGINNING_DEBT]
+        data: [calculations.TOTAL_INTEREST.snowball,calculations.TOTAL_BEGINNING_DEBT.snowball]
       }]
     },
     options: {
@@ -115,7 +129,34 @@ export const generateCharts = (calculations) => {
       plugins: {
         title: {
           display: true,
-          text: "Total Principal and Interest",
+          text: "Total Principal and Interest (Snowball)",
+        }
+      }
+    }
+  });
+
+  chartStatus = Chart.getChart("avalanche-donut-chart");
+  if (chartStatus != undefined) {
+    chartStatus.destroy();
+  }
+  new Chart("avalanche-donut-chart", {
+    type: "doughnut",
+    data: {
+      labels: ["Interest", "Initial Debt"],
+      datasets: [{
+        backgroundColor: [
+          "rgba(0, 40, 255, 0.5)",
+          "rgba(85, 167, 131, 0.5)",
+        ],
+        data: [calculations.TOTAL_INTEREST.avalanche, calculations.TOTAL_BEGINNING_DEBT.avalanche]
+      }]
+    },
+    options: {
+      animation: false,
+      plugins: {
+        title: {
+          display: true,
+          text: "Total Principal and Interest (Avalanche)",
         }
       }
     }

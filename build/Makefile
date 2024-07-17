@@ -2,10 +2,10 @@ include $(PWD)/.env
 
 #### Testing
 test_401k: fmt
-	(cd $(401K_CALCULATOR_DIR); go test ./... -v -coverpkg=./...)
+	(cd $(401K_CALCULATOR_DIR); go test ./... -v -coverpkg=./... -race)
 
 test_debt_snowball: fmt
-	(cd $(DEBT_SNOWBALL_CALCULATOR_DIR); go test ./... -v -coverpkg=./...)
+	(cd $(DEBT_SNOWBALL_CALCULATOR_DIR); go test ./... -v -coverpkg=./... -race)
 
 test: fmt test_401k test_debt_snowball
 	

@@ -1,5 +1,6 @@
 import { generateCharts } from "/assets/js/debt_snowball/chart_module.js";
 import { calculateAll } from "/assets/js/debt_snowball/calculations_module.js";
+import { generateOrderTable } from "/assets/js/debt_snowball/table_module.js"
 
 export async function recalculate(debtInputs, otherInputs, uuid) {
   let debts = [];
@@ -23,17 +24,27 @@ export async function recalculate(debtInputs, otherInputs, uuid) {
 
   let calculations = await calculateAll(debts, sanitizeToZero(otherInputs[0].value), sanitizeToZero(otherInputs[1].value));
 
-  document.getElementById("debt-payoff-month").innerHTML = calculations.DEBT_PAYOFF_MONTH;
-  document.getElementById("total-beginning-debt").innerHTML = isDollarValue(calculations.TOTAL_BEGINNING_DEBT);
-  document.getElementById("total-interest").innerHTML = isDollarValue(calculations.TOTAL_INTEREST);
-  document.getElementById("total-minimum-payment").innerHTML = isDollarValue(calculations.TOTAL_MINIMUM_PAYMENT);
-  document.getElementById("total-payments").innerHTML = isDollarValue(calculations.TOTAL_PAYMENTS);
+  document.getElementById("debt-payoff-month-snowball").innerHTML = calculations.DEBT_PAYOFF_MONTH.snowball;
+  document.getElementById("total-beginning-debt-snowball").innerHTML = isDollarValue(calculations.TOTAL_BEGINNING_DEBT.snowball);
+  document.getElementById("total-interest-snowball").innerHTML = isDollarValue(calculations.TOTAL_INTEREST.snowball);
+  document.getElementById("total-minimum-payment-snowball").innerHTML = isDollarValue(calculations.TOTAL_MINIMUM_PAYMENT.snowball);
+  document.getElementById("total-payments-snowball").innerHTML = isDollarValue(calculations.TOTAL_PAYMENTS.snowball);
+
+  document.getElementById("debt-payoff-month-avalanche").innerHTML = calculations.DEBT_PAYOFF_MONTH.avalanche;
+  document.getElementById("total-beginning-debt-avalanche").innerHTML = isDollarValue(calculations.TOTAL_BEGINNING_DEBT.avalanche);
+  document.getElementById("total-interest-avalanche").innerHTML = isDollarValue(calculations.TOTAL_INTEREST.avalanche);
+  document.getElementById("total-minimum-payment-avalanche").innerHTML = isDollarValue(calculations.TOTAL_MINIMUM_PAYMENT.avalanche);
+  document.getElementById("total-payments-avalanche").innerHTML = isDollarValue(calculations.TOTAL_PAYMENTS.avalanche);
 
   if (uuid != null) {
-    validateInput(calculations.SNOWBALL, amounts);
+    validateInput(calculations.SNOWBALL.snowball, amounts);
   }
 
-  generateCharts(calculations)
+  document.getElementById("decision").innerHTML = calculations.DECISION.snowball.choice;
+  document.getElementById("decision").classList = calculations.DECISION.snowball.choice == "Snowball" ? ['snowball'] : ['avalanche']
+
+  generateOrderTable(calculations);
+  generateCharts(calculations);
 }
 
 export const sanitizeToZero = (input) => {

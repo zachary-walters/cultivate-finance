@@ -37,7 +37,7 @@ func TestNewMonthlySequenceBalancesCalculateSnowball(t *testing.T) {
 	actual := calculator.NewMonthlySequenceBalances()
 	expected := &calculator.MonthlySequenceBalances{
 		DebtPayoffMonthCalculation:    calculator.NewDebtPayoffMonth(),
-		SnowballCalculation:           calculator.NewSnowball(),
+		SnowballAvalancheCalculation:  calculator.NewSnowballAvalanche(),
 		TotalBeginningDebtCalculation: calculator.NewTotalBeginningDebt(),
 	}
 
@@ -57,7 +57,7 @@ func TestMonthlySequenceBalancesCalculateSnowball(t *testing.T) {
 
 			c := &calculator.MonthlySequenceBalances{
 				DebtPayoffMonthCalculation:    mockDebtPayoff,
-				SnowballCalculation:           mockSnowball,
+				SnowballAvalancheCalculation:  mockSnowball,
 				TotalBeginningDebtCalculation: mockTotalBeginningDebt,
 			}
 
@@ -99,7 +99,7 @@ func TestMonthlySequenceBalancesCalculateAvalanche(t *testing.T) {
 
 			c := &calculator.MonthlySequenceBalances{
 				DebtPayoffMonthCalculation:    mockDebtPayoff,
-				SnowballCalculation:           mockSnowball,
+				SnowballAvalancheCalculation:  mockSnowball,
 				TotalBeginningDebtCalculation: mockTotalBeginningDebt,
 			}
 

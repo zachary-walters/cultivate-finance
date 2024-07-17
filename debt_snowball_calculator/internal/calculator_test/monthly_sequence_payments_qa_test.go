@@ -33,8 +33,8 @@ func TestMonthlySequencePaymentsCalculateQA(t *testing.T) {
 			mockSnowball.On("CalculateSnowball", test.model).Return(test.snowball)
 
 			c := &calculator.MonthlySequencePayments{
-				DebtPayoffMonthCalculation: mockDebtPayoff,
-				SnowballCalculation:        mockSnowball,
+				DebtPayoffMonthCalculation:   mockDebtPayoff,
+				SnowballAvalancheCalculation: mockSnowball,
 			}
 
 			actual := c.CalculateSnowball(test.model)

@@ -34,7 +34,7 @@ func TestSnowballQACalculateSnowball(t *testing.T) {
 	const float64EqualityThreshold = 1e-9
 	for _, test := range snowballQATests {
 		t.Run(test.name, func(t *testing.T) {
-			c := calculator.Snowball{
+			c := calculator.SnowballAvalanche{
 				MaxYear: 1000,
 			}
 

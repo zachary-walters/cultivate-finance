@@ -51,11 +51,14 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 	}
 	wg.Wait()
 
-	modelMap := map[string]interface{}{}
+	modelMap := map[string]any{}
 
 	for len(ch) > 0 {
 		calculationData := <-ch
-		modelMap[calculationData.Datakey] = calculationData.Value
+		modelMap[calculationData.Datakey] = map[string]any{
+			"snowball":  calculationData.Value,
+			"avalanche": calculationData.Avalanche,
+		}
 	}
 
 	close(ch)
@@ -65,12 +68,14 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 
 var calculations = map[string]any{
 	"DEBT_PAYOFF_MONTH":         calculator.NewDebtPayoffMonth(),
+	"DECISION":                  calculator.NewDecision(),
 	"MONTH_SEQUENCE":            calculator.NewMonthSequence(),
 	"MONTHLY_SEQUENCE_BALANCES": calculator.NewMonthlySequenceBalances(),
 	"MONTHLY_SEQUENCE_PAYMENTS": calculator.NewMonthlySequencePayments(),
-	"SNOWBALL":                  calculator.NewSnowball(),
+	"SNOWBALL":                  calculator.NewSnowballAvalanche(),
 	"TOTAL_BEGINNING_DEBT":      calculator.NewTotalBeginningDebt(),
 	"TOTAL_INTEREST":            calculator.NewTotalInterest(),
 	"TOTAL_MINIMUM_PAYMENT":     calculator.NewTotalMinimumPayment(),
 	"TOTAL_PAYMENTS":            calculator.NewTotalPayments(),
+	"VALID_SNOWBALL":            calculator.NewValidSnowballAvalanche(),
 }
