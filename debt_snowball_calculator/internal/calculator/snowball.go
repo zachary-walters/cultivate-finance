@@ -20,7 +20,6 @@ func (c *SnowballAvalanche) CalculateSnowball(model *Model) DebtSequences {
 	oneTimeImmediatePayment := model.Input.OneTimeImmediatePayment
 	compoundMinimumPayments := 0.0
 	maxMonth := 0.0
-	invalid := false
 
 	// custom insertion sort to avoid importing the sort library
 	// handrolling our own saves 8kb in the binary file
@@ -52,9 +51,8 @@ func (c *SnowballAvalanche) CalculateSnowball(model *Model) DebtSequences {
 				Without this, the calculator will hang trying to calculate millions of months.
 				Example: amount == 100000000 and min payoff == 10
 			*/
-			if monthIter/12 >= c.MaxYear || invalid {
+			if monthIter/12 >= c.MaxYear {
 				debtSequence.Invalid = true
-				invalid = true
 				debtSequences = append(debtSequences, debtSequence)
 				break
 			}
@@ -108,7 +106,6 @@ func (c *SnowballAvalanche) CalculateAvalanche(model *Model) DebtSequences {
 	oneTimeImmediatePayment := model.Input.OneTimeImmediatePayment
 	compoundMinimumPayments := 0.0
 	maxMonth := 0.0
-	invalid := false
 
 	// custom insertion sort to avoid importing the sort library
 	// handrolling our own saves 8kb in the binary file
@@ -140,9 +137,8 @@ func (c *SnowballAvalanche) CalculateAvalanche(model *Model) DebtSequences {
 				Without this, the calculator will hang trying to calculate millions of months.
 				Example: amount == 100000000 and min payoff == 10
 			*/
-			if monthIter/12 >= c.MaxYear || invalid {
+			if monthIter/12 >= c.MaxYear {
 				debtSequence.Invalid = true
-				invalid = true
 				debtSequences = append(debtSequences, debtSequence)
 				break
 			}

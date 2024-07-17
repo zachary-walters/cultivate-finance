@@ -124,7 +124,6 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 				oneTimeImmediatePayment := test.model.Input.OneTimeImmediatePayment
 				compoundMinimumPayments := 0.0
 				maxMonth := 0.0
-				invalid := false
 
 				sort.Slice(debts, func(i, j int) bool {
 					return debts[i].Amount < debts[j].Amount
@@ -142,9 +141,8 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 
 					monthIter := 1.0
 					for {
-						if monthIter/12 >= c.MaxYear || invalid {
+						if monthIter/12 >= c.MaxYear {
 							debtSequence.Invalid = true
-							invalid = true
 
 							debtSequences = append(debtSequences, debtSequence)
 							break
@@ -225,7 +223,6 @@ func TestSnowballCalculateAvalanche(t *testing.T) {
 				oneTimeImmediatePayment := test.model.Input.OneTimeImmediatePayment
 				compoundMinimumPayments := 0.0
 				maxMonth := 0.0
-				invalid := false
 
 				sort.Slice(debts, func(i, j int) bool {
 					return debts[i].AnnualInterest > debts[j].AnnualInterest
@@ -243,9 +240,8 @@ func TestSnowballCalculateAvalanche(t *testing.T) {
 
 					monthIter := 1.0
 					for {
-						if monthIter/12 >= c.MaxYear || invalid {
+						if monthIter/12 >= c.MaxYear {
 							debtSequence.Invalid = true
-							invalid = true
 
 							debtSequences = append(debtSequences, debtSequence)
 							break
