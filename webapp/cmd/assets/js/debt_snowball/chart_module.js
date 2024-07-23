@@ -1,4 +1,12 @@
 export const generateCharts = (calculations) => {
+  // console.log(calculations.TOTAL_INTEREST, "interest");
+  // console.log(calculations.TOTAL_BEGINNING_DEBT, "beginning debt")
+  // console.log(calculations.TOTAL_PAYMENTS,"total paymetns")
+  console.log(calculations.SNOWBALL.avalanche,"avalanche")
+  // console.log(calculations.MONTHLY_SEQUENCE_PAYMENTS,"monthly sequence payments")
+  // console.log(calculations.MONTHLY_SEQUENCE_BALANCES,"monthly sequence balances")
+  // console.log(calculations.DEBT_PAYOFF_MONTH, "payoff month")
+  
   let chartStatus = Chart.getChart("months-payoff-chart");
   if (chartStatus != undefined) {
     chartStatus.destroy();
@@ -6,17 +14,47 @@ export const generateCharts = (calculations) => {
   new Chart("months-payoff-chart", {
     type: "bar",
     data: {
-      labels: getLabels(calculations.VALID_SNOWBALL.snowball),
+      labels: getLabels(calculations.SNOWBALL.snowball),
       datasets: [
         {
           label: "Snowball",
-          data: getMonthPayoffData(calculations.VALID_SNOWBALL.snowball),
+          data: getMonthPayoffData(calculations.SNOWBALL.snowball),
           borderWidth: 2,
           backgroundColor: "#8091F3",
         },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      animation: false,
+      bar: {
+        borderWidth: 2,
+      },
+      responsive: true,
+      plugins: {
+        legend: {
+          
+        },
+        title: {
+          display: true,
+          text: "Months Until Debt Payoff"
+        },
+      },
+    },
+  });
+
+  chartStatus = Chart.getChart("months-payoff-avalanche-chart");
+  if (chartStatus != undefined) {
+    chartStatus.destroy();
+  }
+  new Chart("months-payoff-avalanche-chart", {
+    type: "bar",
+    data: {
+      labels: getLabels(calculations.SNOWBALL.avalanche),
+      datasets: [
         {
           label: "Avalanche",
-          data: getMonthPayoffData(calculations.VALID_SNOWBALL.avalanche),
+          data: getMonthPayoffData(calculations.SNOWBALL.avalanche),
           borderWidth: 2,
           backgroundColor: "#9DD4BC",
         }, 

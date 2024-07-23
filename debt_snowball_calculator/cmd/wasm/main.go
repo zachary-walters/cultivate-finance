@@ -77,5 +77,4 @@ var calculations = map[string]any{
 	"TOTAL_INTEREST":            calculator.NewTotalInterest(),
 	"TOTAL_MINIMUM_PAYMENT":     calculator.NewTotalMinimumPayment(),
 	"TOTAL_PAYMENTS":            calculator.NewTotalPayments(),
-	"VALID_SNOWBALL":            calculator.NewValidSnowballAvalanche(),
 }

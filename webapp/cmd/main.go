@@ -77,6 +77,7 @@ func debtSnowball(w http.ResponseWriter, r *http.Request) {
 			"templates/debt_snowball_calculator/debt_snowball_input_form.html",
 			"templates/debt_snowball_calculator/debt_snowball_calculations.html",
 			"templates/debt_snowball_calculator/debt_snowball_months_payoff_chart.html",
+			"templates/debt_snowball_calculator/debt_snowball_months_payoff_avalanche_chart.html",
 			"templates/debt_snowball_calculator/debt_snowball_payoff_over_time_chart.html",
 			"templates/debt_snowball_calculator/debt_snowball_donut_chart.html",
 			"templates/debt_snowball_calculator/debt_snowball_decision.html",

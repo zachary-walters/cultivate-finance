@@ -8,9 +8,9 @@ export const generateOrderTable = (calculations) => {
                 </thead>
                 <tbody>`;
 
-  for (var i = 0; i < calculations.VALID_SNOWBALL.snowball.length; i++) {
-    let snowball = calculations.VALID_SNOWBALL.snowball[i];
-    let avalanche = calculations.VALID_SNOWBALL.avalanche[i];
+  for (var i = 0; i < calculations.SNOWBALL.snowball.length; i++) {
+    let snowball = calculations.SNOWBALL.snowball[i];
+    let avalanche = calculations.SNOWBALL.avalanche[i];
     table = table + `<tr>
                        <td>${snowball.debt.name} (mo: ${snowball.months.slice(-1)[0]})</td>
                       <td>${avalanche.debt.name} (mo: ${avalanche.months.slice(-1)[0]})</td>
