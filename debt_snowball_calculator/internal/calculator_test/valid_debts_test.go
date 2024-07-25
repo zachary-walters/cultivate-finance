@@ -9,13 +9,13 @@ import (
 
 var validDebtsTests = []struct {
 	name      string
-	model     *calculator.Model
+	model     calculator.Model
 	snowball  calculator.DebtSequences
 	avalanche calculator.DebtSequences
 }{
 	{
 		name: "Test Case 0 - snowball",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -35,13 +35,12 @@ var validDebtsTests = []struct {
 				Debt: calculator.Debt{
 					Name: "d1",
 				},
-				Invalid: true,
 			},
 		},
 	},
 	{
 		name: "Test Case 1 - snowball",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -76,7 +75,7 @@ var validDebtsTests = []struct {
 	},
 	{
 		name: "Test Case 2 - avalanche",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -96,13 +95,12 @@ var validDebtsTests = []struct {
 				Debt: calculator.Debt{
 					Name: "d1",
 				},
-				Invalid: true,
 			},
 		},
 	},
 	{
 		name: "Test Case 3 - avalanche",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -159,34 +157,20 @@ func TestValidDebtsCalculate(t *testing.T) {
 
 			actual := c.CalculateSnowball(test.model)
 			expected := func() []calculator.Debt {
+				snowballDebts := []calculator.Debt{}
+
 				validDebts := []calculator.Debt{}
-				invalidDebts := []calculator.Debt{}
 
 				for _, debtSequence := range test.snowball {
-					if debtSequence.Invalid {
-						invalidDebts = append(invalidDebts, debtSequence.Debt)
-					}
+					snowballDebts = append(snowballDebts, debtSequence.Debt)
 				}
 
-				for _, debtSequence := range test.avalanche {
-					if debtSequence.Invalid {
-						invalidDebts = append(invalidDebts, debtSequence.Debt)
-					}
-				}
-
-				for _, debt := range test.model.Input.Debts {
-					if func(s []calculator.Debt, d calculator.Debt) bool {
-						for _, a := range s {
-							if a == d {
-								return true
-							}
+				for _, avalancheSequence := range test.avalanche {
+					for _, debt := range snowballDebts {
+						if avalancheSequence.Debt == debt {
+							validDebts = append(validDebts, debt)
 						}
-						return false
-					}(invalidDebts, debt) {
-						continue
 					}
-
-					validDebts = append(validDebts, debt)
 				}
 
 				return validDebts

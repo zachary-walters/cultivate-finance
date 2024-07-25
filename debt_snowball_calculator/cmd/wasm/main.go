@@ -30,6 +30,7 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 		}
 
 		debts = append(debts, calculator.Debt{
+			ID:             args[0].Index(i).Get("id").String(),
 			Name:           args[0].Index(i).Get("name").String(),
 			Amount:         debtAmount,
 			MinimumPayment: args[0].Index(i).Get("minimum_payment").Float(),
@@ -77,4 +78,5 @@ var calculations = map[string]any{
 	"TOTAL_INTEREST":            calculator.NewTotalInterest(),
 	"TOTAL_MINIMUM_PAYMENT":     calculator.NewTotalMinimumPayment(),
 	"TOTAL_PAYMENTS":            calculator.NewTotalPayments(),
+	"VALID_DEBTS":               calculator.NewValidDebts(),
 }

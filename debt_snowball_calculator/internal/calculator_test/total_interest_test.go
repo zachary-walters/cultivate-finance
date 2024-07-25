@@ -9,29 +9,29 @@ import (
 
 var totalInterestTests = []struct {
 	name               string
-	model              *calculator.Model
+	model              calculator.Model
 	totalBeginningDebt float64
 	totalPayments      float64
 }{
 	{
 		name:  "Test Case 0",
-		model: &calculator.Model{},
+		model: calculator.Model{},
 	},
 	{
 		name:               "Test Case 1",
-		model:              &calculator.Model{},
+		model:              calculator.Model{},
 		totalBeginningDebt: 1293012,
 		totalPayments:      12093810984,
 	},
 	{
 		name:               "Test Case 2",
-		model:              &calculator.Model{},
+		model:              calculator.Model{},
 		totalBeginningDebt: 1293012,
 		totalPayments:      1,
 	},
 	{
 		name:               "Test Case 3",
-		model:              &calculator.Model{},
+		model:              calculator.Model{},
 		totalBeginningDebt: 1,
 		totalPayments:      12093810984,
 	},

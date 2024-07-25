@@ -94,8 +94,8 @@ build_debt_snowball_api:
 build_debt_snowball_tinygo:
 	@echo "Building Debt Snowball tinygo wasm binary..."
 	mkdir -p $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin
-	cd $(DEBT_SNOWBALL_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_DEBT_SNOWBALL_BINARY} -target wasm -opt=z -size full -scheduler=asyncify ./cmd/wasm 
-# wasm-opt -s -Oz $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} -o $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} && chmod +x $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
+	cd $(DEBT_SNOWBALL_CALCULATOR_DIR) && tinygo build -o bin/${TINYGO_DEBT_SNOWBALL_BINARY} -target wasm -opt=z -size full -scheduler=asyncify -panic=trap -no-debug ./cmd/wasm 
+	wasm-opt -s -Oz $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} -o $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY} && chmod +x $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
 	du -sh $(DEBT_SNOWBALL_CALCULATOR_DIR)/bin/${TINYGO_DEBT_SNOWBALL_BINARY}
 	@echo "Done building tinygo binary"
 

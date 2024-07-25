@@ -9,12 +9,12 @@ import (
 
 var debtPayoffMonthTests = []struct {
 	name     string
-	model    *calculator.Model
+	model    calculator.Model
 	snowball calculator.DebtSequences
 }{
 	{
 		name:  "Test Case 0",
-		model: &calculator.Model{},
+		model: calculator.Model{},
 		snowball: calculator.DebtSequences{
 			{
 				Months: []float64{1},
@@ -23,11 +23,11 @@ var debtPayoffMonthTests = []struct {
 	},
 	{
 		name:  "Test Case 1",
-		model: &calculator.Model{},
+		model: calculator.Model{},
 	},
 	{
 		name:  "Test Case 2",
-		model: &calculator.Model{},
+		model: calculator.Model{},
 		snowball: calculator.DebtSequences{
 			{
 				Months: []float64{1},
@@ -39,7 +39,7 @@ var debtPayoffMonthTests = []struct {
 	},
 	{
 		name:  "Test Case 2",
-		model: &calculator.Model{},
+		model: calculator.Model{},
 		snowball: calculator.DebtSequences{
 			{
 				Months: []float64{0},

@@ -10,17 +10,17 @@ import (
 
 var totalPaymentsTests = []struct {
 	name                    string
-	model                   *calculator.Model
+	model                   calculator.Model
 	monthlySequencePayments []float64
 }{
 	{
 		name:                    "Test Case 0",
-		model:                   &calculator.Model{},
+		model:                   calculator.Model{},
 		monthlySequencePayments: []float64{1, 2, 3, 4},
 	},
 	{
 		name:                    "Test Case 0",
-		model:                   &calculator.Model{},
+		model:                   calculator.Model{},
 		monthlySequencePayments: []float64{math.Inf(-1)},
 	},
 }

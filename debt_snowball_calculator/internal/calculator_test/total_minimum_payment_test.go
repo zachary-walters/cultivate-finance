@@ -9,11 +9,11 @@ import (
 
 var testTotalMinimumPayment = []struct {
 	name  string
-	model *calculator.Model
+	model calculator.Model
 }{
 	{
 		name: "Test Case 0",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -34,7 +34,7 @@ var testTotalMinimumPayment = []struct {
 	},
 	{
 		name: "Test Case 1",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -55,7 +55,7 @@ var testTotalMinimumPayment = []struct {
 	},
 	{
 		name:  "Test Case 2",
-		model: &calculator.Model{},
+		model: calculator.Model{},
 	},
 }
 

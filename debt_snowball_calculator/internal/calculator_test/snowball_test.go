@@ -10,11 +10,11 @@ import (
 
 var snowballTests = []struct {
 	name  string
-	model *calculator.Model
+	model calculator.Model
 }{
 	{
 		name: "Test Case 0",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -35,7 +35,7 @@ var snowballTests = []struct {
 	},
 	{
 		name: "Test Case 1 - break out early",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -56,7 +56,7 @@ var snowballTests = []struct {
 	},
 	{
 		name: "Test Case 2",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -77,7 +77,7 @@ var snowballTests = []struct {
 	},
 	{
 		name: "Test Case 3 - break out early",
-		model: &calculator.Model{
+		model: calculator.Model{
 			Input: calculator.Input{
 				Debts: []calculator.Debt{
 					{
@@ -101,7 +101,7 @@ var snowballTests = []struct {
 func TestNewSnowball(t *testing.T) {
 	actual := calculator.NewSnowballAvalanche()
 	expected := &calculator.SnowballAvalanche{
-		MaxYear: 1000,
+		MaxYear: 200,
 	}
 
 	assert.Equal(t, expected, actual)
@@ -111,23 +111,31 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 	for _, test := range snowballTests {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.SnowballAvalanche{
-				MaxYear: 1000,
+				MaxYear: 200,
 			}
 
 			actual := c.CalculateSnowball(test.model)
 			expected := func() calculator.DebtSequences {
-				debtSequences := calculator.DebtSequences{}
-
-				debts := test.model.Input.Debts
 				extraMonthlyPayment := test.model.Input.ExtraMonthlyPayment
 				rolloverPayment := 0.0
 				oneTimeImmediatePayment := test.model.Input.OneTimeImmediatePayment
 				compoundMinimumPayments := 0.0
 				maxMonth := 0.0
+				recalculate := false
+				finishedDebts := []calculator.Debt{}
 
-				sort.Slice(debts, func(i, j int) bool {
-					return debts[i].Amount < debts[j].Amount
-				})
+				// custom insertion sort to avoid importing the sort library
+				// handrolling our own saves 8kb in the binary file
+				debts := func(arr []calculator.Debt) []calculator.Debt {
+					for i := 0; i < len(arr); i++ {
+						for j := i; j > 0 && arr[j-1].Amount > arr[j].Amount; j-- {
+							arr[j], arr[j-1] = arr[j-1], arr[j]
+						}
+					}
+					return arr
+				}(test.model.Input.Debts)
+
+				debtSequences := calculator.DebtSequences{}
 
 				for _, debt := range debts {
 					debtBalance := debt.Amount
@@ -141,10 +149,13 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 
 					monthIter := 1.0
 					for {
+						/*
+							This triggers when an arbitrarily high debt payoff happens.
+							Without this, the calculator will hang trying to calculate millions of months.
+							Example: amount == 100000000 and min payoff == 10
+						*/
 						if monthIter/12 >= c.MaxYear {
-							debtSequence.Invalid = true
-
-							debtSequences = append(debtSequences, debtSequence)
+							recalculate = true
 							break
 						}
 
@@ -152,27 +163,17 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 
 						if monthIter == maxMonth {
 							basePayment = debt.MinimumPayment + rolloverPayment
+							rolloverPayment = 0
 						} else if monthIter > maxMonth {
-							basePayment = debt.MinimumPayment + extraMonthlyPayment + compoundMinimumPayments
+							basePayment = debt.MinimumPayment + extraMonthlyPayment + compoundMinimumPayments + rolloverPayment + oneTimeImmediatePayment
 							rolloverPayment = 0
 						}
 
 						debtSequence.Months = append(debtSequence.Months, monthIter)
 
-						// use oneTimeImmediatePayment
-						debtBalance = debtBalance - oneTimeImmediatePayment
 						leftover := (debtBalance - basePayment) * -1
-						if debtBalance <= 0 && monthIter == 1 {
-							debtSequence.Balances = append(debtSequence.Balances, 0)
-							debtSequence.Payments = append(debtSequence.Payments, debt.Amount)
-							rolloverPayment = leftover
-							oneTimeImmediatePayment = debtBalance * -1
-							compoundMinimumPayments += debt.MinimumPayment
-							maxMonth = debtSequence.Months[len(debtSequence.Months)-1]
-							break
-						}
+						oneTimeImmediatePayment = 0
 
-						// use other payments
 						debtBalance = debtBalance - basePayment
 						if debtBalance <= 0 {
 							debtSequence.Balances = append(debtSequence.Balances, 0)
@@ -180,6 +181,8 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 							rolloverPayment = leftover
 							compoundMinimumPayments += debt.MinimumPayment
 							maxMonth = debtSequence.Months[len(debtSequence.Months)-1]
+
+							finishedDebts = append(finishedDebts, debt)
 							break
 						}
 						debtSequence.Payments = append(debtSequence.Payments, basePayment+oneTimeImmediatePayment)
@@ -198,6 +201,11 @@ func TestSnowballCalculateSnowball(t *testing.T) {
 					debtSequences = append(debtSequences, debtSequence)
 				}
 
+				if recalculate {
+					test.model.Input.Debts = finishedDebts
+					return c.CalculateSnowball(test.model)
+				}
+
 				return debtSequences
 			}()
 
@@ -210,7 +218,7 @@ func TestSnowballCalculateAvalanche(t *testing.T) {
 	for _, test := range snowballTests {
 		t.Run(test.name, func(t *testing.T) {
 			c := &calculator.SnowballAvalanche{
-				MaxYear: 1000,
+				MaxYear: 200,
 			}
 
 			// actual := c.CalculateAvalanche(test.model)
@@ -243,8 +251,6 @@ func TestSnowballCalculateAvalanche(t *testing.T) {
 					monthIter := 1.0
 					for {
 						if monthIter/12 >= c.MaxYear {
-							debtSequence.Invalid = true
-
 							debtSequences = append(debtSequences, debtSequence)
 							break
 						}

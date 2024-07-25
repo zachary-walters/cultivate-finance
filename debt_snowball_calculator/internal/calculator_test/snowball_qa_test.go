@@ -10,22 +10,22 @@ import (
 
 var snowballQATests = []struct {
 	name     string
-	model    *calculator.Model
+	model    calculator.Model
 	expected calculator.DebtSequences
 }{
 	{
 		name:     "Test Case 0",
-		model:    &snowballQATestModel0,
+		model:    snowballQATestModel0,
 		expected: snowballQATestModel0Answer,
 	},
 	{
 		name:     "Test Case 1",
-		model:    &snowballQATestModel1,
+		model:    snowballQATestModel1,
 		expected: snowballQATestModel1Answer,
 	},
 	{
 		name:     "Test Case 2",
-		model:    &snowballQATestModel2,
+		model:    snowballQATestModel2,
 		expected: snowballQATestModel2Answer,
 	},
 }
@@ -35,7 +35,7 @@ func TestSnowballQACalculateSnowball(t *testing.T) {
 	for _, test := range snowballQATests {
 		t.Run(test.name, func(t *testing.T) {
 			c := calculator.SnowballAvalanche{
-				MaxYear: 1000,
+				MaxYear: 200,
 			}
 
 			actual := c.CalculateSnowball(test.model)

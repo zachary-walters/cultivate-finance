@@ -12,7 +12,7 @@ func NewDebtPayoffMonth() *DebtPayoffMonth {
 	}
 }
 
-func (c *DebtPayoffMonth) CalculateSnowball(model *Model) float64 {
+func (c *DebtPayoffMonth) CalculateSnowball(model Model) float64 {
 	snowball := c.SnowballAvalancheCalculation.CalculateSnowball(model)
 
 	if len(snowball) <= 0 {
@@ -20,13 +20,6 @@ func (c *DebtPayoffMonth) CalculateSnowball(model *Model) float64 {
 	}
 
 	lastDebtSequence := snowball[len(snowball)-1]
-
-	for i := len(snowball) - 1; i >= 0; i-- {
-		if !snowball[i].Invalid {
-			lastDebtSequence = snowball[i]
-			break
-		}
-	}
 
 	if len(lastDebtSequence.Months) <= 0 {
 		return 0
@@ -37,7 +30,7 @@ func (c *DebtPayoffMonth) CalculateSnowball(model *Model) float64 {
 	return lastMonth
 }
 
-func (c *DebtPayoffMonth) CalculateAvalanche(model *Model) float64 {
+func (c *DebtPayoffMonth) CalculateAvalanche(model Model) float64 {
 	snowball := c.SnowballAvalancheCalculation.CalculateAvalanche(model)
 
 	payoffMonth := 0.0
@@ -47,7 +40,7 @@ func (c *DebtPayoffMonth) CalculateAvalanche(model *Model) float64 {
 	}
 
 	for _, debtSequence := range snowball {
-		if debtSequence.Invalid || len(debtSequence.Months) <= 0 {
+		if len(debtSequence.Months) <= 0 {
 			continue
 		}
 

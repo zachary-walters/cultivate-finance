@@ -14,7 +14,7 @@ func NewTotalPayments() *TotalPayments {
 	}
 }
 
-func (c *TotalPayments) CalculateSnowball(model *Model) float64 {
+func (c *TotalPayments) CalculateSnowball(model Model) float64 {
 	monthlySequencePayments := c.MonthlySequencePaymentsCalculation.CalculateSnowball(model)
 
 	total := 0.0
@@ -25,7 +25,7 @@ func (c *TotalPayments) CalculateSnowball(model *Model) float64 {
 	return c.SanitizeToZero(total)
 }
 
-func (c *TotalPayments) CalculateAvalanche(model *Model) float64 {
+func (c *TotalPayments) CalculateAvalanche(model Model) float64 {
 	monthlySequencePayments := c.MonthlySequencePaymentsCalculation.CalculateAvalanche(model)
 
 	total := 0.0

@@ -5,18 +5,23 @@ import (
 )
 
 type Calculation interface {
-	CalculateSnowball(*Model) float64
-	CalculateAvalanche(*Model) float64
+	CalculateSnowball(Model) float64
+	CalculateAvalanche(Model) float64
 }
 
 type SequenceCalculation interface {
-	CalculateSnowball(*Model) []float64
-	CalculateAvalanche(*Model) []float64
+	CalculateSnowball(Model) []float64
+	CalculateAvalanche(Model) []float64
 }
 
 type SnowballCalculation interface {
-	CalculateSnowball(model *Model) DebtSequences
-	CalculateAvalanche(model *Model) DebtSequences
+	CalculateSnowball(Model) DebtSequences
+	CalculateAvalanche(Model) DebtSequences
+}
+
+type DebtCalculation interface {
+	CalculateSnowball(Model) []Debt
+	CalculateAvalanche(Model) []Debt
 }
 
 type AbstractCalculation struct{}
@@ -39,6 +44,7 @@ func (c *AbstractCalculation) SanitizeToZero(i interface{}) float64 {
 }
 
 type Debt struct {
+	ID             string  `json:"id"`
 	Name           string  `json:"name"`
 	Amount         float64 `json:"amount"`
 	AnnualInterest float64 `json:"annual_interest"`
@@ -56,8 +62,8 @@ type Model struct {
 	Input Input
 }
 
-func NewModel(input Input) *Model {
-	return &Model{
+func NewModel(input Input) Model {
+	return Model{
 		Input: input,
 	}
 }
@@ -67,11 +73,6 @@ type DebtSequence struct {
 	Months   []float64 `json:"months,omitempty"`
 	Payments []float64 `json:"payments,omitempty"`
 	Balances []float64 `json:"balances,omitempty"`
-	Invalid  bool      `json:"valid,omitempty"`
-}
-
-func (d *DebtSequence) IsValid() bool {
-	return !d.Invalid
 }
 
 type DebtSequences []DebtSequence
@@ -88,7 +89,7 @@ type CalculationData struct {
 	Avalanche any    `json:"avalanche,omitempty"`
 }
 
-func CalculateSynchronous(model *Model, calculation any, datakey string) CalculationData {
+func CalculateSynchronous(model Model, calculation any, datakey string) CalculationData {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	snowball, isSnowballCalculation := calculation.(SnowballCalculation)
@@ -111,18 +112,19 @@ func CalculateSynchronous(model *Model, calculation any, datakey string) Calcula
 	return calculationData
 }
 
-func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model *Model) {
+func CalculateAsync(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model Model) {
 	defer wg.Done()
 	calculationData := CalculateSynchronous(model, calculation, datakey)
 
 	ch <- calculationData
 }
 
-func CalculateSynchronousWasm(model *Model, calculation any, datakey string) CalculationData {
+func CalculateSynchronousWasm(model Model, calculation any, datakey string) CalculationData {
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	snowball, isSnowballCalculation := calculation.(SnowballCalculation)
 	decisionCalculation, isDecisionCalculation := calculation.(DecisionCalculation)
+	debtCalculation, isDebtCalculation := calculation.(DebtCalculation)
 
 	calculationData := CalculationData{
 		Datakey: datakey,
@@ -140,12 +142,15 @@ func CalculateSynchronousWasm(model *Model, calculation any, datakey string) Cal
 	} else if isDecisionCalculation {
 		calculationData.Value = TranslateDecision(decisionCalculation.CalculateSnowball(model))
 		calculationData.Avalanche = nil
+	} else if isDebtCalculation {
+		calculationData.Value = TranslateDebts(debtCalculation.CalculateSnowball(model))
+		calculationData.Avalanche = nil
 	}
 
 	return calculationData
 }
 
-func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model *Model) {
+func CalculateAsyncWasm(wg *sync.WaitGroup, ch chan CalculationData, datakey string, calculation any, model Model) {
 	defer wg.Done()
 	calculationData := CalculateSynchronousWasm(model, calculation, datakey)
 
@@ -167,12 +172,12 @@ func TranslateSnowball(s DebtSequences) []interface{} {
 
 	for idx, debtSequence := range s {
 		x = append(x, map[string]interface{}{
-			"invalid":  debtSequence.Invalid,
 			"sequence": idx,
 			"balances": TranslateFloatSlice(debtSequence.Balances),
 			"payments": TranslateFloatSlice(debtSequence.Payments),
 			"months":   TranslateFloatSlice(debtSequence.Months),
 			"debt": map[string]interface{}{
+				"id":              debtSequence.Debt.ID,
 				"name":            debtSequence.Debt.Name,
 				"amount":          debtSequence.Debt.Amount,
 				"minimum_payment": debtSequence.Debt.MinimumPayment,
@@ -189,6 +194,7 @@ func TranslateDebts(debts []Debt) []interface{} {
 
 	for _, debt := range debts {
 		x = append(x, map[string]interface{}{
+			"id":              debt.ID,
 			"name":            debt.Name,
 			"amount":          debt.Amount,
 			"minimum_payment": debt.MinimumPayment,

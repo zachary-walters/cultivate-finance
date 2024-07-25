@@ -36,7 +36,7 @@ export const newDebt = (amount=0, minPayment=0, interest=0) => {
   let debtsDiv = document.getElementById("debts");
   let debtCount = document.getElementsByClassName("debt-input").length / 4 + 1;
 
-  const message = "This debt is considered invalid since <br> it will not be payed off for centuries. <br> It will not be included in the dataset."
+  const message = "This debt is considered invalid. <br> It will not be included in the dataset."
 
   debtsDiv.innerHTML = debtsDiv.innerHTML + `<div class="debt" id=${uuid}>
     <div class="form-input">

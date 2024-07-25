@@ -13,7 +13,7 @@ func NewTotalBeginningDebt() *TotalBeginningDebt {
 	}
 }
 
-func (c *TotalBeginningDebt) CalculateSnowball(model *Model) float64 {
+func (c *TotalBeginningDebt) CalculateSnowball(model Model) float64 {
 	validDebts := c.ValidDebtsCalculation.CalculateSnowball(model)
 
 	total := 0.0
@@ -25,6 +25,6 @@ func (c *TotalBeginningDebt) CalculateSnowball(model *Model) float64 {
 	return c.SanitizeToZero(total)
 }
 
-func (c *TotalBeginningDebt) CalculateAvalanche(model *Model) float64 {
+func (c *TotalBeginningDebt) CalculateAvalanche(model Model) float64 {
 	return c.CalculateSnowball(model)
 }

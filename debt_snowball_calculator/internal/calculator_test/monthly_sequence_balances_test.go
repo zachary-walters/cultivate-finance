@@ -9,14 +9,14 @@ import (
 
 var monthlySequenceBalancesTests = []struct {
 	name               string
-	model              *calculator.Model
+	model              calculator.Model
 	debtPayoffMonth    float64
 	snowball           calculator.DebtSequences
 	totalBeginningDebt float64
 }{
 	{
 		name:            "Test Case 0",
-		model:           &calculator.Model{},
+		model:           calculator.Model{},
 		debtPayoffMonth: 30,
 		snowball: calculator.DebtSequences{
 			{

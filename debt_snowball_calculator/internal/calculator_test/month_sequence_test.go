@@ -9,22 +9,22 @@ import (
 
 var monthSequenceTests = []struct {
 	name            string
-	model           *calculator.Model
+	model           calculator.Model
 	debtPayoffMonth float64
 }{
 	{
 		name:            "Test Case 0",
-		model:           &calculator.Model{},
+		model:           calculator.Model{},
 		debtPayoffMonth: 10,
 	},
 	{
 		name:            "Test Case 1",
-		model:           &calculator.Model{},
+		model:           calculator.Model{},
 		debtPayoffMonth: 99999,
 	},
 	{
 		name:            "Test Case 2",
-		model:           &calculator.Model{},
+		model:           calculator.Model{},
 		debtPayoffMonth: 0,
 	},
 }

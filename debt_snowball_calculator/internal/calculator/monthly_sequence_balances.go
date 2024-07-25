@@ -16,7 +16,7 @@ func NewMonthlySequenceBalances() *MonthlySequenceBalances {
 	}
 }
 
-func (c *MonthlySequenceBalances) CalculateSnowball(model *Model) []float64 {
+func (c *MonthlySequenceBalances) CalculateSnowball(model Model) []float64 {
 	debtPayoffMonth := c.DebtPayoffMonthCalculation.CalculateSnowball(model)
 	snowball := c.SnowballAvalancheCalculation.CalculateSnowball(model)
 	totalBeginningDebt := c.TotalBeginningDebtCalculation.CalculateSnowball(model)
@@ -28,7 +28,7 @@ func (c *MonthlySequenceBalances) CalculateSnowball(model *Model) []float64 {
 	for i := 0; i < int(debtPayoffMonth); i++ {
 		balance := 0.0
 		for _, debtSequence := range snowball {
-			if len(debtSequence.Balances) > i && debtSequence.IsValid() {
+			if len(debtSequence.Balances) > i {
 				balance += debtSequence.Balances[i]
 			}
 		}
@@ -39,7 +39,7 @@ func (c *MonthlySequenceBalances) CalculateSnowball(model *Model) []float64 {
 	return balances
 }
 
-func (c *MonthlySequenceBalances) CalculateAvalanche(model *Model) []float64 {
+func (c *MonthlySequenceBalances) CalculateAvalanche(model Model) []float64 {
 	debtPayoffMonth := c.DebtPayoffMonthCalculation.CalculateAvalanche(model)
 	snowball := c.SnowballAvalancheCalculation.CalculateAvalanche(model)
 	totalBeginningDebt := c.TotalBeginningDebtCalculation.CalculateAvalanche(model)
@@ -51,7 +51,7 @@ func (c *MonthlySequenceBalances) CalculateAvalanche(model *Model) []float64 {
 	for i := 0; i < int(debtPayoffMonth); i++ {
 		balance := 0.0
 		for _, debtSequence := range snowball {
-			if len(debtSequence.Balances) > i && debtSequence.IsValid() {
+			if len(debtSequence.Balances) > i {
 				balance += debtSequence.Balances[i]
 			}
 		}

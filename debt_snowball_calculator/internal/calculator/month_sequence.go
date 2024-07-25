@@ -12,7 +12,7 @@ func NewMonthSequence() *MonthSequence {
 	}
 }
 
-func (c MonthSequence) CalculateSnowball(model *Model) []float64 {
+func (c MonthSequence) CalculateSnowball(model Model) []float64 {
 	debtPayoffMonth := c.DebtPayoffMonthCalculation.CalculateSnowball(model)
 	sequence := []float64{}
 
@@ -23,7 +23,7 @@ func (c MonthSequence) CalculateSnowball(model *Model) []float64 {
 	return sequence
 }
 
-func (c MonthSequence) CalculateAvalanche(model *Model) []float64 {
+func (c MonthSequence) CalculateAvalanche(model Model) []float64 {
 	debtPayoffMonth := c.DebtPayoffMonthCalculation.CalculateAvalanche(model)
 	sequence := []float64{}
 

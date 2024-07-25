@@ -5,18 +5,19 @@ import { generateOrderTable } from "/assets/js/debt_snowball/table_module.js"
 export async function recalculate(debtInputs, otherInputs, uuid) {
   let debts = [];
   let debt = {};
-  let amounts = [];
+  let uuids = [];
 
   for (var i = 0; i < debtInputs.length; i++) {
     if (debtInputs[i].classList.contains("debt-name")) {
       debt.name = debtInputs[i].value;
     } else if (debtInputs[i].classList.contains("debt-amount")) {
       debt.amount = sanitizeToZero(debtInputs[i].value);
-      amounts.push({"uuid": debtInputs[i].getAttribute("uuid"), "amount": debt.amount})
     } else if (debtInputs[i].classList.contains("debt-min-payment")) {
       debt.minimum_payment = sanitizeToZero(debtInputs[i].value);
     } else if (debtInputs[i].classList.contains("debt-interest")) {
       debt.interest = sanitizeToZero(debtInputs[i].value);
+      debt.id = debtInputs[i].getAttribute("uuid");
+      uuids.push(debt.id);
       debts.push(debt);
       debt = {};
     }
@@ -37,7 +38,7 @@ export async function recalculate(debtInputs, otherInputs, uuid) {
   document.getElementById("total-payments-avalanche").innerHTML = isDollarValue(calculations.TOTAL_PAYMENTS.avalanche);
 
   if (uuid != null) {
-    validateInput(calculations.SNOWBALL.snowball, amounts);
+    validateInput(calculations.VALID_DEBTS.snowball, uuids);
   }
 
   document.getElementById("decision").innerHTML = calculations.DECISION.snowball.choice;
@@ -63,22 +64,15 @@ const isDollarValue = (s) => {
   return "$" + s.toLocaleString(undefined, {maximumFractionDigits: 2});
 }
 
-const validateInput = (snowball, amounts) => {
-  var valid = new Array();
-  amounts.forEach((x) => {
-    if (x.amount > 0) {
-      valid.push(x);
-    } 
-  })
+const validateInput = (validDebts, uuids) => {
+  let validDebtIds = validDebts.map(a => a.id);
 
-  valid.sort((a, b) => a.amount - b.amount);
-
-  for (var i = 0; i < valid.length; i++) {
-    var inputAlert = document.getElementById(`input-validation-alert-${valid[i].uuid}`);
-    if (snowball[i].invalid) {
-      inputAlert.style.visibility = "visible";
-    } else {
+  uuids.forEach((u) => {
+    var inputAlert = document.getElementById(`input-validation-alert-${u}`); 
+    if (validDebtIds.includes(u)) {
       inputAlert.style.visibility = "hidden";
+    } else {
+      inputAlert.style.visibility = "visible"; 
     }
-  }
+  })
 }

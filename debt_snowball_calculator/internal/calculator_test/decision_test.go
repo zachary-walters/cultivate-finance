@@ -9,7 +9,7 @@ import (
 
 var decisionTests = []struct {
 	name                     string
-	model                    *calculator.Model
+	model                    calculator.Model
 	debtPayoffMonthSnowball  float64
 	debtPayoffMonthAvalanche float64
 	totalPaymentsSnowball    float64
@@ -17,7 +17,7 @@ var decisionTests = []struct {
 }{
 	{
 		name:                     "Test Case 0 - Either",
-		model:                    &calculator.Model{},
+		model:                    calculator.Model{},
 		debtPayoffMonthSnowball:  10,
 		debtPayoffMonthAvalanche: 10,
 		totalPaymentsSnowball:    10,
@@ -25,7 +25,7 @@ var decisionTests = []struct {
 	},
 	{
 		name:                     "Test Case 1 - Snowball",
-		model:                    &calculator.Model{},
+		model:                    calculator.Model{},
 		debtPayoffMonthSnowball:  10,
 		debtPayoffMonthAvalanche: 111,
 		totalPaymentsSnowball:    10,
@@ -33,7 +33,7 @@ var decisionTests = []struct {
 	},
 	{
 		name:                     "Test Case 2 - Avalanche",
-		model:                    &calculator.Model{},
+		model:                    calculator.Model{},
 		debtPayoffMonthSnowball:  1443,
 		debtPayoffMonthAvalanche: 123,
 		totalPaymentsSnowball:    100,

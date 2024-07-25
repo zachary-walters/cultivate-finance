@@ -36,7 +36,7 @@ func TestNewModel(t *testing.T) {
 	i := calculator.Input{}
 
 	actual := calculator.NewModel(i)
-	expected := &calculator.Model{
+	expected := calculator.Model{
 		Input: i,
 	}
 
@@ -53,7 +53,7 @@ func TestNewModel(t *testing.T) {
 	}
 
 	actual = calculator.NewModel(i)
-	expected = &calculator.Model{
+	expected = calculator.Model{
 		Input: i,
 	}
 
@@ -66,7 +66,7 @@ func TestNewModel(t *testing.T) {
 }
 
 func TestCalculateSynchronous(t *testing.T) {
-	model := &calculator.Model{}
+	model := calculator.Model{}
 	datakey := "testKey"
 
 	t.Run("Test with Calculation type", func(t *testing.T) {
@@ -101,7 +101,6 @@ func TestCalculateSynchronous(t *testing.T) {
 		calculation := &MockSnowballCalculation{}
 		calculation.On("CalculateSnowball", model).Return(calculator.DebtSequences{
 			{
-				Invalid: true,
 				Debt: calculator.Debt{
 					Name:   "12345",
 					Amount: 1337,
@@ -115,7 +114,6 @@ func TestCalculateSynchronous(t *testing.T) {
 		})
 		calculation.On("CalculateAvalanche", model).Return(calculator.DebtSequences{
 			{
-				Invalid: true,
 				Debt: calculator.Debt{
 					Name:   "p923094",
 					Amount: 210983120938,
@@ -132,7 +130,6 @@ func TestCalculateSynchronous(t *testing.T) {
 			Datakey: datakey,
 			Value: calculator.DebtSequences{
 				{
-					Invalid: true,
 					Debt: calculator.Debt{
 						Name:   "12345",
 						Amount: 1337,
@@ -146,7 +143,6 @@ func TestCalculateSynchronous(t *testing.T) {
 			},
 			Avalanche: calculator.DebtSequences{
 				{
-					Invalid: true,
 					Debt: calculator.Debt{
 						Name:   "p923094",
 						Amount: 210983120938,
@@ -165,7 +161,7 @@ func TestCalculateSynchronous(t *testing.T) {
 }
 
 func TestCalculateAsync(t *testing.T) {
-	model := &calculator.Model{}
+	model := calculator.Model{}
 	datakey := "testKey"
 
 	t.Run("Test with Calculation type", func(t *testing.T) {

@@ -1,8 +1,8 @@
 package calculator
 
 type DecisionCalculation interface {
-	CalculateSnowball(*Model) FinalDecision
-	CalculateAvalanche(*Model) FinalDecision
+	CalculateSnowball(Model) FinalDecision
+	CalculateAvalanche(Model) FinalDecision
 }
 
 type Decision struct {
@@ -17,7 +17,7 @@ func NewDecision() *Decision {
 	}
 }
 
-func (c *Decision) CalculateSnowball(model *Model) FinalDecision {
+func (c *Decision) CalculateSnowball(model Model) FinalDecision {
 	debtPayoffMonthSnowball := c.DebtPayoffMonthCalculation.CalculateSnowball(model)
 	debtPayoffMonthAvalanche := c.DebtPayoffMonthCalculation.CalculateAvalanche(model)
 
@@ -39,6 +39,6 @@ func (c *Decision) CalculateSnowball(model *Model) FinalDecision {
 	}
 }
 
-func (c *Decision) CalculateAvalanche(model *Model) FinalDecision {
+func (c *Decision) CalculateAvalanche(model Model) FinalDecision {
 	return c.CalculateSnowball(model)
 }
