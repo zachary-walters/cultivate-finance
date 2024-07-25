@@ -8,7 +8,7 @@ export const generateOrderTable = (calculations) => {
                 </thead>
                 <tbody>`;
 
-  for (var i = 0; i < calculations.SNOWBALL.snowball.length; i++) {
+  for (var i = 0; i < calculations.VALID_DEBTS.snowball.length; i++) {
     let snowball = calculations.SNOWBALL.snowball[i];
     let avalanche = calculations.SNOWBALL.avalanche[i];
     table = table + `<tr>
