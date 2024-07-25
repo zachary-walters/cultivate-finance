@@ -38,6 +38,21 @@ export const generateCharts = (calculations) => {
           text: "Months Until Debt Payoff"
         },
       },
+      scales: { 
+        y: { 
+          beginAtZero: true, 
+          title: { 
+            display: true, 
+            text: 'Debts' 
+          } 
+        }, 
+        x: { 
+          title: { 
+            display: true, 
+            text: 'Months' 
+          } 
+        } 
+      }, 
     },
   });
 

@@ -14,6 +14,7 @@
       </button>
       <div class="dropdown-content">
         <a href="/roth_vs_traditional">401k Roth vs Traditional</a>
+        <a href="/debt_snowball">Debt Snowball vs Avalanche</a>
       </div>
     </div>
   </div>
@@ -77,6 +78,8 @@
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    position: absolute;
   }
 
   /* Links inside the dropdown */
@@ -97,6 +100,8 @@
   /* Show the dropdown menu on hover */
   .dropdown:hover .dropdown-content {
     display: block;
+    position: absolute;
+    z-index: 1;
   }
 </style>
 {{end}}

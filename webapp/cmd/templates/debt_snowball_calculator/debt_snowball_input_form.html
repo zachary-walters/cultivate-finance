@@ -3,7 +3,7 @@
   <div class="form-content">
     <div class="other-inputs">
       <label for="extra-monthly-payment">Extra Monthly Payment</label>
-      <input class="debt-snowball-input other-input" id="extra-monthly-payment" type="number" value="1000"></input>
+      <input class="debt-snowball-input other-input" id="extra-monthly-payment" type="number" value="0"></input>
       <label for="one-time-payment">One Time Payment</label>
       <input class="debt-snowball-input other-input" id="one-time-payment" type="number" value="500"></input>
     </div>
@@ -26,10 +26,6 @@ import { recalculate } from "/assets/js/debt_snowball/input_module.js";
 var allInputs = document.getElementsByClassName("debt-snowball-input");
 var debtInputs = document.getElementsByClassName("debt-input"); 
 var otherInputs = document.getElementsByClassName("other-input");
-
-const update = () => {
-
-}
 
 export const newDebt = (amount=0, minPayment=0, interest=0) => {
   let uuid = crypto.randomUUID(); 
