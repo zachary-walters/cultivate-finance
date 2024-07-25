@@ -57,7 +57,7 @@ func calculateAll(this js.Value, args []js.Value) interface{} {
 	for len(ch) > 0 {
 		calculationData := <-ch
 		modelMap[calculationData.Datakey] = map[string]any{
-			"snowball":  calculationData.Value,
+			"snowball":  calculationData.Snowball,
 			"avalanche": calculationData.Avalanche,
 		}
 	}

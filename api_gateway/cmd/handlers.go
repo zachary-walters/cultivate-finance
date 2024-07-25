@@ -33,7 +33,7 @@ type data401kDatakey struct {
 
 type dataDebtSnowballDatakey struct {
 	Datakey   string `json:"datakey,omitempty"`
-	Value     any    `json:"value,omitempty"`
+	Snowball  any    `json:"snowball,omitempty"`
 	Avalanche any    `json:"avalanche,omitempty"`
 }
 

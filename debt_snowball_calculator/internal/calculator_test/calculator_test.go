@@ -76,7 +76,7 @@ func TestCalculateSynchronous(t *testing.T) {
 
 		expected := calculator.CalculationData{
 			Datakey:   datakey,
-			Value:     1.0,
+			Snowball:  1.0,
 			Avalanche: 2.0,
 		}
 		result := calculator.CalculateSynchronous(model, calculation, datakey)
@@ -90,7 +90,7 @@ func TestCalculateSynchronous(t *testing.T) {
 
 		expected := calculator.CalculationData{
 			Datakey:   datakey,
-			Value:     []float64{1.0, 100, 3.9},
+			Snowball:  []float64{1.0, 100, 3.9},
 			Avalanche: []float64{2.0, 11111, 33333},
 		}
 		result := calculator.CalculateSynchronous(model, calculation, datakey)
@@ -128,7 +128,7 @@ func TestCalculateSynchronous(t *testing.T) {
 
 		expected := calculator.CalculationData{
 			Datakey: datakey,
-			Value: calculator.DebtSequences{
+			Snowball: calculator.DebtSequences{
 				{
 					Debt: calculator.Debt{
 						Name:   "12345",

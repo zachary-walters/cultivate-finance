@@ -85,7 +85,7 @@ type FinalDecision struct {
 
 type CalculationData struct {
 	Datakey   string `json:"datakey,omitempty"`
-	Value     any    `json:"value,omitempty"`
+	Snowball  any    `json:"snowball,omitempty"`
 	Avalanche any    `json:"avalanche,omitempty"`
 }
 
@@ -101,19 +101,19 @@ func CalculateSynchronous(model Model, calculation any, datakey string) Calculat
 	}
 
 	if isSequenceCalculation {
-		calculationData.Value = seq.CalculateSnowball(model)
+		calculationData.Snowball = seq.CalculateSnowball(model)
 		calculationData.Avalanche = seq.CalculateAvalanche(model)
 	} else if isCalculation {
-		calculationData.Value = calc.CalculateSnowball(model)
+		calculationData.Snowball = calc.CalculateSnowball(model)
 		calculationData.Avalanche = calc.CalculateAvalanche(model)
 	} else if isSnowballCalculation {
-		calculationData.Value = snowball.CalculateSnowball(model)
+		calculationData.Snowball = snowball.CalculateSnowball(model)
 		calculationData.Avalanche = snowball.CalculateAvalanche(model)
 	} else if isDecisionCalculation {
-		calculationData.Value = decisionCalculation.CalculateSnowball(model)
+		calculationData.Snowball = decisionCalculation.CalculateSnowball(model)
 		calculationData.Avalanche = nil
 	} else if isDebtCalculation {
-		calculationData.Value = debtCalculation.CalculateSnowball(model)
+		calculationData.Snowball = debtCalculation.CalculateSnowball(model)
 		calculationData.Avalanche = nil
 	}
 
@@ -139,19 +139,19 @@ func CalculateSynchronousWasm(model Model, calculation any, datakey string) Calc
 	}
 
 	if isSequenceCalculation {
-		calculationData.Value = TranslateFloatSlice(seq.CalculateSnowball(model))
+		calculationData.Snowball = TranslateFloatSlice(seq.CalculateSnowball(model))
 		calculationData.Avalanche = TranslateFloatSlice(seq.CalculateAvalanche(model))
 	} else if isCalculation {
-		calculationData.Value = calc.CalculateSnowball(model)
+		calculationData.Snowball = calc.CalculateSnowball(model)
 		calculationData.Avalanche = calc.CalculateAvalanche(model)
 	} else if isSnowballCalculation {
-		calculationData.Value = TranslateSnowball(snowball.CalculateSnowball(model))
+		calculationData.Snowball = TranslateSnowball(snowball.CalculateSnowball(model))
 		calculationData.Avalanche = TranslateSnowball(snowball.CalculateAvalanche(model))
 	} else if isDecisionCalculation {
-		calculationData.Value = TranslateDecision(decisionCalculation.CalculateSnowball(model))
+		calculationData.Snowball = TranslateDecision(decisionCalculation.CalculateSnowball(model))
 		calculationData.Avalanche = nil
 	} else if isDebtCalculation {
-		calculationData.Value = TranslateDebts(debtCalculation.CalculateSnowball(model))
+		calculationData.Snowball = TranslateDebts(debtCalculation.CalculateSnowball(model))
 		calculationData.Avalanche = nil
 	}
 
