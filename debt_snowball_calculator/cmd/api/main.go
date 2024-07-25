@@ -99,8 +99,9 @@ func calculateModel(d []byte) (map[string]calculator.CalculationData, error) {
 	for len(ch) > 0 {
 		calculationData := <-ch
 		modelMap[calculationData.Datakey] = calculator.CalculationData{
-			Datakey: calculationData.Datakey,
-			Value:   calculationData.Value,
+			Datakey:   calculationData.Datakey,
+			Value:     calculationData.Value,
+			Avalanche: calculationData.Avalanche,
 		}
 	}
 

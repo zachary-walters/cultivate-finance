@@ -93,6 +93,8 @@ func CalculateSynchronous(model Model, calculation any, datakey string) Calculat
 	calc, isCalculation := calculation.(Calculation)
 	seq, isSequenceCalculation := calculation.(SequenceCalculation)
 	snowball, isSnowballCalculation := calculation.(SnowballCalculation)
+	decisionCalculation, isDecisionCalculation := calculation.(DecisionCalculation)
+	debtCalculation, isDebtCalculation := calculation.(DebtCalculation)
 
 	calculationData := CalculationData{
 		Datakey: datakey,
@@ -107,6 +109,12 @@ func CalculateSynchronous(model Model, calculation any, datakey string) Calculat
 	} else if isSnowballCalculation {
 		calculationData.Value = snowball.CalculateSnowball(model)
 		calculationData.Avalanche = snowball.CalculateAvalanche(model)
+	} else if isDecisionCalculation {
+		calculationData.Value = decisionCalculation.CalculateSnowball(model)
+		calculationData.Avalanche = nil
+	} else if isDebtCalculation {
+		calculationData.Value = debtCalculation.CalculateSnowball(model)
+		calculationData.Avalanche = nil
 	}
 
 	return calculationData
