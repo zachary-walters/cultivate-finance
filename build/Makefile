@@ -109,7 +109,7 @@ fmt:
 	gofmt -s -w ../.
 
 ### DOCKER BUILD/PUSH
-docker_build: docker_webapp docker_api_gateway docker_401k_api
+docker_build: docker_webapp docker_api_gateway docker_401k_api docker_debt_snowball
 
 docker_wiki_prod:
 	@echo "Building the wiki for production..."
@@ -132,10 +132,16 @@ docker_401k_api: build_401k_api
 	cd $(401K_CALCULATOR_DIR) && docker build -t cultivate-finance-401k-calculator-service -f 401k_calculator.dockerfile .
 	docker tag cultivate-finance-401k-calculator-service $(DOCKERHUB_REPO)/cultivate-finance-401k-calculator-service
 
+docker_debt_snowball: build_debt_snowball_api
+	@echo building docker debt snowball calculator container...
+	cd $(DEBT_SNOWBALL_CALCULATOR_DIR) && docker build -t cultivate-finance-debt-snowball-calculator-service -f debt_snowball_calculator.dockerfile .
+	docker tag cultivate-finance-debt-snowball-calculator-service $(DOCKERHUB_REPO)/cultivate-finance-debt-snowball-calculator-service
+
 docker_push: docker_build
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-webapp-service
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-api-gateway-service
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-401k-calculator-service
+	docker push $(DOCKERHUB_REPO)/cultivate-finance-debt-snowball-calculator-service
 
 docker_push_webapp: docker_webapp
 	docker push $(DOCKERHUB_REPO)/cultivate-finance-webapp-service
