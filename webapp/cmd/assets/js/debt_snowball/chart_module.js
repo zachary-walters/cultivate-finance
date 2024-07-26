@@ -63,7 +63,7 @@ export const generateCharts = (calculations) => {
   new Chart('payoff-over-time-chart', { 
     type: 'line', 
     data: { 
-      labels: calculations.MONTH_SEQUENCE.snowball, 
+      labels: getMonthSequenceLabels(calculations), 
       datasets: [ 
         {  
           label: "Snowball",
@@ -193,4 +193,11 @@ const getMonthPayoffData = (snowball) => {
     maxMonths.push(debt.months[debt.months.length - 1]);
   }
   return maxMonths
+}
+
+const getMonthSequenceLabels = (calculations) => {
+  let snowball = calculations.MONTH_SEQUENCE.snowball;
+  let avalanche = calculations.MONTH_SEQUENCE.avalanche;
+    
+  return snowball.length > avalanche.length ? snowball : avalanche;
 }
