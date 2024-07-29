@@ -1,3 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: tlsredirect
+  namespace: default
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+
+---
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,6 +19,7 @@ metadata:
     name: cultivate-finance-base-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: default-tlsredirect@kubernetescrd
 spec:
   tls:
   - hosts:
@@ -35,6 +48,7 @@ metadata:
     name: cultivate-finance-ingress-www
   annotations:
     kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: default-tlsredirect@kubernetescrd
 spec:
   tls:
   - hosts:
