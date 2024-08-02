@@ -21,11 +21,11 @@ func main() {
 	connectionSvc.Migrate()
 
 	nh := NatsHandler{
-		PGDB:      pg,
+		PGDB: pg,
 	}
 
 	hh := HTTPHandler{
-		PGDB:      pg,
+		PGDB: pg,
 	}
 
 	nc.Subscribe("generate", nh.Generate)

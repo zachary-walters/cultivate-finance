@@ -11,10 +11,10 @@ import (
 )
 
 type NatsHandler struct {
-	PGDB      *sqlx.DB
+	PGDB *sqlx.DB
 }
 type HTTPHandler struct {
-	PGDB      *sqlx.DB
+	PGDB *sqlx.DB
 }
 
 func (h *NatsHandler) Generate(msg *nats.Msg) {

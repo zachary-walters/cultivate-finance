@@ -12,14 +12,14 @@ import (
 type LinkService interface{}
 
 type linkService struct {
-	PGClient    *sqlx.DB
-	Ctx         context.Context
+	PGClient *sqlx.DB
+	Ctx      context.Context
 }
 
 func NewLinkService(pgClient *sqlx.DB, ctx context.Context) *linkService {
 	return &linkService{
-		PGClient:    pgClient,
-		Ctx:         ctx,
+		PGClient: pgClient,
+		Ctx:      ctx,
 	}
 }
 
