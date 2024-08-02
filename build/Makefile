@@ -22,7 +22,7 @@ up:
 	@echo "Docker images started!"
 
 #### up: starts all containers in after building
-up_build: fmt build_401k_api build_webapp build_api_gateway build_debt_snowball_api
+up_build: fmt build_401k_api build_webapp build_api_gateway build_debt_snowball_api build_link_service
 	@echo "Stopping docker images (if running...)"
 	docker-compose down
 	@echo "Building (when required) and starting docker images..."
@@ -60,6 +60,10 @@ debt_snowball_api: fmt build_debt_snowball_api
 api_gateway: build_api_gateway
 	@echo "rebuilding and starting api_gateway"
 	docker-compose up -d --build api-gateway	
+
+link_service: fmt build_link_service
+	@echo "rebuilding and starting link_service"
+	docker-compose up -d --build link-service-api
 
 build_401k_api: 
 	@echo "Building api 401k_calculator binary..."
@@ -101,9 +105,17 @@ build_debt_snowball_tinygo:
 
 build_api_gateway: 
 	@echo "Building the api gateway..."
+	mkdir -p ../api_gateway/bin
 	cd ../api_gateway && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${API_GATEWAY_BINARY} ./cmd
 	du -sh ../api_gateway/bin/${API_GATEWAY_BINARY}
 	@echo "Done building api gateway binary!"
+
+build_link_service:
+	@echo "Building link service ..."
+	mkdir -p ../link_service/bin
+	cd ../link_service && env GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o bin/${LINK_SERVICE_BINARY} ./cmd/api
+	du -sh ../link_service/bin/${LINK_SERVICE_BINARY}	
+	@echo "Done building link service binary!"
 
 fmt: 
 	gofmt -s -w ../.

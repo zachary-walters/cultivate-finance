@@ -84,17 +84,29 @@ services:
     depends_on:
       - nats
 
-  # wiki: 
-  #   container_name: wiki
-  #   build: 
-  #     context: ./../wiki
-  #     dockerfile: ./../wiki/wiki.dockerfile
-  #   restart: always
-  #   ports: 
-  #     - "8080:8080"
-  #     - "8443:8443"
-  #     - "8181:8181"
-  #     - "8143:8143"
+  # link service api
+  link-service-api:
+    container_name: api-server-link-service
+    build: 
+      context: ./../link_service
+      dockerfile: ./../link_service/link_service.dockerfile
+    restart: always
+    ports: 
+      - "8664:8664"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment: 
+      PORT: 8664
+      NATS_URI: nats://nats:4222
+      PG_HOST: pg-link-service
+      PG_PORT: 5432
+      PG_USER: postgres
+      PG_PASS: dev_postgres_pass1
+      PG_DB: links
+    depends_on:
+      - nats
+      - pg-link-service
 
   wiki: 
     container_name: wiki
@@ -107,3 +119,14 @@ services:
       - "8443:8443"
       - "8181:8181"
       - "8143:8143"
+
+  pg-link-service:
+    container_name: pg-link-service
+    image: postgres:latest
+    restart: always
+    ports: 
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=dev_postgres_pass1
+      - POSTGRES_DB=links
