@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 
@@ -18,13 +19,11 @@ type HTTPHandler struct {
 }
 
 func (h *NatsHandler) Generate(msg *nats.Msg) {
-
 }
 
 func (h *HTTPHandler) GenerateAll(w http.ResponseWriter, r *http.Request) {
 	linkService := services.NewLinkService(h.PGDB, r.Context())
 
-	// s := generator.Generate(2, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
 	err := linkService.GenerateAll(4, "abcdefghijklmnopqrstuvwxyz")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -40,6 +39,15 @@ func (h *HTTPHandler) GetLink(w http.ResponseWriter, r *http.Request) {
 	slug := chi.URLParam(r, "slug")
 
 	link, err := linkService.GetLink(slug)
+	if err != nil && err == sql.ErrNoRows {
+		w.WriteHeader(http.StatusBadRequest)
+		_, err := w.Write([]byte("Shared link not found"))
+		if err != nil {
+			panic(err)
+		}
+		return
+	}
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -60,7 +68,11 @@ func (h *HTTPHandler) SaveLink(w http.ResponseWriter, r *http.Request) {
 		Link: "somelink",
 	}
 
-	link, err := linkService.SaveLink(input)
+	link := services.Link{
+		Link: &input.Link,
+	}
+
+	link, err := linkService.SaveLink(link)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -72,4 +84,16 @@ func (h *HTTPHandler) SaveLink(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (h *HTTPHandler) UpdateExpiredLinks(w http.ResponseWriter, r *http.Request) {
+	linkService := services.NewLinkService(h.PGDB, r.Context())
+
+	err := linkService.UpdateExpiredLinks()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

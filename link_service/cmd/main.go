@@ -31,7 +31,8 @@ func main() {
 	nc.Subscribe("generate", nh.Generate)
 	r.Post("/generate_all", hh.GenerateAll)
 	r.Post("/new", hh.SaveLink)
-	r.Get("/cf/{slug}", hh.GetLink)
+	r.Get("/x/{slug}", hh.GetLink)
+	r.Post("/cleanup_expired", hh.UpdateExpiredLinks)
 
 	log.Println("Server listening on port: ", os.Getenv("PORT"))
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), r); err != nil {
