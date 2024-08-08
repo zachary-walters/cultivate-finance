@@ -1,0 +1,7 @@
+go 1.22.5
+
+use ./401k_calculator
+use ./api_gateway
+use ./debt_snowball_calculator
+use ./link_service
+use ./webapp

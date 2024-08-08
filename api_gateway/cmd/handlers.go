@@ -37,6 +37,13 @@ type dataDebtSnowballDatakey struct {
 	Avalanche any    `json:"avalanche,omitempty"`
 }
 
+type dataLink struct {
+	Slug     string     `json:"slug" db:"slug"`
+	Date     *time.Time `json:"date" db:"date"`
+	Metadata *string    `json:"metadata" db:"metadata"`
+	Link     *string    `json:"link" db:"link"`
+}
+
 func (s server) calculate401kDatakey(w http.ResponseWriter, r *http.Request) {
 	datakey := strings.ToUpper(chi.URLParam(r, "datakey"))
 
@@ -159,6 +166,7 @@ func (s server) calculateDebtSnowballDatakey(w http.ResponseWriter, r *http.Requ
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println("Error parsing request body: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -180,24 +188,29 @@ func (s server) calculateDebtSnowballDatakey(w http.ResponseWriter, r *http.Requ
 	err = json.Unmarshal(body, &input)
 	if err != nil {
 		log.Println("Error unmarshalling body into inputs: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	reqData, err := json.Marshal(input)
 	if err != nil {
 		log.Println("Error marshalling inputs into bytes: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	response, err := s.nc.Request("calculate_debt_snowball_by_datakey", reqData, 5*time.Second)
 	if err != nil {
 		log.Println("Error making NATS request:", err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	data := new(dataDebtSnowballDatakey)
 	err = json.Unmarshal(response.Data, data)
 	if err != nil {
-		panic(err)
+		log.Println("Error unmarshalling inputs into bytes:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	data.Datakey = datakey
@@ -208,4 +221,84 @@ func (s server) calculateDebtSnowballDatakey(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (s server) linkGenerateAll(w http.ResponseWriter, r *http.Request) {
+	err := s.nc.Publish("linkGenerateAll", nil)
+	if err != nil {
+		log.Println("Error trying to publish linkGenerateAll:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (s server) linkGetLink(w http.ResponseWriter, r *http.Request) {
+	slug := chi.URLParam(r, "slug")
+
+	msg, err := s.nc.Request("linkGetLink", []byte(slug), 5*time.Second)
+	if err != nil {
+		log.Println("Error request linkGetLink over nats:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if string(msg.Data) == "Shared link not found" {
+		w.WriteHeader(http.StatusBadRequest)
+		_, err := w.Write(msg.Data)
+		if err != nil {
+			panic(err)
+		}
+		return
+	}
+
+	link := new(dataLink)
+	err = json.Unmarshal(msg.Data, link)
+	if err != nil {
+		log.Println("Error unmarshalling link data:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(link)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (s server) linkSaveLink(w http.ResponseWriter, r *http.Request) {
+	msg, err := s.nc.Request("linkSaveLink", nil, 5*time.Second)
+	if err != nil {
+		log.Println("Error request linkGetLink over nats:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	link := new(dataLink)
+	err = json.Unmarshal(msg.Data, link)
+	if err != nil {
+		log.Println("Error unmarshalling link data:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(link)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (s server) linkUpdateExpiredLinks(w http.ResponseWriter, r *http.Request) {
+	err := s.nc.Publish("linkUpdateExpiredLinks", nil)
+	if err != nil {
+		log.Println("Error request linkGetLink over nats:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

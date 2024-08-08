@@ -22,13 +22,20 @@ func main() {
 
 	nh := NatsHandler{
 		PGDB: pg,
+		NC:   nc,
 	}
 
 	hh := HTTPHandler{
 		PGDB: pg,
 	}
 
-	nc.Subscribe("generate", nh.Generate)
+	// nats requests
+	nc.Subscribe("linkGenerateAll", nh.GenerateAll)
+	nc.Subscribe("linkGetLink", nh.GetLink)
+	nc.Subscribe("linkSaveLink", nh.SaveLink)
+	nc.Subscribe("linkUpdateExpiredLinks", nh.UpdateExpiredLinks)
+
+	// http requests
 	r.Post("/generate_all", hh.GenerateAll)
 	r.Post("/new", hh.SaveLink)
 	r.Get("/x/{slug}", hh.GetLink)

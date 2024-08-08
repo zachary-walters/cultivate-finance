@@ -7,27 +7,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jmoiron/sqlx"
-	"github.com/nats-io/nats.go"
-	services "github.com/zachary-walters/cultivate-finance/link_service/internal"
 )
 
-type NatsHandler struct {
-	PGDB *sqlx.DB
-}
 type HTTPHandler struct {
 	PGDB *sqlx.DB
 }
 
-func (h *NatsHandler) Generate(msg *nats.Msg) {
-}
-
 func (h *HTTPHandler) GenerateAll(w http.ResponseWriter, r *http.Request) {
-	linkService := services.NewLinkService(h.PGDB, r.Context())
-
-	err := linkService.GenerateAll(4, "abcdefghijklmnopqrstuvwxyz")
+	err := generateAll(h.PGDB, r.Context())
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -35,12 +24,9 @@ func (h *HTTPHandler) GenerateAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HTTPHandler) GetLink(w http.ResponseWriter, r *http.Request) {
-	linkService := services.NewLinkService(h.PGDB, r.Context())
 	slug := chi.URLParam(r, "slug")
-
-	link, err := linkService.GetLink(slug)
+	link, err := getLink(h.PGDB, r.Context(), slug)
 	if err != nil && err == sql.ErrNoRows {
-		w.WriteHeader(http.StatusBadRequest)
 		_, err := w.Write([]byte("Shared link not found"))
 		if err != nil {
 			panic(err)
@@ -62,17 +48,7 @@ func (h *HTTPHandler) GetLink(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HTTPHandler) SaveLink(w http.ResponseWriter, r *http.Request) {
-	linkService := services.NewLinkService(h.PGDB, r.Context())
-
-	input := services.Input{
-		Link: "somelink",
-	}
-
-	link := services.Link{
-		Link: &input.Link,
-	}
-
-	link, err := linkService.SaveLink(link)
+	link, err := saveLink(h.PGDB, r.Context())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -87,9 +63,7 @@ func (h *HTTPHandler) SaveLink(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HTTPHandler) UpdateExpiredLinks(w http.ResponseWriter, r *http.Request) {
-	linkService := services.NewLinkService(h.PGDB, r.Context())
-
-	err := linkService.UpdateExpiredLinks()
+	err := updateExpiredLinks(h.PGDB, r.Context())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

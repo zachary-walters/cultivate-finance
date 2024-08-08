@@ -1,6 +1,6 @@
 module github.com/zachary-walters/rothvtrad/401k_calculator
 
-go 1.21.6
+go 1.22.5
 
 require (
 	github.com/go-chi/chi/v5 v5.0.12
